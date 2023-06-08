@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.15.2",
+    "libraryName": "cv-classified-app",
+    "libraryId": "c27f3e70-1c7c-4daa-827b-f18928ad7aaa",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "cv-classified-app",
+    "solutionShortDescription": "cv-classified-app description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
