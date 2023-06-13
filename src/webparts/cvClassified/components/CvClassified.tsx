@@ -2,6 +2,9 @@ import * as React from 'react';
 import styles from './CvClassified.module.scss';
 import { ICvClassifiedProps } from './ICvClassifiedProps';
 import { escape } from '@microsoft/sp-lodash-subset';
+import ProductComponents from '../../../commonComponents/productComponents/ProductComponents';
+import ProductDetailComponent from '../../../commonComponents/productDetailComponent/ProductDetailComponent';
+require('../../../assets/stylesheets/base/global.scss');
 
 export default class CvClassified extends React.Component<ICvClassifiedProps, {}> {
   public render(): React.ReactElement<ICvClassifiedProps> {
@@ -14,13 +17,10 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
     } = this.props;
 
     return (
-      <section className={`${styles.cvClassified} ${hasTeamsContext ? styles.teams : ''}`}>
-        <div className={styles.welcome}>
-          <img alt="" src={isDarkTheme ? require('../assets/welcome-dark.png') : require('../assets/welcome-light.png')} className={styles.welcomeImage} />
-          <h2>Well done, {escape(userDisplayName)}!</h2>
-          <div>{environmentMessage}</div>
-        </div>
-      </section>
+     <>
+    {/* <ProductComponents /> */}
+    <ProductDetailComponent />
+     </>
     );
   }
 }

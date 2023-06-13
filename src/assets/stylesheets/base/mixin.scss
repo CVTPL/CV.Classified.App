@@ -1,0 +1,28 @@
+@mixin text-styles($font-size,$line-height, $color){
+    font-size: $font-size;
+    line-height: $line-height;
+    color: $color;
+}
+
+
+// / Responsive - Mixin Start /
+@mixin media-breakpoint-down($breakpoint) {
+  $breakpoint-value: map-get($breakpoints, $breakpoint);
+  @media (max-width: $breakpoint-value) {
+    @content;
+  }
+}
+// / Responsive - Mixin End /  
+
+
+$breakpoints: (
+  xxxs: 320px,
+  xxs: 420px,
+  xs: 575px,
+  sm: 767px,
+  md: 991px,
+  ipad: 1024px,
+  lg: 1440px,
+//   xl: 1500px,
+//   xxl: 1600px,
+);

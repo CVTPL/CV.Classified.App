@@ -1,0 +1,562 @@
+@import "node_modules/office-ui-fabric-react/dist/css/fabric.min.css";
+@import './variable.scss';
+@import './mixin.scss';
+
+
+/* Default Basic Comman Style CSS Start */
+html, body {
+    // font-family: $font-regular;
+    // color: $black;
+    color: black;
+  }
+  html, body, h1, h2, h3, h4, h5, h6, p {
+    margin: 0px;
+    padding: 0px;
+  }
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  ul {
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+  }
+  *, ::after, ::before {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  // .ms-Grid-row {
+  //   margin: 0 -15px;
+  // }
+  // .ms-Grid-col {
+  //   padding-left: 15px;
+  //   padding-right: 15px;
+  // }
+  .grid-column-wraping-issue {
+    .ms-Grid-row {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  /* Default Basic Comman Style CSS End */
+
+
+
+
+  /* SharePoint Local layout SCSS Start */
+.ms-font-m {
+  .SPPageChrome {
+    .spAppAndPropertyPanelContainer {
+      .SPPageChrome-app {
+        #workbenchPageContent {
+          width: 100%;
+          max-width: 100%;
+          .CanvasComponent {
+            &.LCS {
+              .CanvasZone--edit {
+                max-width: 100%;
+              }
+            }
+          }
+        }
+        .ms-Fabric {
+          .mainContent {
+            #spPageCanvasContent {
+              .SPCanvas {
+                .SPCanvas-canvas {
+                  .CanvasComponent {
+                    .Canvas {
+                      .CanvasZone {
+                        >div {
+                          max-width: 100% !important;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+/* SharePoint Local Layout SCSS End */
+
+// main CSS Start region
+.mainClassifiedContainer{
+.subClassified{
+  background-color: $secondary-2;
+  border: 1px solid $secondary-2;
+  padding: 27px 20px;
+  position: relative;
+  border-radius: 20px;
+    .ms-SearchBox{
+      min-width: 500px;
+      width: 100%;
+      border: 1px solid $primary-2;
+      border-radius: 10px;
+      background-color: $secondary-2;
+      &::after{
+        display: none;
+      }
+    }
+ 
+ .pivotSection{
+  position: relative;
+  .ms-Pivot{
+    margin-top: -40px;
+    width: 150px;
+    margin-left: auto;
+    background-color: $primary-1;
+    color: $secondary-2;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    .ms-Button{
+      width: 75px;
+      color: $secondary-2;
+      margin: 0px;
+      padding: 0px;
+      &.is-selected{
+        border-radius: 20px;
+        background-color: $secondary-2;
+        color: $primary-1;
+        &:hover{
+          background-color: $secondary-2;
+          color: $primary-1;
+        }
+      }
+      &:hover{
+        background-color: $primary-1;
+        color: $secondary-2;
+        border-radius: 20px;
+        &::before{
+          display: none;
+        }
+      }
+    }
+  }
+
+  .ms-Button-flexContainer{
+    .ms-Pivot-linkContent{
+      .ms-Pivot-text{
+        font-size: $fs-18;
+      }
+    }
+  }
+
+
+  .is-selected{
+    background-color: $secondary-2;
+    .ms-Button-flexContainer{
+      .ms-Pivot-linkContent{
+        .ms-Pivot-text{
+          color: $primary-1;
+          font-size: $fs-18;
+        }
+      }
+    }
+    &::before{
+      background-color: transparent;
+      height: 0px;
+    }
+    &:hover{
+    background-color: $secondary-2;
+    color: $primary-1;
+    }
+  }
+  
+  .searchSection{
+    margin-bottom: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+      .filtersSortSection{
+        display: flex;
+        align-items: center;
+        .sort-section{
+          .sortBy{
+            position: relative;
+            margin-left: auto;
+            display: flex;
+            justify-content: end;
+            .ms-Dropdown-container{
+              .ms-Dropdown{
+                @include media-breakpoint-down(md){
+                 margin-top: 13px;
+                }
+              .ms-Dropdown-title{
+                border: 1px solid $seconday-1;
+                color: $seconday-1;
+                background-color: $secondary-2;
+                border-radius: 10px;
+                // min-width: 117px;
+                height: 40px;
+                width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                padding-left: 39px;
+              }
+              .ms-Dropdown-caretDownWrapper{
+                position: absolute;
+                left: 12px;
+                top: 58%;
+                transform: translateY(-50%);
+                height: auto;
+                line-height: normal;
+              }
+              &:focus{
+                &::after{
+                border: none;
+                }
+              }
+              }
+            }
+          }
+        }
+      }
+    }
+   
+  
+ }
+}
+}
+
+
+// dropdown options css start region
+.ms-Layer{
+  .ms-Layer-content{
+    .ms-Callout-container{
+      .ms-Dropdown-callout{
+        .ms-Callout-main{
+          border-radius: 10px;
+        }
+        margin-top: 10px;
+        border-radius: 10px;
+        max-width: 172px;
+        width: 100%;
+        .ms-Dropdown-items{
+          background: $secondary-2;
+          .ms-Button{
+            border-bottom: 1px solid $primary-2;
+            .ms-Button-flexContainer{
+              .ms-Dropdown-optionText{
+                color: $primary-3;
+              }
+            }
+          }
+          
+        }
+      }
+    }
+  }
+}
+
+
+// card css
+.classified-cards{
+  .content-card{
+    .card-header{
+      height: 244px;
+      overflow: hidden;
+      position: relative;
+      .prd-amt{
+        background-color: $primary-1;
+        padding: 4px 14px;
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        border-radius: 5px 0px 0px 5px;
+        @include text-styles($fs-20 , 24px,  $secondary-2);
+      }
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        transform: scale(1);
+        transition: 0.3s all ease-out;
+      }
+    }
+    .card-body{
+      border: 1px solid $secondary-4;
+      padding: 20px;
+      .card-content{
+        p{
+          @include text-styles($fs-16, 22px ,$secondary-5, );
+          margin-bottom: 10px;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;  
+          overflow: hidden;
+        }
+        .card-location{
+          display: flex;
+          align-items: center;
+          @include text-styles ($fs-14, 17px , $secondary-5);
+          img{
+            margin-right: 10px;
+            margin-bottom: 10px
+          }
+        }
+
+        .card-userName{
+        
+          display: flex;
+          align-items: center;
+          @include text-styles ($fs-14, 17px , $secondary-5);
+          margin-bottom: 10px;
+          img{
+            margin-right: 10px;
+            margin-bottom: 10px
+          }
+        }
+        }
+
+      .card-title{
+        p{
+        @include text-styles($fs-18 , 22px , $primary-3);          
+        margin-bottom:10px;
+        font-weight: 600;
+        }
+      }
+    }
+
+    .social-icons{
+      ul{
+        display: flex;
+        border-top: 0px;
+        border-left: 1px solid $secondary-4;
+        border-right: 1px solid $secondary-4;
+        border-bottom: 1px solid $secondary-4;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+       
+         li{
+          flex: 1;
+          border-right: 1px solid $secondary-4;;
+          align-items: center;
+          justify-content: center;
+          display: flex;
+          padding: 14px 21px;
+          border-right: 1px solid $secondary-4;
+          cursor: pointer;
+          @include media-breakpoint-down(xxxs){
+            padding: 11px 0px;
+          }
+          img{
+            width: 30px;
+            height: 30px;
+            @include media-breakpoint-down(xxxs){
+              width: 15px;
+              height: 15px;
+            }
+          }
+          &:last-child{
+            border-right: 0px;
+          }
+        }
+      
+      }
+    }
+    &:hover{
+      .card-body , .social-icons{
+        background-color: $secondary-7;
+      }
+      .card-header{
+        img{
+          transform: scale(1.2);
+          transition: 0.3s all ease-out;
+        }
+      }
+      cursor: pointer;
+    }
+  }
+}
+
+
+.filterSection{
+  position: relative;
+  .ms-Button{
+    background-color: $secondary-3;
+    color: $seconday-1;
+    padding: 12px 23px;
+    margin-left: 10px;
+  }
+  .filter-dropDown{
+    background-color: $secondary-2;
+    position: absolute;
+    z-index: 1;
+    right: 0px;
+    padding: 20px;
+    min-width: 336px;
+    width: 100%;
+    border: 0.5px solid $secondary-4;
+    box-shadow: 0px 0px 10px $secondary-6;
+    border-radius: 20px;
+    margin-top: 10px;
+    @include text-styles($fs-12 , 30px, $primary-3);
+    .ms-Dropdown-container{
+      .ms-Dropdown{
+        .ms-Dropdown-title{
+        background: $secondary-2;
+        }
+      }
+    }
+  }
+}
+
+// custom row and custom column css
+.custmRow{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px -20px;
+  box-sizing: border-box;
+}
+
+.custmCols{
+  flex: 0 0 auto;
+  width: 20%;
+  padding: 0px 20px;
+
+  @include media-breakpoint-down(lg){
+      width: 33.33%;
+      margin: 10px 0px;
+    }
+
+
+    @include media-breakpoint-down(md){
+      width: 50%; 
+      }
+
+    @include media-breakpoint-down(sm){
+      width: 100%; 
+      }
+    
+}
+
+
+// *******************************************************************************************Product page CSS*****************************************************
+
+.productDetails{
+  .detailsPage{
+    background-color: $secondary-2;
+    border-radius: 20px;
+    padding: 20px;
+    .prdCardContainer{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      .prd-details{
+        width: 60%;
+        .prd-title{
+          @include text-styles ($fs-24, 29px , $primary-3);
+          font-weight:bold;
+          margin-bottom: 10px;
+        }
+          .prd-description{
+            @include text-styles ($fs-18 , 22px , $primary-3);
+            margin-bottom: 20px;
+          }
+          .location{
+            margin-bottom: 20px;
+            @include text-styles ($fs-16 , 19px , $seconday-1);
+            img{
+              margin-right: 10px;
+            }
+          }
+
+          .userName{
+            margin-bottom: 20px;
+            @include text-styles ($fs-14 , 17px , $primary-3);
+            img{
+              margin-right: 10px;
+            }
+          }
+
+          .amt{
+            @include text-styles ($fs-35 , 46px , $primary-1);
+            margin-bottom: 30px;
+            font-weight: 600;
+          }
+      }
+      
+      .social-icons{
+        ul{
+          margin-bottom: 30px;
+          li{
+            border: 0.5px solid $primary-2;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+          }
+        }
+
+      }
+    }
+    .description{
+      border: 0.5px solid $seconday-1;
+      border-radius: 10px;
+      width: 100%;
+      margin-bottom: 30px;
+      .desc-title{
+        @include text-styles($fs-18, 22px , $primary-3);
+        font-weight: bold;
+        padding: 20px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: $secondary-3;
+      }
+      .desc-details{
+        padding: 20px;
+        p{
+          margin-bottom: 10px;
+          margin-left: 10px;
+          font-weight: 600;
+          @include text-styles ( $fs-16 , 30px , $primary-3);
+        }
+        .description-line{
+          display: flex;
+        }
+      }
+    }
+    .line-design{
+      border-width: 0.5px;
+      border-color: $secondary-3;
+    }
+    .similarPrudcts{
+      padding-top: 51px;
+      .borderTitle{
+        @include text-styles( $fs-22 , 27px , $primary-3);
+        position: relative;
+        margin-bottom: 40px;
+        display: inline-block;
+        padding-bottom: 10px;
+        font-weight: 600;
+        &::after{
+          position: absolute;
+          content: "";
+          bottom: 0;
+          margin-top: 11px;
+          border-bottom: 3px solid $primary-1;
+          width: 50%;
+          left: 0px;
+        }
+        }
+      }
+    }
+  }
+
+
+
+// *******************************************************************************************Product page CSS*****************************************************
+
+// main CSS End region
+
