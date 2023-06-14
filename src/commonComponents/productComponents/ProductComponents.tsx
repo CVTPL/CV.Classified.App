@@ -234,9 +234,7 @@ const handleFilterButtonClick = (): void => {
 
     </div>
     </div>
-         </div>
-         <h1>sell data</h1>
-      
+         </div>  
          <div className='contentPivot'>
       < ClassifiedCardComponent />
         </div>

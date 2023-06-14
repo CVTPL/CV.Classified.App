@@ -90,8 +90,8 @@ html, body {
 // main CSS Start region
 .mainClassifiedContainer{
 .subClassified{
-  background-color: $secondary-2;
-  border: 1px solid $secondary-2;
+  background-color: $secondary-2;;
+  border: 1px solid $secondary-2;;
   padding: 27px 20px;
   position: relative;
   border-radius: 20px;
@@ -100,9 +100,12 @@ html, body {
       width: 100%;
       border: 1px solid $primary-2;
       border-radius: 10px;
-      background-color: $secondary-2;
+      background-color: $secondary-2;;
       &::after{
         display: none;
+      }
+      @include media-breakpoint-down(xxxs){
+        min-width: 238px;
       }
     }
  
@@ -113,26 +116,26 @@ html, body {
     width: 150px;
     margin-left: auto;
     background-color: $primary-1;
-    color: $secondary-2;
+    color: $secondary-2;;
     border-radius: 20px;
     margin-bottom: 20px;
     .ms-Button{
       width: 75px;
-      color: $secondary-2;
+      color: $secondary-2;;
       margin: 0px;
       padding: 0px;
       &.is-selected{
         border-radius: 20px;
-        background-color: $secondary-2;
+        background-color: $secondary-2;;
         color: $primary-1;
         &:hover{
-          background-color: $secondary-2;
+          background-color: $secondary-2;;
           color: $primary-1;
         }
       }
       &:hover{
         background-color: $primary-1;
-        color: $secondary-2;
+        color: $secondary-2;;
         border-radius: 20px;
         &::before{
           display: none;
@@ -151,7 +154,7 @@ html, body {
 
 
   .is-selected{
-    background-color: $secondary-2;
+    background-color: $secondary-2;;
     .ms-Button-flexContainer{
       .ms-Pivot-linkContent{
         .ms-Pivot-text{
@@ -165,7 +168,7 @@ html, body {
       height: 0px;
     }
     &:hover{
-    background-color: $secondary-2;
+    background-color: $secondary-2;;
     color: $primary-1;
     }
   }
@@ -177,7 +180,7 @@ html, body {
     justify-content: space-between;
       .filtersSortSection{
         display: flex;
-        align-items: center;
+        align-items: end;
         .sort-section{
           .sortBy{
             position: relative;
@@ -190,9 +193,9 @@ html, body {
                  margin-top: 13px;
                 }
               .ms-Dropdown-title{
-                border: 1px solid $seconday-1;
-                color: $seconday-1;
-                background-color: $secondary-2;
+                border: 1px solid $secondary-1;
+                color: $secondary-1;
+                background-color: $secondary-2;;
                 border-radius: 10px;
                 // min-width: 117px;
                 height: 40px;
@@ -205,7 +208,7 @@ html, body {
               }
               .ms-Dropdown-caretDownWrapper{
                 position: absolute;
-                left: 12px;
+                left: 19px;
                 top: 58%;
                 transform: translateY(-50%);
                 height: auto;
@@ -242,7 +245,7 @@ html, body {
         max-width: 172px;
         width: 100%;
         .ms-Dropdown-items{
-          background: $secondary-2;
+          background: $secondary-2;;
           .ms-Button{
             border-bottom: 1px solid $primary-2;
             .ms-Button-flexContainer{
@@ -365,7 +368,7 @@ html, body {
           padding: 14px 21px;
           border-right: 1px solid $secondary-4;
           cursor: pointer;
-          @include media-breakpoint-down(xxxs){
+          @include media-breakpoint-down(xxs){
             padding: 11px 0px;
           }
           img{
@@ -403,12 +406,12 @@ html, body {
   position: relative;
   .ms-Button{
     background-color: $secondary-3;
-    color: $seconday-1;
+    color: $secondary-1;
     padding: 12px 23px;
     margin-left: 10px;
   }
   .filter-dropDown{
-    background-color: $secondary-2;
+    background-color: $secondary-2;;
     position: absolute;
     z-index: 1;
     right: 0px;
@@ -423,7 +426,7 @@ html, body {
     .ms-Dropdown-container{
       .ms-Dropdown{
         .ms-Dropdown-title{
-        background: $secondary-2;
+        background: $secondary-2;;
         border-radius: 10px;
         border-color: $primary-3;
         &:focus{
@@ -469,7 +472,7 @@ html, body {
 
 .productDetails{
   .detailsPage{
-    background-color: $secondary-2;
+    background-color: $secondary-2;;
     border-radius: 20px;
     padding: 20px;
     .prdCardContainer{
@@ -493,7 +496,7 @@ html, body {
           }
           .location{
             margin-bottom: 20px;
-            @include text-styles ($fs-16 , 19px , $seconday-1);
+            @include text-styles ($fs-16 , 19px , $secondary-1);
             img{
               margin-right: 10px;
             }
@@ -528,7 +531,7 @@ html, body {
       }
     }
     .description{
-      border: 0.5px solid $seconday-1;
+      border: 0.5px solid $secondary-1;
       border-radius: 10px;
       width: 100%;
       margin-bottom: 30px;
@@ -649,13 +652,13 @@ html, body {
         bottom: 0;
         left: 0;
         right: 0;
-        // background-color: $secondary-2;
+        // background-color: $secondary-2;;
         background-color: rgb($secondary-2, 0.6);
         z-index: 1;
         border-radius: 12px;
       }
       .image-gallery-thumbnail-image{
-        border: 0.5px solid $secondary-2;
+        border: 0.5px solid $secondary-2;;
         border-radius: 12px;
         width: 160px;
         height: 160px;
@@ -678,12 +681,178 @@ html, body {
 
 }
 
-  //*******************************************************image galary slidere css start region**************************************************************
-
-  
-
+  //*******************************************************image galary slidere css start region*************************************************************
 
   }
+
+
+
+
+  // / Callout & Panel Relative Style CSS Start /
+  .ms-Layer {
+    .ms-Layer-content {
+      .ms-Overlay {
+        backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        -moz-backdrop-filter: blur(2px);
+      }
+      .ms-Panel {
+        &.panel-container {
+          .ms-Panel-main {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            height: 100vh;
+            .ms-Panel-commands {
+              margin-top: 0px;
+              .ms-Panel-navigation {
+                align-items: center;
+                justify-content: space-between;
+                background: $secondary-3;
+                padding: 15px 25px;
+                @include media-breakpoint-down(sm) {
+                  padding: 15px 20px 15px 25px;
+                }
+                @include media-breakpoint-down(xxs) {
+                  padding: 12px 12px 12px 15px;
+                }
+                .panel-header {
+                  display: flex;
+                  align-items: center;
+                  justify-content: space-between;
+                  flex-wrap: wrap;
+                  flex: 1;
+                  padding-right: 20px;
+                  @include media-breakpoint-down(sm) {
+                    flex-direction: column;
+                    align-items: flex-start;
+                  }
+                  @include media-breakpoint-down(xxs) {
+                    padding-right: 12px;
+                  }
+                  .left-section {
+                    padding-right: 15px;
+                    @include media-breakpoint-down(sm) {
+                      padding-right: 0px;
+                    }
+                    .header-left-section-list {
+                      display: flex;
+                      justify-content: flex-start;
+                      .header-left-section-list-item {
+                        padding: 0px 20px;
+                        &:first-child {
+                          padding-left: 0px;
+                        }
+                        &:last-child {
+                          padding-right: 0px;
+                        }
+                        &:not(:last-child) {
+                          border-right: 1px solid $secondary-8;
+                        }
+                      }
+                    }
+                  }
+                  .right-section {
+                    padding-left: 15px;
+                    @include media-breakpoint-down(sm) {
+                      padding-left: 0px;
+                      margin-top: 8px;
+                    }
+                    
+                  }
+                  h4 {
+                    @include text-styles($fs-18, 20px, $secondary-1);
+                    font-weight: bold;
+                    margin-bottom: 4px;
+                    @include media-breakpoint-down(sm) {
+                      @include text-styles($fs-16, 18px, $secondary-1);
+                    }
+                  }
+                  span {
+                    @include text-styles($fs-15, 18px, $secondary-1);
+                    @include media-breakpoint-down(sm) {
+                      @include text-styles($fs-14, 16px, $secondary-1);
+                    }
+                  }
+                }
+                .ms-Button {
+                  margin-right: 0px;
+                }
+              }
+            }
+            .ms-Panel-contentInner {
+              flex: 1;
+              .ms-Panel-scrollableContent {
+                height: 100%;
+                flex: 1;
+                overflow: unset;
+                .ms-Panel-content {
+                  height: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  padding: 0px;
+                  .panel-body {
+                    height: calc(100% - 70px);
+                    flex: 1;
+                    padding: 20px 30px;
+                    overflow-y: auto;
+                    // @include scroll-style();
+                    @include media-breakpoint-down(xxs) {
+                      padding: 10px;
+                    }
+                    &.sticky-with-content {
+                      display: flex;
+                      flex-direction: column;
+                      .cmn-white-shadow-box {
+                        flex: 1;
+                        overflow-y: auto;
+                        // @include scroll-style();
+                      }
+                      .sticky-top-set {
+                        margin: 0px;
+                      }
+                    }
+                  }
+                  .panel-footer {
+                    padding: 15px 25px;
+                    background-color: $secondary-3;
+                    @include media-breakpoint-down(sm) {
+                      padding: 15px;
+                    }
+                    @include media-breakpoint-down(xxs) {
+                      padding: 12px;
+                    }
+                    .btn-container {
+                      .ms-Button {
+                        &:not(:last-child) {
+                          margin-right: 20px;
+                          @include media-breakpoint-down(sm) {
+                            margin-right: 12px;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+              .ms-Panel-footer {
+                background-color: $secondary-3;
+                .ms-Panel-footerInner {
+                  padding: 0px;
+                }
+              }
+            }
+          }
+          .ms-Overlay {
+          background: $primary-3;
+          opacity: 0.3;
+            filter: blur(0px);
+          }
+        }
+      }
+    }
+  }
+  // / Callout & Panel Relative Style CSS End /
 
 
   

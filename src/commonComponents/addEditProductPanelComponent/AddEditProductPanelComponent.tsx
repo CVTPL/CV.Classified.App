@@ -1,10 +1,12 @@
 import * as React from 'react';
-import { IAddEditProductPanelComponent } from './IaddEditProductPanelComponent';
+import { IAddEditProductPanelComponentProps } from './IAddEditProductPanelComponentProps';
 
 
-const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanelComponent> = (props) => {
-  return(
+
+const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanelComponentProps> = (props) => {
+  return (
         <>
+        <h1>test data</h1>
         </>
   ) ;
 };
