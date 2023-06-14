@@ -1,9 +1,11 @@
 import * as React from 'react';
 import { IClassifiedCardComponentProps } from './IClassifiedCardComponentProps';
+import { DefaultButton, Panel } from 'office-ui-fabric-react';
 
 
 
 const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentProps> = (props) => {
+  const [isOpen, isClose] = React.useState(false);
     const classifiedCard = [
         {
           id: 1,
@@ -54,7 +56,11 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
           },
       ];
       
-
+      const assessmentFormPanelHeader = () => (
+        <div className="panel-header">
+           <h1>add product</h1>
+          </div>
+      )
 
   return (
     <>
@@ -68,6 +74,20 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
                     <div className='prd-amt'>
                       {card.price}
                       </div>
+                      <div className='edit-icon'>
+                        <img src={require('../../assets/images/svg/edit-icon.svg')} />
+                        </div>
+
+                        <div>
+                          <DefaultButton text="Open panel" onClick={openPanel} />
+                          <Panel className="panel-container assessment-panel-container"
+                            onRenderHeader={assessmentFormPanelHeader}
+                            isOpen={isOpen}
+                            onDismiss={() => { assessmentFormPanelClose() }}
+                            closeButtonAriaLabel="Close">
+
+                            </Panel>
+                        </div>
                   </div>
                   <div className='card-body'>
                     <div className='card-title'>
@@ -88,9 +108,9 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
                   <div className='social-icons'>
                     <ul>
                      <li><a href="https://www.microsoft.com/en-in/microsoft-teams/log-in"><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
-                       <li> <a href="https://outlook.live.com/owa/"><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
-                      <li>  <a href="tel:+917852693210"><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                       <li> <a href=""><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                       <li><a href="https://outlook.live.com/owa/"><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
+                      <li><a href="tel:+917852693210"><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
+                       <li><a href=""><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                     </ul>
                   </div>
                 </div>
@@ -101,6 +121,14 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
 
     </>
   );
+  function assessmentFormPanelClose() {
+    isClose(false);
+  }
+
+  function openPanel (){
+    isClose(false);
+  }
+
 };
 
 export default ClassifiedCardComponent;

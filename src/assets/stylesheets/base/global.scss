@@ -1,4 +1,5 @@
 @import "node_modules/office-ui-fabric-react/dist/css/fabric.min.css";
+@import "~react-image-gallery/styles/scss/image-gallery.scss";
 @import './variable.scss';
 @import './mixin.scss';
 
@@ -265,6 +266,17 @@ html, body {
       height: 244px;
       overflow: hidden;
       position: relative;
+      border-top-right-radius: 20px;
+      border-top-left-radius: 20px;
+      > img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        transform: scale(1);
+        transition: 0.3s all ease-out;
+      }
       .prd-amt{
         background-color: $primary-1;
         padding: 4px 14px;
@@ -274,14 +286,20 @@ html, body {
         border-radius: 5px 0px 0px 5px;
         @include text-styles($fs-20 , 24px,  $secondary-2);
       }
-      img{
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-top-left-radius: 20px;
-        border-top-right-radius: 20px;
-        transform: scale(1);
-        transition: 0.3s all ease-out;
+      
+      .edit-icon{
+        position: absolute;
+        top: 8px;
+        left: 11px;
+        background: black;
+        padding: 8px;
+        border-radius: 5px;
+        height: 40px;
+        width: 40px;
+        > img{
+         width: 24px;
+         height: 24px;
+        }
       }
     }
     .card-body{
@@ -370,7 +388,7 @@ html, body {
         background-color: $secondary-7;
       }
       .card-header{
-        img{
+        > img{
           transform: scale(1.2);
           transition: 0.3s all ease-out;
         }
@@ -406,6 +424,11 @@ html, body {
       .ms-Dropdown{
         .ms-Dropdown-title{
         background: $secondary-2;
+        border-radius: 10px;
+        border-color: $primary-3;
+        &:focus{
+          outline: none;
+        }
         }
       }
     }
@@ -454,6 +477,9 @@ html, body {
       flex-wrap: wrap;
       justify-content: space-between;
       margin-bottom: 30px;
+      @include media-breakpoint-down(ipad){
+        margin-top: 30px;
+      }
       .prd-details{
         width: 60%;
         .prd-title{
@@ -552,7 +578,115 @@ html, body {
         }
       }
     }
+
+//*******************************************************image galary slidere css start region**************************************************************
+
+.imageGallerySlider{
+  .image-gallery {
+    .image-gallery-content{
+      display: flex;
+      .image-gallery-thumbnails-wrapper{
+        min-width: 184px;
+        margin: 0px;
+        .image-gallery-thumbnails{
+          position: relative;
+        }
+      }
+      .image-gallery-slide-wrapper{     
+        display: inline-block;
+        width: calc(100% - 220px);
+        height: 550px;
+        margin: 0px 50px 0px 50px;
+        .image-gallery-swipe{
+          height: 100%;
+          border-radius: 20px;
+          box-shadow: 3px 3px 13px $secondary-8;
+          .image-gallery-slides{
+            height: 100%;
+            .image-gallery-slide {
+              border-radius: 20px;
+              height: 100%;
+              .image-gallery-image{
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 20px;
+              }
+            }
+              }
+          }
+      }
+    }
   }
+
+  .image-gallery-thumbnail{
+    min-width: fit-content;
+    border: none;
+    margin-bottom: 20px;
+    &:hover, &:focus{
+      border: none;
+    }
+    &.active{
+      // border:0.5px solid $primary-1;
+      border-radius: 12px;
+      width: 160px;
+    }    
+    .thumbnails-swipe-vertical{
+      display: inline-block;
+      vertical-align: top;
+      width: 204px;
+      min-width: auto;
+      max-width: initial;
+    }
+    .image-gallery-thumbnail-inner{
+      position: relative;
+      width: 160px;
+      // margin: 0px 0px 20px 0px;
+      &::after{
+        position: absolute;
+        content: "";
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        // background-color: $secondary-2;
+        background-color: rgb($secondary-2, 0.6);
+        z-index: 1;
+        border-radius: 12px;
+      }
+      .image-gallery-thumbnail-image{
+        border: 0.5px solid $secondary-2;
+        border-radius: 12px;
+        width: 160px;
+        height: 160px;
+        border: none;
+        &:hover{
+          border: none;
+         }
+      }
+    }
+
+     &.active{
+        border: 0.5px solid $primary-1;
+        .image-gallery-thumbnail-inner{
+        &::after{
+          background-color: rgb($secondary-2, 0);
+      }
+      }
+      }
+  }
+
+}
+
+  //*******************************************************image galary slidere css start region**************************************************************
+
+  
+
+
+  }
+
+
+  
 
 
 

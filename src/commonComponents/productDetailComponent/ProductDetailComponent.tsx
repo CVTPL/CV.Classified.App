@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IProductDetailComponentProps } from './IProductDetailComponentProps';
 import ClassifiedCardComponent from '../classifiedCardComponent/ClassifiedCardComponent';
+import ImageGallerySliderComponent from '../imageGallerySliderComponent/ImageGallerySliderComponent';
 
 
 const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentProps> = (props) => {
@@ -10,10 +11,12 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
 <div className='detailsPage'>
 <div className="ms-Grid">
   <div className="ms-Grid-row">
-    <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
-        images
+    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6">
+      <div className='imageGallerySlider'>
+        <ImageGallerySliderComponent />
+        </div>
     </div>
-    <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
+    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6">
         <div className='prdCardContainer'>
         <div className='prd-details'>
             <p className='prd-title'>Microsoft Surface Laptop</p>
@@ -26,6 +29,12 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
                 ₹14,500
             </div>
         </div>
+        {/* image-gallery-thumbnails-wrapper  image-gallery-thumbnails-left thumbnails-swipe-vertical */}
+        {/* image-gallery-slide-wrapper  image-gallery-thumbnails-left -  */}
+        {/* image-gallery-thumbnail-inner & image-gallery-thumbnail active - 160px */}
+        {/* image-gallery-thumbnail active - width: 160px;
+    min-width: auto;
+    max-width: initial; */}
         <div className='social-icons'>
             <ul>
                     <li><a href="https://www.microsoft.com/en-in/microsoft-teams/log-in"><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>

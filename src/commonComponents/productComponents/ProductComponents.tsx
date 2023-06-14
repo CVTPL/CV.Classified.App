@@ -164,8 +164,83 @@ const handleFilterButtonClick = (): void => {
       < ClassifiedCardComponent />
         </div>
       </PivotItem>
+
+
+
+      <div className="ms-Grid">
+      <div className="ms-Grid-row">
+        <div className='ms-Grid-col ms-sm12 ms-md12 ms-lg12'>
+          <div className='title'>
+          <h1>Classified</h1>
+        </div>
+          </div>
+          </div>
+          </div>
       <PivotItem className='contentPivot' headerText="SELL">
-        <div>Pivot #2</div>
+      <div className='searchSection'>
+        <div className='searchContainer'>
+          <SearchBox
+              className=''
+              placeholder="Search"
+              onEscape={ev => {
+                console.log('Custom onEscape Called');
+              }}
+              onClear={ev => {
+                console.log('Custom onClear Called');
+              }}
+              onChange={(_, newValue) => console.log('SearchBox onChange fired: ' + newValue)}
+              onSearch={newValue => console.log('SearchBox onSearch fired: ' + newValue)}
+            />
+          </div>
+          <div className='filtersSortSection'>
+          <div className='sort-section'>
+          <div className='sortBy'>
+                <Dropdown
+                placeholder="Sort by"
+                options={sortOptions}
+                onRenderCaretDown={onRenderCaretDown}
+              />
+          </div>
+          </div>
+
+            <div className='filterSection'>
+                  <ActionButton iconProps={filterIcon} onClick={handleFilterButtonClick}>
+                  Filter
+                </ActionButton>
+            {showFilterOptions && (
+        <div className='filter-dropDown'>
+          <Dropdown
+            label="Location"
+            selectedKey="Ahmedabad"
+            onChange={handleLocationChange}
+            options={locationOptions}
+          />
+
+          <Dropdown
+            label="Category"
+            selectedKey="Mobile"
+            onChange={handleCategoryChange}
+            options={category}
+          />
+
+          <Dropdown
+            label="Status"
+            selectedKey="Active"
+            onChange={handleStatusChange}
+            options={status}
+          />
+        </div>
+      )}
+
+    </div>
+    </div>
+         </div>
+         <h1>sell data</h1>
+      
+         <div className='contentPivot'>
+      < ClassifiedCardComponent />
+        </div>
+      
       </PivotItem>
         </Pivot>
         </div>
