@@ -450,6 +450,8 @@ html, body {
   flex: 0 0 auto;
   width: 20%;
   padding: 0px 20px;
+  min-height: 500px;
+  margin-bottom: 20px;
 
   @include media-breakpoint-down(lg){
       width: 33.33%;
@@ -459,13 +461,33 @@ html, body {
 
     @include media-breakpoint-down(md){
       width: 50%; 
+      min-height: auto;
       }
 
     @include media-breakpoint-down(sm){
       width: 100%; 
+      min-height: auto;
       }
     
+
+
+// empty card design 
+  .emptyCardContainer{
+    border: 1px dashed $primary-2;
+    border-radius: 20px;
+    padding: 10px;
+    height: 100%;
+    cursor: pointer;
+    .addIcon{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateY(210px);
+    }
+  }
 }
+
+
 
 
 // *******************************************************************************************Product page CSS*****************************************************
@@ -708,8 +730,11 @@ html, body {
               .ms-Panel-navigation {
                 align-items: center;
                 justify-content: space-between;
-                background: $secondary-3;
+                background-color: $secondary-2;
+                box-shadow: 0px 0px 20px $secondary-9;
                 padding: 15px 25px;
+                position: relative;
+                z-index: 1;
                 @include media-breakpoint-down(sm) {
                   padding: 15px 20px 15px 25px;
                 }
@@ -791,11 +816,13 @@ html, body {
                   display: flex;
                   flex-direction: column;
                   padding: 0px;
+
                   .panel-body {
                     height: calc(100% - 70px);
                     flex: 1;
                     padding: 20px 30px;
                     overflow-y: auto;
+                    background-color: $secondary-2;
                     // @include scroll-style();
                     @include media-breakpoint-down(xxs) {
                       padding: 10px;
@@ -806,16 +833,92 @@ html, body {
                       .cmn-white-shadow-box {
                         flex: 1;
                         overflow-y: auto;
-                        // @include scroll-style();
+                      // @include scroll-style();
                       }
                       .sticky-top-set {
                         margin: 0px;
                       }
                     }
+
+                    .panelContainer{
+                      .material-textfield {
+                        position: relative;  
+                        margin-bottom: 20px;
+                      }
+                      
+                      label {
+                        position: absolute;
+                        font-size: 1rem;
+                        left: 0;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        background-color: white;
+                        color: gray;
+                        padding: 0 0.3rem;
+                        margin: 0 0.5rem;
+                        transition: .1s ease-out;
+                        transform-origin: left top;
+                        pointer-events: none;
+                      }
+
+                      input {
+                        font-size: 1rem;
+                        outline: none;
+                        border: 1px solid $primary-2;
+                        border-radius: 10px;  
+                        padding: 1rem 0.7rem;
+                        color: $primary-3;
+                        transition: 0.1s ease-out;
+                        width: 100%;
+                      }
+                      input:focus {
+                        border-color: $primary-2;  
+                      }
+                      input:focus + label {
+                        color: $secondary-10;
+                        top: 0;
+                        transform: translateY(-50%) scale(.9);
+                      }
+                      input:not(:placeholder-shown) + label {
+                        top: 0;
+                        transform: translateY(-50%) scale(.9);
+                      }
+                    }
+                    
+                    .material-textfield-dropdown{
+                      font-size: 1rem;
+                      outline: 0;
+                      border: 1px solid #cac8cf;
+                      border-radius: 10px;
+                      color: #000;
+                      transition: .1s ease-out;
+                      width: 100%;
+                      height: 55px;
+                      padding: 10px;
+                      .ms-Dropdown-container{
+                        .ms-Dropdown{
+                          &:focus{
+                            &::after{
+                            display: none;
+                            }
+                          }
+                          .ms-Dropdown-title{
+                            border: none;
+                            background-color: $secondary-2;
+                          }
+                        }
+                      }
+                    }
+
+                    // .quill .ql-editor{
+                    //  boredr
+                    // }
                   }
+
                   .panel-footer {
                     padding: 15px 25px;
-                    background-color: $secondary-3;
+                    background-color: $secondary-2;
+                    box-shadow: 0px 0px 20px $secondary-9;
                     @include media-breakpoint-down(sm) {
                       padding: 15px;
                     }
@@ -848,18 +951,67 @@ html, body {
           opacity: 0.3;
             filter: blur(0px);
           }
+          &.product-panel-container {
+            @include panelResponsiveCommanWidthStyle(800px);
+          }
         }
       }
     }
   }
   // / Callout & Panel Relative Style CSS End /
 
-
+// button design css start region
+// / Button Style CSS Start /
+.btn-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  &.btn-center {
+    justify-content: center;
+  }
+  &.btn-end {
+    justify-content: flex-end;
+  }
+  .ms-Button--primary {
+    width: 180px;
+    height: 40px;
+    // @include text-style($fs-14, 16px, $font-regular, $white);
+    font-weight: bold;
+    background-color: $primary-1;
+    border: 1px solid $primary-1;
+    border-radius: 6px;
+    transition: all 0.5s ease 0s;
+    @include media-breakpoint-down(sm) {
+      width: auto;
+      height: 34px;
+      padding: 0px 40px;
+    }
+    @include media-breakpoint-down(sm) {
+      padding: 0px 20px;
+    }
+    @include media-breakpoint-down(xxxs) {
+      padding: 0px 12px;
+    }
+    &:hover {
+      background-color: transparent;
+      color: $primary-1;
+      transition: all 0.5s ease 0s;
+    }
+    // Primary Buttons
+    &.btn-primary {
+      @include buttonBackgroundGenerate($primary-1);
+    }
+  }
+}
   
 
 
 
-// *******************************************************************************************Product page CSS*****************************************************
+
+
+
+//*******************************************************************************************Product page CSS*****************************************************
 
 // main CSS End region
 

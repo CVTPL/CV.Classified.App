@@ -16,6 +16,8 @@ $secondary-5:#888888;
 $secondary-6:#0000001F;
 $secondary-7:#FAFAFA;
 $secondary-8:lightgray;
+$secondary-9:#0000001A;
+$secondary-10:#A8A8A8;
 
 
 
@@ -51,3 +53,18 @@ $fs-29:29px;
 $fs-30:30px;
 $fs-35:35px;
 
+
+
+
+// breakpoints
+$breakpoints: (
+  xxxs: 320px,
+  xxs: 420px,
+  xs: 575px,
+  sm: 767px,
+  md: 991px,
+  ipad: 1024px,
+  lg: 1440px,
+//   xl: 1500px,
+//   xxl: 1600px,
+);

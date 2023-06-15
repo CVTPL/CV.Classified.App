@@ -5,6 +5,25 @@
 }
 
 
+@mixin panelResponsiveCommanWidthStyle($width: 800px){
+  .ms-Panel-main {
+    width: $width;
+    @include media-breakpoint-down(xxl) {
+      width: 80%;
+    }
+    @include media-breakpoint-down(xl) {
+      width: 90%;
+    }
+    @include media-breakpoint-down(xxs) {
+      width: 100%;
+    }
+  }
+}
+
+
+
+
+
 // / Responsive - Mixin Start /
 @mixin media-breakpoint-down($breakpoint) {
   $breakpoint-value: map-get($breakpoints, $breakpoint);
@@ -15,14 +34,15 @@
 // / Responsive - Mixin End /  
 
 
-$breakpoints: (
-  xxxs: 320px,
-  xxs: 420px,
-  xs: 575px,
-  sm: 767px,
-  md: 991px,
-  ipad: 1024px,
-  lg: 1440px,
-//   xl: 1500px,
-//   xxl: 1600px,
-);
+// button mixins
+// Background Button Generate Dynamic
+@mixin buttonBackgroundGenerate($backgroundColor) {
+  background-color: $backgroundColor;
+  border: 1px solid $backgroundColor;
+  &:hover{
+    background-color: transparent;
+    color: $backgroundColor;
+  }
+}
+
+

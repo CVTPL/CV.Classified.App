@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { IClassifiedCardComponentProps } from './IClassifiedCardComponentProps';
 import {  Panel } from 'office-ui-fabric-react';
-
-
-
+import AddEditProductPanelComponent from '../addEditProductPanelComponent/AddEditProductPanelComponent';
 const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentProps> = (props) => {
-  const [isOpen, isClose] = React.useState(false);
+
+
+  const [isPanel, setIsPanel] = React.useState(false);
     const classifiedCard = [
         {
           id: 1,
@@ -56,9 +56,9 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
           },
       ];
       
-      const assessmentFormPanelHeader = () => (
+      const panelHeader = () => (
         <div className="panel-header">
-           <h1>add product</h1>
+           <h1>Edit Product</h1>
           </div>
       )
 
@@ -74,18 +74,15 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
                     <div className='prd-amt'>
                       {card.price}
                       </div>
-                      <div className='edit-icon' onClick={openPanel}>
+                      <div className='edit-icon' onClick={() => {
+                                    setIsPanel(true);
+                                  }}>
                         <img src={require('../../assets/images/svg/edit-icon.svg')} />
                         </div>
 
                         <div>
-                          <Panel className="panel-container assessment-panel-container"
-                            onRenderHeader={assessmentFormPanelHeader}
-                            isOpen={isOpen}
-                            onDismiss={() => { panelClose() }}
-                            closeButtonAriaLabel="Close">
-
-                            </Panel>
+                        
+                          
                         </div>
                   </div>
                   <div className='card-body'>
@@ -106,27 +103,41 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
                   </div>
                   <div className='social-icons'>
                     <ul>
-                     <li><a href="https://www.microsoft.com/en-in/microsoft-teams/log-in"><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
+                      <li><a href="https://www.microsoft.com/en-in/microsoft-teams/log-in"><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
                        <li><a href="https://outlook.live.com/owa/"><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
-                      <li><a href="tel:+917852693210"><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
+                       <li><a href="tel:+917852693210"><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
                        <li><a href=""  onClick={()=>{navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com'})}}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                     </ul>
                   </div>
                 </div>
               </div>
             ))}
-        </div>
-        </div>
 
+            <div className='custmCols'>
+          <div className='emptyCardContainer'>
+            <div className='addIcon'>
+            <img src={require('../../assets/images/svg/plus-icon.svg')} />
+            </div>
+            </div>              
+            </div>
+            {/* Panel Start Region */}
+            <div>
+            <Panel
+                  className="panel-container product-panel-container"
+                   onRenderHeader={panelHeader}
+                   isOpen={isPanel}
+                   onDismiss={() => {setIsPanel(false)}}
+                    closeButtonAriaLabel="Close"
+                    isHiddenOnDismiss={false}>
+                    <AddEditProductPanelComponent />
+                    </Panel>
+            </div>
+            {/* Panel End Region */}
+            
+        </div>
+        </div>
     </>
   );
-  function panelClose() {
-    isClose(false);
-  }
-
-  function openPanel (){
-    isClose(true);
-  }
 
 };
 
