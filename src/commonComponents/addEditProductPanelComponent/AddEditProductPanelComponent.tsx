@@ -7,19 +7,23 @@ import { IFilePickerResult, FilePicker } from '@pnp/spfx-controls-react/lib/File
 import { RichText } from "@pnp/spfx-controls-react/lib/RichText";
 import CommonDeleteDailog from '../CommonDeleteDailog/CommonDeleteDailog';
 
-
 const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanelComponentProps> = (props) => {
 
+
   const [richTextValue, setRichTextValue] = useState('');
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-
-  const files = acceptedFiles.map((file: any) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-    </li>
-  ));
-  const dropzoneRef:any = createRef()
-
+  const dropzoneRef: any = createRef()
+  const [files, setFiles]: any = React.useState([]);
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      'image/*': []
+    },
+    onDrop: acceptedFiles => {
+      setFiles(acceptedFiles);
+      // setFiles(acceptedFiles.map(file => Object.assign(file, {
+      //     preview: URL.createObjectURL(file)
+      //   })))
+    }
+  });
 
   const [hideDialog, setHideDialog]: any = React.useState(false);
   const modelProps = {
@@ -41,6 +45,52 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
     { key: 'InActive', text: 'InActive' },
     { key: 'Draft', text: 'Draft' },
   ];
+
+  const thumbsContainer: any = {
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginTop: 16
+  };
+
+  const thumb: any = {
+    display: 'inline-flex',
+    borderRadius: 2,
+    border: '1px solid #eaeaea',
+    marginBottom: 8,
+    marginRight: 8,
+    width: 100,
+    height: 100,
+    padding: 4,
+    boxSizing: 'border-box'
+  };
+
+  const thumbInner = {
+    display: 'flex',
+    minWidth: 0,
+    overflow: 'hidden'
+  };
+
+  const img = {
+    display: 'block',
+    width: 'auto',
+    height: '100%'
+  };
+
+  const thumbs = files.map((file: any) => {
+    return (
+      <div style={thumb} key={file.name}>
+        <div style={thumbInner}>
+          <img
+            src={URL.createObjectURL(file)}
+            style={img}
+            // Revoke data uri after image is loaded
+            onLoad={() => { URL.revokeObjectURL(file.preview) }}
+          />
+        </div>
+      </div>
+    )
+  });
 
 
 
@@ -94,33 +144,42 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                 </div>
               </div>
 
+
+
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
-                  {/* <RichText label="My multiline text field" value={() => {handleRichTextChange}} /> */}
+                  <div className="material-textfield shortDescription">
+                    <input placeholder=" " value="One day old Microsoft Surface Laptop 5 Intel Core i5 12th Gen in mint condition urgent sale." />
+                    <label>Short Description</label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="ms-Grid-row">
+                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
                   <RichText value={richTextValue} onChange={(text) => onTextChange(text)} />
                 </div>
               </div>
 
               <div className='ms-Grid-row'>
-                <Dropzone ref={dropzoneRef}>
+                {/* <Dropzone ref={dropzoneRef}>
                   {({ getRootProps, getInputProps }) => (
                     <div {...getRootProps()}>
                       <input {...getInputProps()} />
                       <p>Drag 'n' drop some files here, or click to select files</p>
                     </div>
                   )}
-                </Dropzone>
-                {/* <section className="container">
-              <div {...getRootProps({className: 'dropzone'})}>
-              <input {...getInputProps()} />
-                <p>Drag 'n' drop some files here, or click to select files</p>
-              </div>
-          <aside>
-        <h4>Files</h4>
-        <ul>{files}</ul>
-      </aside>
-    </section> */}
-              </div>
+                </Dropzone> */}
+                <section className="container">
+                  <div {...getRootProps({ className: 'dropzone' })}>
+                    <input {...getInputProps()} />
+                    <p>Drag 'n' drop some files here, or click to select files</p>
+                  </div>
+                  <aside style={thumbsContainer}>
+                    {thumbs}
+                  </aside>
+                </section>
+                  </div>
             </div>
           </div>
         </div>
@@ -158,7 +217,6 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
   function toggleHideDialog() {
     setHideDialog(false);
   }
-
 };
 
 export default AddEditProductPanelComponent;
