@@ -18,6 +18,8 @@ $secondary-7:#FAFAFA;
 $secondary-8:lightgray;
 $secondary-9:#0000001A;
 $secondary-10:#A8A8A8;
+$secondary-11:#FF4B4A;
+$secondary-12:#FFECEC;
 
 
 
@@ -59,6 +61,7 @@ $fs-35:35px;
 // breakpoints
 $breakpoints: (
   xxxs: 320px,
+  mxs: 375px,
   xxs: 420px,
   xs: 575px,
   sm: 767px,

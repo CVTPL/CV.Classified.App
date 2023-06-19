@@ -14,7 +14,9 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
           content:'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard.',
           location:'Iskcon Ahmedabad',
           userName:'Bhavin Patel',
-          price:'₹12000'
+          price:'₹12000',
+          class:'disabled',
+          sold:  require('../../assets/images/svg/sold.svg'),
       
          
         },
@@ -68,11 +70,17 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
         <div className="custmRow">
         {classifiedCard.map((card) => (
               <div className='custmCols'>
-                <div className='content-card'>
+                <div className={"content-card" + " " + card.class}>
                   <div className='card-header'>
+                    <div className='prdPrice'>
                     <img src={card.urlImage} alt={card.title} />
                     <div className='prd-amt'>
                       {card.price}
+                      </div>
+                    </div>
+                    
+                      <div className='soldLabel'>
+                        <img src={card.sold} alt="icon"  />
                       </div>
                       <div className='edit-icon' onClick={() => {
                                     setIsPanel(true);
@@ -113,7 +121,7 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
               </div>
             ))}
 
-            <div className='custmCols'>
+            <div className='custmCols emptyCard'>
           <div className='emptyCardContainer'>
             <div className='addIcon'>
             <img src={require('../../assets/images/svg/plus-icon.svg')} />
