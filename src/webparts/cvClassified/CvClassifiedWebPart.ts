@@ -14,6 +14,7 @@ import { ICvClassifiedProps } from './components/ICvClassifiedProps';
 
 export interface ICvClassifiedWebPartProps {
   description: string;
+  context: any;
 }
 
 export default class CvClassifiedWebPart extends BaseClientSideWebPart<ICvClassifiedWebPartProps> {
@@ -29,7 +30,8 @@ export default class CvClassifiedWebPart extends BaseClientSideWebPart<ICvClassi
         isDarkTheme: this._isDarkTheme,
         environmentMessage: this._environmentMessage,
         hasTeamsContext: !!this.context.sdks.microsoftTeams,
-        userDisplayName: this.context.pageContext.user.displayName
+        userDisplayName: this.context.pageContext.user.displayName,
+        context: this.context,
       }
     );
 
