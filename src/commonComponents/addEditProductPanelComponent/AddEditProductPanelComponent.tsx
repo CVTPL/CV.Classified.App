@@ -55,20 +55,20 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
   const thumb: any = {
     display: 'inline-flex',
-    borderRadius: 2,
-    border: '1px solid #eaeaea',
     marginBottom: 8,
-    marginRight: 8,
+    marginRight: 21,
     width: 100,
     height: 100,
     padding: 4,
-    boxSizing: 'border-box'
+    boxSizing: 'border-box',
+    position:'relative'
   };
 
   const thumbInner = {
     display: 'flex',
-    minWidth: 0,
-    overflow: 'hidden'
+    minWidth: 100,
+    overflow: 'hidden',
+    borderRadius:'10px',
   };
 
   const img = {
@@ -77,12 +77,9 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
     height: '100%'
   };
 
-  const crossButton = {
-
-  };
 
   const addFriendIconProps: IIconProps = {
-    iconName: 'AddFriend',
+    iconName: 'ChromeClose',
   };
 
 
@@ -97,8 +94,9 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           onLoad={() => { URL.revokeObjectURL(file.preview) }}
           alt="Preview"
         />
-          <IconButton iconProps={addFriendIconProps} />
+         
       </div>
+      <IconButton iconProps={addFriendIconProps} className='crossIconBtn'/>
     </div>
     )
   });

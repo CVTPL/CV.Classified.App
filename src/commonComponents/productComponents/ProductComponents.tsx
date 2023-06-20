@@ -53,6 +53,8 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
   const [showFilterOptions, setShowFilterOptions] = useState(false);
+    const [showBuySection, setShowBuySection] = useState(true);
+  const [showSellSection, setShowSellSection] = useState(true);
 
   const handleLocationChange = (event: React.FormEvent<HTMLDivElement>, option?: IDropdownOption): void => {
     setSelectedLocation(option?.key as string);

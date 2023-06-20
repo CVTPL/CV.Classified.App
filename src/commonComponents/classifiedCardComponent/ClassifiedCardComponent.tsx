@@ -75,6 +75,7 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
 
   return (
     <>
+    
       {showProductDetail == false ?
         <div className='classified-cards'>
           <div className="custmRow">

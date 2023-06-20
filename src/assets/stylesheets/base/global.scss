@@ -1036,6 +1036,11 @@ html, body {
                         transition: 0.1s ease-out;
                         width: 100%;
                       }
+
+                      textarea:not(:placeholder-shown)+label {
+                        top: 0;
+                        transform: translateY(-50%) scale(.9);   
+                      }
                       
                       .textareaContainer label {
                         position: absolute;
@@ -1054,8 +1059,10 @@ html, body {
                       .textareaContainer textarea:focus + label {
                         top: 0px; 
                         font-size: $fs-16;
-                        transform: translateY(-50%) scale(.9);
+                        // transform: translateY(-50%) scale(.9);
                       }
+
+
                       
                       label {
                         position: absolute;
@@ -1086,6 +1093,7 @@ html, body {
                         .ql-editor{
                         border-radius: 10px;
                         margin-bottom: 20px;
+                        height: 114px;
                         &::after{
                           display: none;
                         }
@@ -1678,6 +1686,7 @@ html, body {
                     .image-gallery-thumbnails-container{
                       display: flex;
                       flex-direction: row;
+                      margin-top: 15px;
                     }
                     .image-gallery-thumbnail{
                       margin-left: 6px;
@@ -1717,4 +1726,161 @@ html, body {
     }
   }
 
+  
+
+  .zoneContent{
+  .ms-Button--icon{
+    position: absolute;
+    top: -8px;
+    right: -13px;
+    
+  }
+  .crossIconBtn{
+    background-color: $secondary-11;
+    padding: 1px;
+    border: 1px solid $secondary-11;
+    border-radius: 50px;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    margin: 0px;
+    padding: 6px;
+    &:hover{
+      background: $secondary-11;
+      color: $primary-1;
+
+    }
+  }
+  .ms-Button-icon{
+    font-size: $fs-8;
+    color: $secondary-2;
+    margin: 0px;
+  }
+  }
+
+
+
+  @include media-breakpoint-down (xs){
+    .productDetails{
+      .detailsPage{
+        .description{
+        margin-bottom: 15px;
+        }
+        .similarPrudcts {
+          padding-top: 20px;
+        }
+        .prdCardContainer{
+          display: flex;
+          flex-direction: column;
+          .prd-details{
+            width: 100%;
+            .location{
+              margin-bottom: 15px;
+            }
+            .userName{
+              margin-bottom: 15px;
+            }
+            .amt{
+              margin-bottom: 15px;
+            }
+          }
+          .social-icons{
+            ul{
+              display: flex;
+              margin-bottom: 15px;
+              li{
+                flex: 0 0 20%;
+                margin: 0 10px 0 0;
+                height: 49px;
+                width: 49px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                a{
+                  > img{
+                    width: 22px;
+                    height: 22px;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .colSize{
+          .imageGallerySlider{
+         .image-gallery-thumbnail{
+          margin-left: 0px!important;
+          margin-top: 10px;
+          margin-right: 0px;
+          &.active{
+            width: 24px;
+          }
+          .image-gallery-thumbnail-inner{
+            width: 100%;
+            .image-gallery-thumbnail-image{
+              width: 55px;
+              height: 55px;
+            }
+          }
+         }
+            .image-gallery{
+              .image-gallery-content{
+                .image-gallery-slide-wrapper{
+                  height: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+
+@include media-breakpoint-down(mxs){
+  .productDetails{
+    .detailsPage{
+      .colSize{
+        .imageGallerySlider{
+          .image-gallery{
+            .image-gallery-content{
+              .image-gallery-thumbnails-wrapper{
+                .image-gallery-thumbnails{
+                  .image-gallery-thumbnails-container{
+                    display: flex;
+                    justify-content: space-between;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@include media-breakpoint-down(md){
+  .productDetails{
+    .detailsPage{
+      .colSize {
+        .imageGallerySlider{
+          .image-gallery{
+            .image-gallery-content{
+              .image-gallery-slide-wrapper{
+                height: auto;
+                margin-bottom: 13px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
   // main CSS End region
+
+
+
+
