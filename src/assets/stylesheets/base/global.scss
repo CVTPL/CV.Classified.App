@@ -639,7 +639,7 @@ html, body {
 
 
 
-// *******************************************************************************************Product page CSS*****************************************************
+// ********************************************************************************************Product page CSS*****************************************************
 
 .productDetails{
   .detailsPage{
@@ -1011,10 +1011,50 @@ html, body {
                         margin-bottom: 20px;
                       }
 
-                      .shortDescription{
-                        input{
+                      .material-textfield {
+                        position: relative;
+                        margin-bottom: 20px;
+                      }
+                      
+                      .material-textfield {
+                        position: relative;
+                        margin-bottom: 20px;
+                      }
+                      
+                      .textareaContainer {
+                        position: relative;
+                      }
+                      
+                      .textareaContainer textarea {
+                        font-size: $fs-16;
+                        outline: none;
                         height: 114px;
-                        }
+                        border: 1px solid $primary-2;
+                        border-radius: 10px;
+                        padding: 16px 20px;
+                        color: $primary-3;
+                        transition: 0.1s ease-out;
+                        width: 100%;
+                      }
+                      
+                      .textareaContainer label {
+                        position: absolute;
+                        font-size: $fs-16;
+                        left: 0px; 
+                        top: 25px; 
+                        background-color: $secondary-2;
+                        color: gray;
+                        padding: 0 0.3rem;
+                        margin: 0 0.5rem;
+                        transition: 0.1s ease-out;
+                        transform-origin: left top;
+                        pointer-events: none;
+                      }
+                      
+                      .textareaContainer textarea:focus + label {
+                        top: 0px; 
+                        font-size: $fs-16;
+                        transform: translateY(-50%) scale(.9);
                       }
                       
                       label {
@@ -1031,7 +1071,6 @@ html, body {
                         transform-origin: left top;
                         pointer-events: none;
                       }
-
                       input {
                         font-size: $fs-16;
                         outline: none;
@@ -1045,13 +1084,11 @@ html, body {
                       }
                       .quill{
                         .ql-editor{
-                          border-bottom-left-radius: 10px;
-                          border-bottom-right-radius: 10px;
-                          p{
-                            &::after{
-                              display: none;
-                            }
-                          }
+                        border-radius: 10px;
+                        margin-bottom: 20px;
+                        &::after{
+                          display: none;
+                        }
                         }
                       }
                       input:focus {
@@ -1380,7 +1417,6 @@ html, body {
               }
             }
           }
-
           .CanvasSection-xl6{
             .mainClassifiedContainer{
               .subClassified{
@@ -1414,9 +1450,6 @@ html, body {
               }
             }
             }
-
-
-
   .CanvasSection-xl4{
     .mainClassifiedContainer{
       .subClassified{
@@ -1510,46 +1543,52 @@ html, body {
   }
 
 
-  // dropzone css 
-  .container {
+  .zoneContent{
+    padding-left: 8px;
+    P{
+      @include text-styles($fs-16 , 24px , $secondary-10);
+      margin-bottom:9px;
+    }
+  .dropZoneContainer {
     display: flex;
-    flex-direction: column;
-    font-family: sans-serif;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+     p{
+      font-size: $fs-50;
+      margin-bottom: 11px;
+    }
+     em{
+      font-size: .8rem;
+    }
+    .dropzone {
+      flex: 1;
+      display: flex;
+      -ms-flex-direction: row-reverse;
+      flex-direction: row-reverse;
+      -ms-flex-align: center;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      border-width: 2px;
+      border-radius: 2px;
+      border-style: dashed;
+      background-color: $secondary-2;
+      color: $primary-2;
+      outline: 0;
+      margin-top: 16px;
+      transition: border .24s ease-in-out;
+      max-width: 100px;
+      height: 100px;
+      &:focus{
+        border-color: $primary-2;
+      }
+      & .disabled{
+        opacity: 0.6;
+      }
+    }
   }
   
-  .container > p {
-    font-size: 1rem;
-  }
-  
-  .container > em {
-    font-size: .8rem;
-  }
-  
-  .dropzone {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-width: 2px;
-    border-radius: 2px;
-    border-color: #eeeeee;
-    border-style: dashed;
-    background-color: #fafafa;
-    color: #bdbdbd;
-    outline: none;
-    transition: border .24s ease-in-out;
-  }
-  
-  .dropzone:focus {
-    border-color: #2196f3;
-  }
-  
-  .dropzone.disabled {
-    opacity: 0.6;
-  }
-
-
+}
 
   .pagination-empty-card{
     display: flex;
@@ -1617,7 +1656,6 @@ html, body {
   }
   // / Pagination Relative Code End / 
   // Sharepoint Select Column Card issue SCSS Customize End
-
 
   @include media-breakpoint-down(lg-one){
     .productDetails{

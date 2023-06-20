@@ -2,7 +2,7 @@ import * as React from 'react';
 import { createRef, useState } from 'react';
 import Dropzone, { useDropzone } from 'react-dropzone';
 import { IAddEditProductPanelComponentProps } from './IAddEditProductPanelComponentProps';
-import { Dialog, Dropdown, IDropdownOption, PrimaryButton } from 'office-ui-fabric-react';
+import { Dialog, Dropdown, IDropdownOption, IIconProps, Icon, IconButton, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import { IFilePickerResult, FilePicker } from '@pnp/spfx-controls-react/lib/FilePicker';
 import { RichText } from "@pnp/spfx-controls-react/lib/RichText";
 import CommonDeleteDailog from '../CommonDeleteDailog/CommonDeleteDailog';
@@ -77,18 +77,29 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
     height: '100%'
   };
 
+  const crossButton = {
+
+  };
+
+  const addFriendIconProps: IIconProps = {
+    iconName: 'AddFriend',
+  };
+
+
   const thumbs = files.map((file: any) => {
     return (
       <div style={thumb} key={file.name}>
-        <div style={thumbInner}>
-          <img
-            src={URL.createObjectURL(file)}
-            style={img}
-            // Revoke data uri after image is loaded
-            onLoad={() => { URL.revokeObjectURL(file.preview) }}
-          />
-        </div>
+      <div style={thumbInner}>
+        <img
+          src={URL.createObjectURL(file)}
+          style={img}
+          // Revoke data URI after the image is loaded
+          onLoad={() => { URL.revokeObjectURL(file.preview) }}
+          alt="Preview"
+        />
+          <IconButton iconProps={addFriendIconProps} />
       </div>
+    </div>
     )
   });
 
@@ -148,38 +159,34 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
-                  <div className="material-textfield shortDescription">
-                    <input placeholder=" " value="One day old Microsoft Surface Laptop 5 Intel Core i5 12th Gen in mint condition urgent sale." />
+                  <div className="material-textfield textareaContainer">
+                    <textarea placeholder=" "></textarea>
                     <label>Short Description</label>
                   </div>
                 </div>
               </div>
 
+
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
-                  <RichText value={richTextValue} onChange={(text) => onTextChange(text)} />
+                  <RichText value={richTextValue} onChange={(text) => onTextChange(text)} placeholder='Long Description' />
                 </div>
               </div>
 
               <div className='ms-Grid-row'>
-                {/* <Dropzone ref={dropzoneRef}>
-                  {({ getRootProps, getInputProps }) => (
-                    <div {...getRootProps()}>
+                <div className='zoneContent'>
+                  <p>Product Images</p>
+                  <section className="dropZoneContainer">
+                    <div {...getRootProps({ className: 'dropzone' })}>
                       <input {...getInputProps()} />
-                      <p>Drag 'n' drop some files here, or click to select files</p>
+                      <p>+</p>
                     </div>
-                  )}
-                </Dropzone> */}
-                <section className="container">
-                  <div {...getRootProps({ className: 'dropzone' })}>
-                    <input {...getInputProps()} />
-                    <p>Drag 'n' drop some files here, or click to select files</p>
-                  </div>
-                  <aside style={thumbsContainer}>
-                    {thumbs}
-                  </aside>
-                </section>
-                  </div>
+                    <aside style={thumbsContainer}>
+                      {thumbs}
+                    </aside>
+                  </section>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -191,7 +198,6 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           <PrimaryButton className="btn-secondary-3" text="Update" />
         </div>
       </div>
-
 
       {/* <DefaultButton secondaryText="Opens the Sample Dialog" text="Open Dialog" /> */}
       <Dialog

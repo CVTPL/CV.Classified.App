@@ -77,7 +77,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
 
 <div className='similarPrudcts'>
     <div className='borderTitle'>Similar Products</div>
-<ClassifiedCardComponent />
+        <ClassifiedCardComponent />
 </div>
 </div>
 </div>
