@@ -104,7 +104,7 @@ html, body {
       &::after{
         display: none;
       }
-      @include media-breakpoint-down(xxxs){
+      @include media-breakpoint-down(xs){
         min-width: 238px;
       }
     }
@@ -121,15 +121,15 @@ html, body {
     margin-bottom: 20px;
     .ms-Button{
       width: 75px;
-      color: $secondary-2;;
+      color: $secondary-2;
       margin: 0px;
       padding: 0px;
       &.is-selected{
         border-radius: 20px;
-        background-color: $secondary-2;;
+        background-color: $secondary-2;
         color: $primary-1;
         &:hover{
-          background-color: $secondary-2;;
+          background-color: $secondary-2;
           color: $primary-1;
         }
       }
@@ -141,6 +141,10 @@ html, body {
           display: none;
         }
       }
+    }
+    @include media-breakpoint-down (xxxs){
+      margin-top: 9px;
+      margin-left: 0px;
     }
   }
 
@@ -154,7 +158,7 @@ html, body {
 
 
   .is-selected{
-    background-color: $secondary-2;;
+    background-color: $secondary-2;
     .ms-Button-flexContainer{
       .ms-Pivot-linkContent{
         .ms-Pivot-text{
@@ -178,6 +182,14 @@ html, body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    @include media-breakpoint-down (xs){
+      width: 100%;
+    }
+    .searchContainer{
+      @include media-breakpoint-down(xs){
+          width: 100%;
+      }
+    }
       .filtersSortSection{
         display: flex;
         align-items: end;
@@ -224,6 +236,9 @@ html, body {
           }
         }
       }
+      @include media-breakpoint-down(xs){
+       width: 100%;
+      }
     } 
  }
 
@@ -240,9 +255,25 @@ html, body {
           display: none;
       }
       }
+      .pagination-empty-card{
+        display: flex;
+        justify-content: flex-end;
+      }
     }
+
+    // .sellSection{
+    //   .pagination-empty-card{
+    //     display: flex;
+    //     flex-direction: column-reverse;
+    //     .pagination-container{
+    //     margin: 0px auto;
+    //   }
+    //   }
+    // }
 }
 }
+
+
 
 
 
@@ -300,7 +331,7 @@ html, body {
           padding: 4px 14px;
           position: absolute;
           right: 0;
-          bottom: 0;
+          bottom: 3px;
           border-radius: 5px 0px 0px 5px;
           @include text-styles($fs-20 , 24px,  $secondary-2);
         }
@@ -351,7 +382,7 @@ html, body {
     .card-body{
       border: 1px solid $secondary-4;
       padding: 20px;
-      margin-top: -3px;
+      margin-top: -4px;
       .card-content{
         p{
           @include text-styles($fs-16, 22px ,$secondary-5, );
@@ -409,7 +440,7 @@ html, body {
           align-items: center;
           justify-content: center;
           display: flex;
-          padding: 14px 21px;
+          padding: 14px 11px;
           border-right: 1px solid $secondary-4;
           cursor: pointer;
           @include media-breakpoint-down(xxs){
@@ -485,6 +516,9 @@ html, body {
     box-shadow: 0px 0px 10px $secondary-6;
     border-radius: 20px;
     margin-top: 10px;
+    @include media-breakpoint-down(mxs){
+      min-width: 262px;
+    }
     @include text-styles($fs-12 , 30px, $primary-3);
     .filter-title{
       p{
@@ -549,8 +583,7 @@ html, body {
           }
         }
       }
-    }
- 
+    } 
   }
 }
 
@@ -566,8 +599,8 @@ html, body {
   flex: 0 0 auto;
   width: 20%;
   padding: 0px 20px;
-  min-height: 500px;
-  margin-bottom: 20px;
+  min-height: 456px;
+  margin-bottom:20px;
 
   @include media-breakpoint-down(lg){
       width: 33.33%;
@@ -601,16 +634,16 @@ html, body {
       transform: translateY(210px);
     }
   }
-}
+  }
 
 
 
 
-// *******************************************************************************************Product page CSS*****************************************************
+// ********************************************************************************************Product page CSS*****************************************************
 
 .productDetails{
   .detailsPage{
-    background-color: $secondary-2;;
+    background-color: $secondary-2;
     border-radius: 20px;
     padding: 20px;
     .prdCardContainer{
@@ -717,6 +750,18 @@ html, body {
           left: 0px;
         }
         }
+        .classified-cards{
+          .emptyCard{
+            display: none;
+          }
+          .content-card{
+            .card-header{
+              .edit-icon{
+                display: none;
+              }
+            }
+          }
+        }
       }
     }
 
@@ -752,6 +797,9 @@ html, body {
                 height: 100%;
                 object-fit: cover;
                 border-radius: 20px;
+                @include media-breakpoint-down(md){
+                  height: auto;
+                }
               }
             }
               }
@@ -816,8 +864,9 @@ html, body {
       }
       }
   }
-
 }
+
+
 
   //*******************************************************image galary slidere css start region*************************************************************
 
@@ -961,6 +1010,52 @@ html, body {
                         position: relative;  
                         margin-bottom: 20px;
                       }
+
+                      .material-textfield {
+                        position: relative;
+                        margin-bottom: 20px;
+                      }
+                      
+                      .material-textfield {
+                        position: relative;
+                        margin-bottom: 20px;
+                      }
+                      
+                      .textareaContainer {
+                        position: relative;
+                      }
+                      
+                      .textareaContainer textarea {
+                        font-size: $fs-16;
+                        outline: none;
+                        height: 114px;
+                        border: 1px solid $primary-2;
+                        border-radius: 10px;
+                        padding: 16px 20px;
+                        color: $primary-3;
+                        transition: 0.1s ease-out;
+                        width: 100%;
+                      }
+                      
+                      .textareaContainer label {
+                        position: absolute;
+                        font-size: $fs-16;
+                        left: 0px; 
+                        top: 25px; 
+                        background-color: $secondary-2;
+                        color: gray;
+                        padding: 0 0.3rem;
+                        margin: 0 0.5rem;
+                        transition: 0.1s ease-out;
+                        transform-origin: left top;
+                        pointer-events: none;
+                      }
+                      
+                      .textareaContainer textarea:focus + label {
+                        top: 0px; 
+                        font-size: $fs-16;
+                        transform: translateY(-50%) scale(.9);
+                      }
                       
                       label {
                         position: absolute;
@@ -976,7 +1071,6 @@ html, body {
                         transform-origin: left top;
                         pointer-events: none;
                       }
-
                       input {
                         font-size: $fs-16;
                         outline: none;
@@ -987,6 +1081,15 @@ html, body {
                         color: $primary-3;
                         transition: 0.1s ease-out;
                         width: 100%;
+                      }
+                      .quill{
+                        .ql-editor{
+                        border-radius: 10px;
+                        margin-bottom: 20px;
+                        &::after{
+                          display: none;
+                        }
+                        }
                       }
                       input:focus {
                         border-color: $primary-2;  
@@ -1263,53 +1366,89 @@ html, body {
     }
    
           }
+
+
         }
    
     .CanvasSection-xl8{
             .mainClassifiedContainer{
               .subClassified{
-                
+                .classified-cards{
+                  .custmCols{
+                    width: 25%;
+                  }
+                  .content-card{
+                    .social-icons{
+                      ul{
+                        li{
+                          img{
+                            width: 25px;
+                            height: 25px;
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+
               }
             }
-           
-          }
 
+            .productDetails{
+              .detailsPage{
+                .similarPrudcts{
+                  .classified-cards{
+                    .custmCols{
+                      width: 33.33%;
+                    }
+                  }
+                }
+                .colSize{
+                  width: 100%;
+                  .prdCardContainer{
+                    margin-top: 30px;
+                  }
+                }
+                .btn-standard{
+                  @include text-styles($fs-16 , 30px , $primary-3);
+                  margin-bottom:20px;
+                  font-weight: 600;
+                }
+              }
+            }
+          }
           .CanvasSection-xl6{
             .mainClassifiedContainer{
               .subClassified{
                 .contentPivot{
                   .classified-cards{
                     .custmCols{
-                      width: 50%;
+                      width: 33.33%;
                       padding: 0px 15px;
                     }
-                    // .content-card{
-                    //   .social-icons{
-                    //     ul{
-                    //       li{
-                    //         padding: 8px 8px;
-                    //         > img{
-                    //           width: 22px;
-                    //           height: 22px;
-                    //         }
-                    //       }
-                    //     }
-                    //   }
-                    //   .card-header{
-                    //     height: 173px;
-                    //     .prdPrice{
-                    //       >img{
-                    //         width: 100%;
-                    //       }
-                    //     }
-                    //   }
-                    // }
                   }
                  }
-                
               }
             }
-           
+            .productDetails{
+              .detailsPage{
+                .similarPrudcts{
+                  .classified-cards{
+                    .custmCols{
+                      width: 33.33%;
+                      padding: 0px 15px;
+                    }
+                  }
+                }
+
+                .colSize{
+                  width: 100%;
+                  .prdCardContainer{
+                    margin-top: 30px;
+                  }
+                }
+              }
+            }
             }
   .CanvasSection-xl4{
     .mainClassifiedContainer{
@@ -1357,8 +1496,225 @@ html, body {
 
       }
     }
+    .productDetails{
+      .detailsPage{
+        .similarPrudcts{
+          .classified-cards{
+            .custmCols{
+              width: 50%;
+            }
+          }
+        }
+        .colSize{
+          width: 100%;
+          .imageGallerySlider{
+            .image-gallery{
+              .image-gallery-content{
+                display: flex;
+                flex-direction: column;
+                .image-gallery-slide-wrapper{
+                  width: calc(100% - -7px);
+                  margin: 0px 50px 0px 0px;
+                }
+                .image-gallery-thumbnails-wrapper{
+                  min-width: 100%;
+                  .image-gallery-thumbnails{
+                    height: auto !important;
+                    .image-gallery-thumbnails-container{
+                      display: flex;
+                      flex-direction: row;
+                    }
+                    .image-gallery-thumbnail{
+                      margin-left: 6px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .prdCardContainer{
+            margin-top: 30px;
+          }
+
+        }
+      }
+    }
+   
   }
 
-// Sharepoint Select Column Card issue SCSS Customize End
-// main CSS End region
 
+  .zoneContent{
+    padding-left: 8px;
+    P{
+      @include text-styles($fs-16 , 24px , $secondary-10);
+      margin-bottom:9px;
+    }
+  .dropZoneContainer {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+     p{
+      font-size: $fs-50;
+      margin-bottom: 11px;
+    }
+     em{
+      font-size: .8rem;
+    }
+    .dropzone {
+      flex: 1;
+      display: flex;
+      -ms-flex-direction: row-reverse;
+      flex-direction: row-reverse;
+      -ms-flex-align: center;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      border-width: 2px;
+      border-radius: 2px;
+      border-style: dashed;
+      background-color: $secondary-2;
+      color: $primary-2;
+      outline: 0;
+      margin-top: 16px;
+      transition: border .24s ease-in-out;
+      max-width: 100px;
+      height: 100px;
+      &:focus{
+        border-color: $primary-2;
+      }
+      & .disabled{
+        opacity: 0.6;
+      }
+    }
+  }
+  
+}
+
+  .pagination-empty-card{
+    display: flex;
+    flex: auto;
+    justify-content: space-between;
+
+    @include media-breakpoint-down(md){
+      display: flex;
+      justify-content: center !important;
+    }
+  }
+
+  // / Pagination Relative Code Start /
+  .pagination-container {
+    padding: 0px !important;
+    padding-left: 15px !important;
+    display: flex;
+    justify-content: flex-end;
+    @include media-breakpoint-down(sm) {
+      margin-top: 12px;
+      padding-left: 0px !important;
+    }
+
+    @include media-breakpoint-down(md){
+      display: flex;
+      justify-content: center;
+    }
+    .ms-Stack {
+      .ms-Stack-inner {
+        .ms-Button {
+          min-width: 32px !important;
+          max-width: max-content;
+          border-radius: 4px;
+          padding: 0px 4px;
+          margin-left: 0px;
+          // border: 1px solid $secondary-25;
+          &:not(:last-child) {
+            margin-right: 6px;
+          }
+          .ms-Button-flexContainer {
+            .ms-Icon {
+              font-size: $fs-12;
+              margin: 0px;
+            }
+            .ms-Button-textContainer {
+              .ms-Button-label {
+                // @include text-style($fs-16, 18px, $font-regular, $secondary-26);
+              }
+            }
+          }
+          &.ms-Button--primary {
+            background-color: $primary-1;
+            border: 1px solid $primary-1;
+            .ms-Button-flexContainer {
+              .ms-Button-textContainer {
+                .ms-Button-label {
+                  // color: $white;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  // / Pagination Relative Code End / 
+  // Sharepoint Select Column Card issue SCSS Customize End
+
+  @include media-breakpoint-down(lg-one){
+    .productDetails{
+      .detailsPage{
+        .colSize{
+          width: 100%;
+          .imageGallerySlider{
+            .image-gallery{
+              .image-gallery-content{
+                display: flex;
+                flex-direction: column-reverse;
+                .image-gallery-slide-wrapper{
+                  width: calc(100% - -7px);
+                  margin: 0px 50px 0px 0px;
+                }
+                .image-gallery-thumbnails-wrapper{
+                  min-width: 100%;
+                  .image-gallery-thumbnails{
+                    height: auto !important;
+                    .image-gallery-thumbnails-container{
+                      display: flex;
+                      flex-direction: row;
+                    }
+                    .image-gallery-thumbnail{
+                      margin-left: 6px;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          .prdCardContainer{
+            margin-top: 30px;
+          }
+  
+        }
+      }
+    }
+  
+  }
+
+  @include media-breakpoint-down(sm-mobile){
+    .productDetails{
+      .detailsPage{
+        padding: 0px;
+      .imageGallerySlider{
+        .image-gallery-thumbnail{
+          .image-gallery-thumbnail-inner{
+            // display: none;
+          }
+        }
+      }
+    }
+  }
+    .mainClassifiedContainer{
+      .subClassified{
+        padding: 0px;
+      }
+    }
+  }
+
+  // main CSS End region

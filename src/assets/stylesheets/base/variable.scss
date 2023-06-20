@@ -54,6 +54,7 @@ $fs-28:28px;
 $fs-29:29px;
 $fs-30:30px;
 $fs-35:35px;
+$fs-50:50px;
 
 
 
@@ -64,10 +65,12 @@ $breakpoints: (
   mxs: 375px,
   xxs: 420px,
   xs: 575px,
+  sm-mobile:672px,
   sm: 767px,
   md: 991px,
   ipad: 1024px,
+  lg-one:1439px,
   lg: 1440px,
-//   xl: 1500px,
-//   xxl: 1600px,
+  xl: 1500px,
+  xxl: 1600px,
 );

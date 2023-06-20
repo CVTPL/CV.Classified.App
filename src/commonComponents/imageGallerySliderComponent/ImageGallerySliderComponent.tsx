@@ -23,7 +23,7 @@ const ImageGallerySliderComponent: React.FunctionComponent<IImageGallerySliderCo
             <>
     <ImageGallery items={images}
     thumbnailPosition='left'
-    autoPlay={false}
+    autoPlay={true}
     showPlayButton={false}
     showBullets={false}
     infinite={true}

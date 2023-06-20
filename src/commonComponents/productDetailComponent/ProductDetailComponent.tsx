@@ -2,21 +2,26 @@ import * as React from 'react';
 import { IProductDetailComponentProps } from './IProductDetailComponentProps';
 import ClassifiedCardComponent from '../classifiedCardComponent/ClassifiedCardComponent';
 import ImageGallerySliderComponent from '../imageGallerySliderComponent/ImageGallerySliderComponent';
+import { ActionButton, IIconProps} from 'office-ui-fabric-react';
 
 
 const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentProps> = (props) => {
+  const backArrow: IIconProps = { iconName: 'ChevronLeftMed' };
   return(
     <>
 <div className='productDetails'>
 <div className='detailsPage'>
+<ActionButton iconProps={backArrow} href='/' className='btn-standard'>
+    Go Back
+    </ActionButton>
 <div className="ms-Grid">
   <div className="ms-Grid-row">
-    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6">
+    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6 colSize">
       <div className='imageGallerySlider'>
         <ImageGallerySliderComponent />
         </div>
     </div>
-    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6">
+    <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6 colSize">
         <div className='prdCardContainer'>
         <div className='prd-details'>
             <p className='prd-title'>Microsoft Surface Laptop</p>
@@ -29,12 +34,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
                 ₹14,500
             </div>
         </div>
-        {/* image-gallery-thumbnails-wrapper  image-gallery-thumbnails-left thumbnails-swipe-vertical */}
-        {/* image-gallery-slide-wrapper  image-gallery-thumbnails-left -  */}
-        {/* image-gallery-thumbnail-inner & image-gallery-thumbnail active - 160px */}
-        {/* image-gallery-thumbnail active - width: 160px;
-    min-width: auto;
-    max-width: initial; */}
+
         <div className='social-icons'>
             <ul>
                     <li><a href="https://www.microsoft.com/en-in/microsoft-teams/log-in"><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
@@ -42,7 +42,6 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
                       <li>  <a href="tel:+917852693210"><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
                        <li> <a href=""><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
             </ul>
-                
        </div>
        </div>
         <div className='description'>
@@ -78,12 +77,16 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
 
 <div className='similarPrudcts'>
     <div className='borderTitle'>Similar Products</div>
-<ClassifiedCardComponent />
+        <ClassifiedCardComponent />
 </div>
 </div>
 </div>
     </>
-  ) ;
+  );
+  function _alertClicked(): void {
+  alert('Clicked');
+}
+
 };
 
 export default ProductDetailComponent;
