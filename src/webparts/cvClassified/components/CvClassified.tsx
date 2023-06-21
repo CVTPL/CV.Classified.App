@@ -4,7 +4,7 @@ import { ICvClassifiedProps } from './ICvClassifiedProps';
 import { escape } from '@microsoft/sp-lodash-subset';
 import ProductComponents from '../../../commonComponents/productComponents/ProductComponents';
 require('../../../assets/stylesheets/base/global.scss');
-// import { spfi, SPFx } from "@pnp/sp";
+import { spfi, SPFx } from "@pnp/sp";
 import commonServices from '../../../services/commonServices';
 
 export default class CvClassified extends React.Component<ICvClassifiedProps, {}> {
@@ -75,7 +75,7 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
       environmentMessage,
       hasTeamsContext,
       userDisplayName
-    } = this.props;
+    } = this.props; 
 
 
 
@@ -87,3 +87,11 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
     );
   }
 }
+// function spfi() {
+//   throw new Error('Function not implemented.');
+// }
+
+// function SPFx(context: any): any {
+//   throw new Error('Function not implemented.');
+// }
+
