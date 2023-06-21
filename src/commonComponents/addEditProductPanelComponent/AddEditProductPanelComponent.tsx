@@ -9,7 +9,7 @@ import CommonDeleteDailog from '../CommonDeleteDailog/CommonDeleteDailog';
 
 const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanelComponentProps> = (props) => {
 
-
+  const [addProductInputList, setAddProductInputList] = React.useState<any>({});
   const [richTextValue, setRichTextValue] = useState('');
   const dropzoneRef: any = createRef()
   const [files, setFiles]: any = React.useState([]);
@@ -46,6 +46,9 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
     { key: 'Draft', text: 'Draft' },
   ];
 
+  const handleChangeProductInput = (e: any): void => {
+    setAddProductInputList({ ...addProductInputList, [e.target.id]: e.target.value });
+  }
   const thumbsContainer: any = {
     display: 'flex',
     flexDirection: 'row',
@@ -102,6 +105,16 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
   });
 
 
+  const handleChangeDropdown = (ev: any, op: any, i: any) => {
+    setAddProductInputList({ ...addProductInputList, [ev.target.id]: op.key });
+  }
+
+  const addProductSubmit = () => {
+    if (richTextValue.length > 0) {
+      setAddProductInputList({ ...addProductInputList, ["CV_productDescription"]: richTextValue });
+    }
+    console.log(addProductInputList);
+  }
 
   return (
     <>
@@ -112,7 +125,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
                   <div className="material-textfield">
-                    <input placeholder=" " type="text" value="Microsoft Surface Laptop" />
+                    <input type="text" id="Title" value={addProductInputList.Title} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Title</label>
                   </div>
                 </div>
@@ -121,15 +134,18 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
                   <div className="material-textfield-dropdown">
                     <Dropdown
-                      defaultSelectedKey="laptop"
+                      placeholder="Category"
+                      selectedKey={addProductInputList.CV_productCategory ? addProductInputList.CV_productCategory : ""}
                       options={productOptions}
+                      id="CV_productCategory"
+                      onChange={(ev, op, i) => handleChangeDropdown(ev, op, i)}
                     />
                   </div>
                 </div>
 
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
                   <div className="material-textfield">
-                    <input placeholder=" " type="text" value="14,500" />
+                    <input placeholder=" " type="text" id="CV_productPrice" value={addProductInputList.CV_productPrice} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Price</label>
                   </div>
                 </div>
@@ -139,15 +155,18 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
                   <div className="material-textfield">
-                    <input placeholder=" " type="text" value="Fake Location" />
+                    <input placeholder=" " type="text" id="CV_location" value={addProductInputList.CV_location} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Location</label>
                   </div>
                 </div>
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
                   <div className="material-textfield-dropdown">
                     <Dropdown
-                      defaultSelectedKey="Active"
+                      placeholder="Status"
+                      selectedKey={addProductInputList.CV_productStatus ? addProductInputList.CV_productStatus : ""}
                       options={statusOpts}
+                      id="CV_productStatus"
+                      onChange={(ev, op, i) => handleChangeDropdown(ev, op, i)}
                     />
                   </div>
                 </div>
@@ -158,7 +177,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
                   <div className="material-textfield textareaContainer">
-                    <textarea placeholder=" "></textarea>
+                    <textarea placeholder=" " id="CV_shortDescription" value={addProductInputList.CV_shortDescription} onChange={(e) => { handleChangeProductInput(e) }} ></textarea>
                     <label>Short Description</label>
                   </div>
                 </div>
@@ -193,7 +212,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
         <div className="btn-container btn-end">
           <PrimaryButton className="btn-secondary-4" text="Cancel" />
           <PrimaryButton className="btn-secondary-2" text="Delete" onClick={toggleShowDialog} />
-          <PrimaryButton className="btn-secondary-3" text="Update" />
+          <PrimaryButton className="btn-secondary-3" text="Update" onClick={() => { addProductSubmit() }} />
         </div>
       </div>
 
@@ -211,7 +230,10 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
   function onTextChange(newText: string) {
     console.log(newText);
+    setRichTextValue(newText);
     return newText;
+    // setAddProductInputList({ ...addProductInputList, ["CV_productDescription"]: newText });
+    // return newText;
   }
 
   function toggleShowDialog() {

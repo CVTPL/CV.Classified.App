@@ -79,7 +79,7 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
       {showProductDetail == false ?
         <div className='classified-cards'>
           <div className="custmRow">
-            {classifiedCard.map((card) => (
+          {classifiedCard.map((card) => (
               <div className='custmCols' onClick={() => handleClick("viewPage")} key={card.id}>
                 <div className={"content-card" + " " + card.class}>
                   <div className='card-header'>
@@ -126,18 +126,16 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
               </div>
             ))}
 
-
             {/* <div className='pagination-empty-card'> */}
-          <div className='pagination-empty-card'>
-            <div className='custmCols emptyCard'>
-              <div className='emptyCardContainer'>
-                <div className='addIcon'>
-                  <img src={require('../../assets/images/svg/plus-icon.svg')} />
+            <div className='pagination-empty-card'>
+              <div className='custmCols emptyCard'>
+                <div className='emptyCardContainer' onClick={(e) => { showpanels("showPanel", e) }}>
+                  <div className='addIcon'>
+                    <img src={require('../../assets/images/svg/plus-icon.svg')}  />
+                  </div>
                 </div>
               </div>
             </div>
-            </div>
-
 
           </div>
           {/* Panel Start Region */}
@@ -159,29 +157,29 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
           <ProductDetailComponent />
         </div>
       }
-        <Pagination
-          currentPage={3}
-          totalPages={13}
-          limiter={3}
-          onChange={function (page: number): void {
-          }} />
+      <Pagination
+        currentPage={3}
+        totalPages={13}
+        limiter={3}
+        onChange={function (page: number): void {
+        }} />
     </>
   );
 
 
-function handleClick(action:any){
-  if (action == "viewPage"){
-    setShowProductDetail(true);
+  function handleClick(action: any) {
+    if (action == "viewPage") {
+      setShowProductDetail(true);
+    }
   }
-}
 
-function showpanels(action:any, event:any){
-  if(action == "showPanel"){
-    setIsPanel(true);
-    event.stopPropagation();
+  function showpanels(action: any, event: any) {
+    if (action == "showPanel") {
+      setIsPanel(true);
+      event.stopPropagation();
+    }
+
   }
- 
-}
 };
 
 export default ClassifiedCardComponent;

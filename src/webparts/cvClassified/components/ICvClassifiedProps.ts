@@ -4,4 +4,5 @@ export interface ICvClassifiedProps {
   environmentMessage: string;
   hasTeamsContext: boolean;
   userDisplayName: string;
+  context: any;
 }
