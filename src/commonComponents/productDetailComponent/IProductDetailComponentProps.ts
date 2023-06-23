@@ -1,1 +1,3 @@
-export interface IProductDetailComponentProps {}
+export interface IProductDetailComponentProps {
+    choiceGroupVisibility: any;
+}

@@ -1,1 +1,3 @@
-export interface IClassifiedCardComponentProps {}
+export interface IClassifiedCardComponentProps {
+    cardView: string;
+}

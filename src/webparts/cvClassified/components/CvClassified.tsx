@@ -75,23 +75,15 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
       environmentMessage,
       hasTeamsContext,
       userDisplayName
-    } = this.props; 
+    } = this.props;
 
 
 
     return (
-     <>
-     
-    <ProductComponents />
-     </>
+      <>
+        <ProductComponents />
+      </>
     );
   }
 }
-// function spfi() {
-//   throw new Error('Function not implemented.');
-// }
-
-// function SPFx(context: any): any {
-//   throw new Error('Function not implemented.');
-// }
 
