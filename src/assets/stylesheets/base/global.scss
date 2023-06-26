@@ -1399,6 +1399,8 @@ html, body {
 
 
         }
+
+
    
     .CanvasSection-xl8{
             .mainClassifiedContainer{
@@ -1447,6 +1449,9 @@ html, body {
               }
             }
           }
+
+
+          
           .CanvasSection-xl6{
             .mainClassifiedContainer{
               .subClassified{
@@ -1998,5 +2003,15 @@ html, body {
   }
 }
 // / Switch Button - Relative Code End /
+
+@include media-breakpoint-down(sm){
+  .CanvasSection-sm12{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
+  .a_c_50a7110f:not(.b_c_50a7110f):not(.j_c_50a7110f){
+    padding: 0px 2px;
+  }
+}
 
 
