@@ -117,7 +117,7 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
                 </div>
             </div>
             <Pagination
-                currentPage={3}
+                currentPage={1}
                 totalPages={13}
                 limiter={3}
                 onChange={function (page: number): void {

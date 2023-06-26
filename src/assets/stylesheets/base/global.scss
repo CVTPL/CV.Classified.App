@@ -133,6 +133,7 @@ html, body {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+      align-items: flex-end;
       @include media-breakpoint-down (xs){
         width: 100%;
       }
@@ -984,20 +985,21 @@ html, body {
                   padding: 0px;
 
                   .panel-body {
-                    height: calc(100% - 70px);
+                    max-height: calc(100vh - 137px);
                     flex: 1;
                     padding: 20px 30px;
-                    overflow-y: auto;
+                    overflow-y: scroll;
                     background-color: $secondary-2;
                     @include media-breakpoint-down(xxs) {
                       padding: 10px;
+                      max-height: calc(100vh - 116px);
                     }
                     &.sticky-with-content {
                       display: flex;
                       flex-direction: column;
                       .cmn-white-shadow-box {
                         flex: 1;
-                        overflow-y: auto;
+                        overflow-y: scroll;
 
                       }
                       .sticky-top-set {
@@ -1142,7 +1144,7 @@ html, body {
                       color: $primary-3;
                       transition: .1s ease-out;
                       width: 100%;
-                      margin-bottom: 8px;
+                      margin-bottom: 28px;
                       .ms-Dropdown-container{
                         .ms-Dropdown{
                           &:focus{
@@ -1292,6 +1294,11 @@ html, body {
                 background-color:$secondary-2;
                 border-radius: 30px;
                 min-width: 403px;
+                @include media-breakpoint-down(xs){
+                  min-width: auto;
+                  width: 100%;
+                  padding: 42px 30px;
+                }
                 .ms-Dialog-content {
                   .modal-custom-content {
                     display: flex;
@@ -1328,8 +1335,12 @@ html, body {
                         &.bg-secondary-18 {
                           background: $secondary-12;
                         }
-
-
+                          > img{
+                            @include media-breakpoint-down(xs){
+                              width: 30px;
+                              height: 30px;
+                            }
+                          }
                       }
                     }
                     .modal-body {
@@ -1353,15 +1364,25 @@ html, body {
                         .ms-Dialog-action {
                           margin: 0px;
                           .btn-container{
+                            @include media-breakpoint-down(xs){
+                              width: 100%;
+                            }
                             .btn-green{
                               flex: 1;
                               margin-right: 17px;
                               min-width: 140px;
+                              @include media-breakpoint-down(xs){
+                                min-width: 94px;
+                              }
                             }
                             .btn-red{
                               background-color: $secondary-11;
                               color: $secondary-2;
                               min-width: 140px;
+                              flex: 1;
+                              @include media-breakpoint-down(xs){
+                                min-width: 94px;
+                              }
                             }
                           }
                         }
@@ -1911,6 +1932,19 @@ html, body {
       }
     }
   }
+   
+  .mainClassifiedContainer{
+    .subClassified{
+      .searchSection{
+        .filtersSortSection{
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+        }
+      }
+    }
+  }
+
 }
   // main CSS End region
 
@@ -2011,6 +2045,19 @@ html, body {
   }
   .a_c_50a7110f:not(.b_c_50a7110f):not(.j_c_50a7110f){
     padding: 0px 2px;
+  }
+  .pagination-empty-card{
+    .emptyCard{
+      .emptyCardContainer{
+        .addIcon{
+          transform: translateY(0px);
+          img{
+            width: 28px;
+            height: 28px;
+          }
+        }
+      }
+    }
   }
 }
 
