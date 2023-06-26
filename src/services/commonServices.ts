@@ -1,6 +1,7 @@
 import "@pnp/sp/webs";
+import "@pnp/sp/security/web";
 import "@pnp/sp/lists";
-import "@pnp/sp/items";
+
 import "@pnp/sp/items/get-all";
 import "@pnp/sp/site-scripts";
 import "@pnp/sp/site-designs";
@@ -8,8 +9,14 @@ import "@pnp/sp/files";
 import "@pnp/sp/folders";
 import "@pnp/sp/batching";
 import "@pnp/sp/regional-settings/web";
+import "@pnp/sp/attachments";
+import "@pnp/sp/presets/all";
 
 const commonServices = {
+
+    _getCurrentLoginUser: async (sp: any) => {
+        return await sp.web.currentUser();
+    },
 
     _getSiteListByName: async (context: any, listName: string) => {
         var myHeaders = new Headers({
@@ -68,6 +75,10 @@ const commonServices = {
                 },
                 {
                     "verb": "createSiteColumnXml",
+                    "schemaXml": "<Field Type=\"Number\" ID=\"{e67444b2-8f05-4bc6-9bd7-61b98fd25438}\" Name=\"CV_ContactNo\" DisplayName=\"Contact No\" Required=\"TRUE\" StaticName=\"CV_ContactNo\" Group=\"_CV\" Customization=\"\" />"
+                },
+                {
+                    "verb": "createSiteColumnXml",
                     "schemaXml": "<Field Type=\"Text\" ID=\"{382b98d0-c51c-4ad6-82ff-a2c7cc20d777}\" Name=\"CV_location\" DisplayName=\"Location\" Required=\"TRUE\" Group=\"_CV\" StaticName=\"CV_location\" Customization=\"\" />"
                 },
                 {
@@ -102,6 +113,10 @@ const commonServices = {
                             {
                                 "verb": "addSiteColumn",
                                 "internalName": "CV_productPrice"
+                            },
+                            {
+                                "verb": "addSiteColumn",
+                                "internalName": "CV_ContactNo"
                             },
                             {
                                 "verb": "addSiteColumn",
@@ -146,6 +161,7 @@ const commonServices = {
                                 "CV_productCategory",
                                 "CV_otherProductCategory",
                                 "CV_productPrice",
+                                "CV_ContactNo",
                                 "CV_location",
                                 "CV_productStatus",
                                 "CV_shortDescription",
@@ -180,24 +196,82 @@ const commonServices = {
         return await sp.siteDesigns.applySiteDesign(siteDesignId, siteUrl);
     },
 
-    _createFolder: async (sp: any, folderUrl: string) => {
-        return await sp.web.folders.addUsingPath(folderUrl);
+    _getAllRoleDefinitions: async (sp: any) => {
+        return await sp.web.roleDefinitions();
     },
 
-    _getRegionalSetting: async (sp: any) => {
-        return await sp.web.regionalSettings.timeZone();
+    _getSiteGroupByName: async (sp: any, groupName: any) => {
+        return await sp.web.siteGroups.getByName(groupName)();
     },
 
-    _ensureSiteAssetsLibraryexist: async (sp: any) => {
-        return await sp.web.lists.ensureSiteAssetsLibrary();
+    _breakRollAssignments: async (sp: any, ListName: string, copyRoleAssignments: boolean, clearSubscopes: boolean) => {
+        return await sp.web.lists.getByTitle(ListName).breakRoleInheritance(copyRoleAssignments, clearSubscopes);
+    },
+
+    _createNewPermission: async (sp: any, roleDefinitionsName: any, roleDefinitionsDescription: any, order: number, basePermission: any) => {
+        return await sp.web.roleDefinitions.add(roleDefinitionsName, roleDefinitionsDescription, order, basePermission);
+    },
+
+    _roleAssignments: async (sp: any, ListName: any, principalId: number, roleDefId: number) => {
+        return await sp.web.lists.getByTitle(ListName).roleAssignments.add(principalId, roleDefId);
+    },
+
+    _getListAllItems: async (sp: any, listName: any) => {
+        return await sp.web.lists.getByTitle(listName).items.getAll();
+    },
+
+    _getListItemWithExpand: async (sp: any, listName: any, selectString: string, expandString: string) => {
+        return await sp.web.lists.getByTitle(listName).items.select(selectString).expand(expandString).getAll();
     },
 
     _updateListItem: async (sp: any, listName: any, data: any, itemId: any) => {
         return await sp.web.lists.getByTitle(listName).items.getById(itemId).update(data);
     },
 
+    _getContentTypeColumns: async (sp: any, contentTypeId: any) => {
+        return await sp.web.contentTypes.getById(contentTypeId).fields();
+    },
+
     _addListItem: async (sp: any, listName: any, item: any) => {
         return await sp.web.lists.getByTitle(listName).items.add(item);
+    },
+
+    _addMultipleAttachment: async (sp: any, listName: any, itemId: any, attachment: any) => {
+        // return await sp.web.lists.getByTitle(listName).items.getById(itemId).attachmentFiles.add(attachment.path, attachment);
+
+        const res: any = [];
+        for (let i = 0; i < attachment.length; i++) {
+            await sp.web.lists.getByTitle(listName).items.getById(itemId).attachmentFiles.add(attachment[i].name, attachment[i]).then((r: any) => res.push(r));
+        }
+        return res;
+    },
+
+    _checkRequiredValidation: async (dataObject: any, richTextValue: any, attachments: any, requiredFields: any) => {
+        let errorMessage: any = {};
+        requiredFields.forEach((requiredElement: any) => {
+
+            if (dataObject[requiredElement] == "" || dataObject[requiredElement] === undefined) {
+                errorMessage[requiredElement] = "*Required!";
+            }
+
+            if (dataObject["CV_productCategory"] == "Other") {
+                if (dataObject["CV_otherProductCategory"] == "" || dataObject["CV_otherProductCategory"] === undefined) {
+                    errorMessage["CV_otherProductCategory"] = "*Required!";
+                }
+            }
+
+            if (richTextValue == "" || richTextValue === undefined) {
+                errorMessage["CV_productDescription"] = "*Required!";
+            }
+
+            if (attachments.length === 0) {
+                errorMessage["Attachments"] = "*Required!";
+            }
+            else if (attachments.length < 3) {
+                errorMessage["Attachments"] = "*Minimum 3 Attachments Required!";
+            }
+        });
+        return errorMessage;
     },
 
 

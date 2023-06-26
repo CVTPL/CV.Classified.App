@@ -1,1 +1,4 @@
-export interface IProductComponentsProps {}
+export interface IProductComponentsProps {
+    context: any;
+    alasql: any;
+}

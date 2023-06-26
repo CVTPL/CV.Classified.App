@@ -60,45 +60,57 @@ const classifiedCard = [
 const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
     let { path, url } = useRouteMatch();
 
+    // const soldIcon = require('../../assets/images/svg/sold.svg');
+
+    const [paginatedItems, setPaginatedItems] = React.useState([]);
+    const [pageSize, setPageSize] = React.useState(1);
+
+    const getPage = (page: number) => {
+        // round a number up to the next largest integer.
+        const roundupPage = Math.ceil(page);
+        const tempPaginatedItems = props.productCardData.slice(roundupPage * pageSize, (roundupPage * pageSize) + pageSize)
+        setPaginatedItems(tempPaginatedItems);
+    }
+
     React.useEffect(() => {
-        console.log(path);
-        console.log(url);
+        // console.log(path);
+        // console.log(url);
         props.choiceGroupVisibility(true);//show choice group which is available in parent component.
     }, [])
     return (
         <>
             <div className='classified-cards'>
                 <div className="custmRow">
-                    {classifiedCard.map((card) => (
-                        <div className='custmCols' key={card.id}>
-                            <div className={"content-card" + " " + card.class}>
-                                <Link to={`${path}/productDetails?productId=${card.id}`} >
+                    {props.productCardData.map((card) => (
+                        <div className='custmCols' key={card.Id}>
+                            <div className={card.CV_productStatus === "Sold" ? "content-card" + " " + 'disabled' : "content-card" + " " + ''}>
+                                <Link to={`${path}/productDetails?productId=${card.Id}`} >
                                     <div className='card-header'>
                                         <div className='prdPrice'>
-                                            <img src={card.urlImage} alt={card.title} />
+                                            <img src={card.AttachmentFiles[0].ServerRelativeUrl} alt={card.Title} />
                                             <div className='prd-amt'>
-                                                {card.price}
+                                                {card.CV_productPrice}
                                             </div>
                                         </div>
                                         <div className='soldLabel'>
-                                            <img src={card.sold} alt="icon" style={{ display: card.sold ? 'block' : 'none' }} />
+                                            <img src={require('../../assets/images/svg/sold.svg')} alt="icon" style={{ display: card.CV_productStatus === "Sold" ? 'block' : 'none' }} />
                                         </div>
                                         <div>
                                         </div>
                                     </div>
                                     <div className='card-body'>
                                         <div className='card-title'>
-                                            <p>{card.title}</p>
+                                            <p>{card.Title}</p>
                                         </div>
                                         <div className='card-content'>
-                                            <p>{card.content}</p>
+                                            <p>{card.CV_shortDescription}</p>
                                             <div className='card-location'>
                                                 <img src={require('../../assets/images/svg/location.svg')} alt='Location Icon' />
-                                                <p>{card.location}</p>
+                                                <p>{card.CV_location}</p>
                                             </div>
                                             <div className='card-userName'>
                                                 <img src={require('../../assets/images/svg/user-icon.svg')} alt='User Icon' />
-                                                <p>{card.userName}</p>
+                                                <p>{card.Author.Title}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -118,10 +130,9 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
             </div>
             <Pagination
                 currentPage={1}
-                totalPages={13}
+                totalPages={(props.productCardData.length / pageSize) - 1}
                 limiter={3}
-                onChange={function (page: number): void {
-                }} />
+                onChange={(page) => getPage(page)} />
             {/* <HashRouter>
                 <Switch>
                     <Route exact path={path} component={() => (

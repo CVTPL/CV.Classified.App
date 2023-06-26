@@ -68,7 +68,9 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
     setCurrentProduct(productId)
     props.choiceGroupVisibility(false);//show choice group which is available in parent component.
   }, [currentProduct])
+
   const backArrow: IIconProps = { iconName: 'ChevronLeftMed' };
+
   return (
     <>
       <div className='productDetails'>
@@ -100,10 +102,10 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
 
                   <div className='social-icons'>
                     <ul>
-                      <li><a href="https://www.microsoft.com/en-in/microsoft-teams/log-in"><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
-                      <li> <a href="https://outlook.live.com/owa/"><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
-                      <li>  <a href="tel:+917852693210"><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                      <li> <a href=""><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                      <li><a onClick={() => { window.location.href = "https://teams.microsoft.com/l/chat/0/0?users=ankit@thecodevision.com" }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
+                      <li><a onClick={() => { window.location.href = "mailTo:ankit@thecodevision.com" }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
+                      <li><a onClick={() => { window.location.href = "tel:+91 7852693210" }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
+                      <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                     </ul>
                   </div>
                 </div>

@@ -1,1 +1,5 @@
-export interface IAddEditProductPanelComponentProps {}
+export interface IAddEditProductPanelComponentProps {
+    context: any;
+    onPanelChange: any;
+    onChangeAddPageToggle: any;
+}

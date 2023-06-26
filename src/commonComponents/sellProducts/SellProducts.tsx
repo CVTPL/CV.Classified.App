@@ -57,50 +57,75 @@ const classifiedCard = [
 ];
 
 const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
-    const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+
+    // const [isPanelOpen, setIsPanelOpen] = React.useState(false);
+
+    const [isPanel, setIsPanel] = React.useState(false);
+
+    const [AddPageToggle, setAddPageToggle] = React.useState(true);
+
+    // const soldIcon = require('../../assets/images/svg/sold.svg');
 
     const panelHeader = () => (
-        <div className="panel-header">
-            <h1>Edit Product</h1>
-        </div>
+        AddPageToggle ?
+            <div className="panel-header">
+                <h1>Sell New Product</h1>
+            </div> :
+            <div className="panel-header">
+                <h1>Edit Product</h1>
+            </div>
     )
+
+    function showpanels(action: any, event: any) {
+        if (action == "showAddPanel") {
+            setAddPageToggle(true);
+            setIsPanel(true);
+            event.stopPropagation();
+        }
+        else {
+            setAddPageToggle(false);
+            setIsPanel(true);
+            event.stopPropagation();
+        }
+
+    }
 
     return (
         <>
             <div className='classified-cards'>
                 <div className="custmRow">
-                    {classifiedCard.map((card) => (
-                        <div className='custmCols' key={card.id}>
-                            <div className={"content-card" + " " + card.class}>
+                    {props.productCardData.map((card) => (
+                        <div className='custmCols' key={card.Id}>
+                            <div className={card.CV_productStatus === "Sold" ? "content-card" + " " + 'disabled' : "content-card" + " " + ''}>
                                 <div className='card-header'>
                                     <div className='prdPrice'>
-                                        <img src={card.urlImage} alt={card.title} />
+                                        <img src={card.AttachmentFiles[0].ServerRelativeUrl} alt={card.Title} />
                                         <div className='prd-amt'>
-                                            {card.price}
+                                            {card.CV_productPrice}
                                         </div>
                                     </div>
                                     <div className='soldLabel'>
-                                        <img src={card.sold} alt="icon" style={{ display: card.sold ? 'block' : 'none' }} />
+                                        <img src={require('../../assets/images/svg/sold.svg')} alt="icon" style={{ display: card.CV_productStatus === "Sold" ? 'block' : 'none' }} />
                                     </div>
                                     <div className='edit-icon' >
-                                        <img src={require('../../assets/images/svg/edit-icon.svg')} onClick={() => { setIsPanelOpen(true) }} />
+                                        <img src={require('../../assets/images/svg/edit-icon.svg')} onClick={(e) => showpanels("showEditPanel", e)} />
                                     </div>
                                     <div>
                                     </div>
                                 </div>
                                 <div className='card-body'>
                                     <div className='card-title'>
-                                        <p>{card.title}</p>
+                                        <p>{card.Title}</p>
                                     </div>
                                     <div className='card-content'>
-                                        <p>{card.content}</p>
+                                        <p>{card.CV_shortDescription}</p>
                                         <div className='card-location'>
                                             <img src={require('../../assets/images/svg/location.svg')} alt='Location Icon' />
-                                            <p>{card.location}</p>
+                                            <p>{card.CV_location}</p>
                                         </div>
                                         <div className='card-userName'>
                                             <img src={require('../../assets/images/svg/user-icon.svg')} alt='User Icon' />
-                                            <p>{card.userName}</p>
+                                            <p>{card.Author.Title}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -119,7 +144,7 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                     {/* <div className='pagination-empty-card'> */}
                     <div className='pagination-empty-card'>
                         <div className='custmCols emptyCard'>
-                            <div className='emptyCardContainer' onClick={() => { setIsPanelOpen(true) }}>
+                            <div className='emptyCardContainer' onClick={(e) => { showpanels("showAddPanel", e) }}>
                                 <div className='addIcon'>
                                     <img src={require('../../assets/images/svg/plus-icon.svg')} />
                                 </div>
@@ -133,10 +158,10 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
             <Panel
                 className="panel-container product-panel-container"
                 onRenderHeader={panelHeader}
-                isOpen={isPanelOpen}
-                onDismiss={() => { setIsPanelOpen(false) }}
+                isOpen={isPanel}
+                onDismiss={() => { setIsPanel(false) }}
                 closeButtonAriaLabel="Close">
-                <AddEditProductPanelComponent />
+                <AddEditProductPanelComponent context={props.context} onPanelChange={setIsPanel} onChangeAddPageToggle={AddPageToggle} />
             </Panel>
             {/* Panel End Region */}
         </>

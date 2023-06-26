@@ -17,11 +17,14 @@
     "@pnp/graph": "^3.16.0",
     "@pnp/sp": "^3.16.0",
     "@pnp/spfx-controls-react": "^3.14.0",
+    "alasql": "^1.7.4",
     "office-ui-fabric-react": "7.185.7",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-dropzone": "^14.2.3",
     "react-image-gallery": "^1.2.12",
+    "react-loader-spinner": "^5.3.4",
+    "react-router-dom": "^5.3.4",
     "tslib": "2.3.1"
   },
   "devDependencies": {
@@ -33,6 +36,7 @@
     "@rushstack/eslint-config": "2.5.1",
     "@types/react": "16.9.51",
     "@types/react-dom": "16.9.8",
+    "@types/react-router-dom": "^5.3.3",
     "@types/react-image-gallery": "^1.2.0",
     "@types/webpack-env": "~1.15.2",
     "ajv": "^6.12.5",

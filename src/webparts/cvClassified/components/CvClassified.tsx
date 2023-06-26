@@ -6,14 +6,78 @@ import ProductComponents from '../../../commonComponents/productComponents/Produ
 require('../../../assets/stylesheets/base/global.scss');
 import { spfi, SPFx } from "@pnp/sp";
 import commonServices from '../../../services/commonServices';
+import * as alasql from 'alasql';
 
-export default class CvClassified extends React.Component<ICvClassifiedProps, {}> {
+export default class CvClassified extends React.Component<ICvClassifiedProps, any, {}> {
 
   constructor(props: ICvClassifiedProps) {
     super(props);
+    this.state = {
+      alasql: alasql,
+    };
   }
 
   public sp = spfi().using(SPFx(this.props.context));
+
+  /**
+   * customPermission
+   */
+  public customPermission = (): void => {
+    commonServices._getAllRoleDefinitions(this.sp).then((allRoleDefitions) => {
+
+      //check AddItems permission exist or not
+      let checkCustomPermissionAddItems = allRoleDefitions.filter((ele: any) => ele.Name === "AddItems");
+      let rolDefId: number;
+
+      //permission not exist
+      if (checkCustomPermissionAddItems.length === 0) {
+        //create new permission
+        commonServices._createNewPermission(this.sp, "AddItems", "Can add Only", 99, { High: 1, Low: 2 }).then((response) => {
+          rolDefId = response.data.Id;
+          alert("AddItems Custom Permission Created");
+          //break inheritance permission
+          commonServices._breakRollAssignments(this.sp, "Classified Products", true, true).then((breakRollAssignmentRes) => {
+            //get principalId from sitegroup
+            commonServices._getSiteGroupByName(this.sp, "CV_Classified_App Visitors").then((siteGroupRes) => {
+              let principalId = siteGroupRes.Id;
+              //assign custom permission to list
+              commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId).then((roleAssignmentRes) => {
+                alert("Custom permission applied");
+              })
+            })
+          })
+        })
+      }
+      //permission exist
+      else {
+        rolDefId = checkCustomPermissionAddItems[0].Id;
+        //break inheritance permission
+        commonServices._breakRollAssignments(this.sp, "Classified Products", true, true).then((breakRollAssignmentRes) => {
+          //get principalId from sitegroup
+          commonServices._getSiteGroupByName(this.sp, "CV_Classified_App Visitors").then((siteGroupRes) => {
+            let principalId = siteGroupRes.Id;
+            //assign custom permission to list
+            commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId).then((roleAssignmentRes) => {
+              alert("Custom permission applied");
+            })
+          })
+        })
+      }
+
+      //check EditItems permission exist or not
+      let checkCustomPermissionEditItems = allRoleDefitions.filter((ele: any) => ele.Name === "EditItems");
+
+      //permission not exist
+      if (checkCustomPermissionEditItems.length === 0) {
+        //create new permission
+        commonServices._createNewPermission(this.sp, "EditItems", "Can Edit Only", 99, { High: 0, Low: 196613 }).then((response) => {
+          alert("EditItems Custom Permission Created");
+
+        })
+      }
+
+    });
+  }
 
   componentDidMount(): void {
 
@@ -33,6 +97,9 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
               //site design is available so apply that site design to site.
               return commonServices._applySiteDesignToSite(this.sp, checkSiteDesign[0].Id, siteUrl).then((response) => {
                 alert("Site design applied");
+
+                this.customPermission();
+
               });
             }
             else {
@@ -46,6 +113,9 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
                     return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
                   }).then((response) => {
                     alert("Site design applied");
+
+                    this.customPermission();
+
                   });
                 }
                 else {
@@ -56,6 +126,9 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
                     return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
                   }).then((response) => {
                     alert("Site design applied");
+
+                    this.customPermission();
+
                   });
                 }
               });
@@ -68,6 +141,8 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
       });
     }
   }
+
+
   public render(): React.ReactElement<ICvClassifiedProps> {
     const {
       description,
@@ -81,7 +156,7 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, {}
 
     return (
       <>
-        <ProductComponents />
+        <ProductComponents context={this.props.context} alasql={this.state.alasql} />
       </>
     );
   }
