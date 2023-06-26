@@ -7,6 +7,7 @@ import { IFilePickerResult, FilePicker } from '@pnp/spfx-controls-react/lib/File
 import { RichText } from "@pnp/spfx-controls-react/lib/RichText";
 import CommonDeleteDailog from '../CommonDeleteDailog/CommonDeleteDailog';
 
+
 const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanelComponentProps> = (props) => {
 
   const [addProductInputList, setAddProductInputList] = React.useState<any>({});
@@ -123,15 +124,16 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           <div className='panelInnerbox'>
             <div className="ms-Grid">
               <div className="ms-Grid-row">
-                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
+                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 customTextFiled">
                   <div className="material-textfield">
                     <input type="text" id="Title" value={addProductInputList.Title} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Title</label>
                   </div>
+                  <span className='requiredmsg'>Required</span>
                 </div>
               </div>
               <div className="ms-Grid-row">
-                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
+                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield-dropdown">
                     <Dropdown
                       placeholder="Category"
@@ -141,25 +143,28 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                       onChange={(ev, op, i) => handleChangeDropdown(ev, op, i)}
                     />
                   </div>
+                  <span className='requiredmsg'>Required</span>
                 </div>
 
-                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
+                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="text" id="CV_productPrice" value={addProductInputList.CV_productPrice} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Price</label>
                   </div>
+                  <span className='requiredmsg'>Required</span>
                 </div>
               </div>
 
 
               <div className="ms-Grid-row">
-                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
+                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="text" id="CV_location" value={addProductInputList.CV_location} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Location</label>
                   </div>
+                  <span className='requiredmsg'>Required</span>
                 </div>
-                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6">
+                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield-dropdown">
                     <Dropdown
                       placeholder="Status"
@@ -169,25 +174,28 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                       onChange={(ev, op, i) => handleChangeDropdown(ev, op, i)}
                     />
                   </div>
+                  <span className='requiredmsg'>Required</span>
                 </div>
               </div>
 
 
 
-              <div className="ms-Grid-row">
-                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
+              <div className="ms-Grid-row customRichText">
+                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 customTextFiled">
                   <div className="material-textfield textareaContainer">
                     <textarea placeholder=" " id="CV_shortDescription" value={addProductInputList.CV_shortDescription} onChange={(e) => { handleChangeProductInput(e) }} ></textarea>
                     <label>Short Description</label>
                   </div>
+                  <span className='requiredmsg'>Required</span>
                 </div>
               </div>
 
 
               <div className="ms-Grid-row">
-                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12">
+                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 customTextFiled">
                   <RichText value={richTextValue} onChange={(text) => onTextChange(text)} placeholder='Long Description' />
                 </div>
+                <span className='requiredmsgRichText'>Required</span>
               </div>
 
               <div className='ms-Grid-row'>
@@ -203,6 +211,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                     </aside>
                   </section>
                 </div>
+                <span className='requiredmsgUploadImages'>Required</span>
               </div>
             </div>
           </div>

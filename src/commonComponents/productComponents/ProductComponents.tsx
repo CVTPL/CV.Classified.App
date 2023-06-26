@@ -230,7 +230,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                   <div className="ms-Grid">
                     <div className="ms-Grid-row">
                       <div className='ms-Grid-col ms-sm12 ms-md12 ms-lg12'>
-                        <div className='contentPivot'>
+                        <div className='contentPivot sellProducts'>
                           <SellProducts />
                         </div>
                       </div>

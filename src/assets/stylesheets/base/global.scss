@@ -109,10 +109,15 @@ html, body {
       }
     }
 
+    .sellProducts{
+      margin-top: 30px;
+    }
+
     .headerTitle{
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
+      align-items: center;
       .title{
         h1{
         @include text-styles($fs-22, 27px , $primary-3)
@@ -151,7 +156,7 @@ html, body {
                    margin-top: 13px;
                   }
                 .ms-Dropdown-title{
-                  border: 1px solid $secondary-1;
+                  border: 1px solid $secondary-4;
                   color: $secondary-1;
                   background-color: $secondary-2;;
                   border-radius: 10px;
@@ -331,15 +336,6 @@ html, body {
           }
         }
       }
-//     }
-//   }
-// }
-
-
-
-
-
-
 
 
 // card css
@@ -387,32 +383,6 @@ html, body {
          height: 24px;
         }
       }
-
-      // .soldLabel{
-      //   position: absolute;
-      //   transform: rotate(45deg);
-      //   color: $secondary-2;
-      //   content: "";
-      //   top: 12px;
-      //   font-size: $fs-15;
-      //   right: 15px;
-      //   z-index: 9;
-      //   &::after{
-      //     background-color: $secondary-11;
-      //     color: $secondary-2;
-      //     top: 0px;
-      //     content: "";
-      //     position: absolute;
-      //     z-index: 9;
-      //     bottom: unset;
-      //     right: 0px;
-      //     z-index: 52;
-      //     width: 143px;
-      //     height: 143px;
-      //     clip-path: polygon(100% 0, 0 0, 100% 100%);
-
-      //   }
-      // }
     }
     .card-body{
       border: 1px solid $secondary-4;
@@ -624,7 +594,7 @@ html, body {
 
 // custom row and custom column css
 .custmRow{
-  display: flex;
+  display: inline-flex;
   flex-wrap: wrap;
   margin: 0px -20px;
   box-sizing: border-box;
@@ -661,6 +631,7 @@ html, body {
     border-radius: 20px;
     padding: 10px;
     height: 100%;
+    min-width: 273px;
     cursor: pointer;
     .addIcon{
       display: flex;
@@ -913,11 +884,6 @@ html, body {
   // / Callout & Panel Relative Style CSS Start /
   .ms-Layer {
     .ms-Layer-content {
-      .ms-Overlay {
-        backdrop-filter: blur(2px);
-        -webkit-backdrop-filter: blur(2px);
-        -moz-backdrop-filter: blur(2px);
-      }
       .ms-Panel {
         &.panel-container {
           .ms-Panel-main {
@@ -1023,7 +989,6 @@ html, body {
                     padding: 20px 30px;
                     overflow-y: auto;
                     background-color: $secondary-2;
-                    // @include scroll-style();
                     @include media-breakpoint-down(xxs) {
                       padding: 10px;
                     }
@@ -1033,7 +998,7 @@ html, body {
                       .cmn-white-shadow-box {
                         flex: 1;
                         overflow-y: auto;
-                      // @include scroll-style();
+
                       }
                       .sticky-top-set {
                         margin: 0px;
@@ -1041,21 +1006,36 @@ html, body {
                     }
 
                     .panelContainer{
+                      .customTextFiled{
+                        position: relative;
+                        .requiredmsg{
+                          position: absolute;
+                            top: 43px;
+                            color: $secondary-11;
+                            font-weight: 600;
+                            margin: 10px 0px 10px 0px;
+                        }
+                      }
+
+                      .requiredmsgRichText , .requiredmsgUploadImages{
+                        color: $secondary-11;
+                        font-weight: 600;
+                        padding-left: 8px;
+                      }
+
+
                       .material-textfield {
                         position: relative;  
                         margin-bottom: 20px;
-                      }
 
-                      .material-textfield {
-                        position: relative;
-                        margin-bottom: 20px;
                       }
-                      
-                      .material-textfield {
+                      .customRichText{
                         position: relative;
-                        margin-bottom: 20px;
+                        .requiredmsg{
+                          position: absolute;
+                          top: 110px;
+                        }
                       }
-                      
                       .textareaContainer {
                         position: relative;
                       }
@@ -1070,6 +1050,7 @@ html, body {
                         color: $primary-3;
                         transition: 0.1s ease-out;
                         width: 100%;
+                        margin-bottom: 8px;
                       }
 
                       textarea:not(:placeholder-shown)+label {
@@ -1123,12 +1104,15 @@ html, body {
                         color: $primary-3;
                         transition: 0.1s ease-out;
                         width: 100%;
+                        margin-bottom: 8px;
                       }
                       .quill{
                         .ql-editor{
                         border-radius: 10px;
                         margin-bottom: 20px;
                         height: 114px;
+                        margin-bottom: 8px;
+
                         &::after{
                           display: none;
                         }
@@ -1158,6 +1142,7 @@ html, body {
                       color: $primary-3;
                       transition: .1s ease-out;
                       width: 100%;
+                      margin-bottom: 8px;
                       .ms-Dropdown-container{
                         .ms-Dropdown{
                           &:focus{
@@ -1210,9 +1195,11 @@ html, body {
             }
           }
           .ms-Overlay {
-          background: $primary-3;
-          opacity: 0.3;
+          background-color:rgb($primary-3, 0.3);
             filter: blur(0px);
+             backdrop-filter: blur(2px);
+        -webkit-backdrop-filter: blur(2px);
+        -moz-backdrop-filter: blur(2px);
           }
           &.product-panel-container {
             @include panelResponsiveCommanWidthStyle(800px);
@@ -1588,6 +1575,7 @@ html, body {
 
   .zoneContent{
     padding-left: 8px;
+    margin-top: 10px;
     P{
       @include text-styles($fs-16 , 24px , $secondary-10);
       margin-bottom:9px;
@@ -1637,11 +1625,16 @@ html, body {
     display: flex;
     flex: auto;
     justify-content: space-between;
-
     @include media-breakpoint-down(md){
       display: flex;
       justify-content: center !important;
     }
+     
+    .emptyCard{
+      min-width: 311px;
+    }
+
+
   }
 
   // / Pagination Relative Code Start /
@@ -1667,7 +1660,7 @@ html, body {
           border-radius: 4px;
           padding: 0px 4px;
           margin-left: 0px;
-          // border: 1px solid $secondary-25;
+          border: 1px solid $secondary-4;
           &:not(:last-child) {
             margin-right: 6px;
           }
@@ -1925,7 +1918,7 @@ html, body {
     .ms-ChoiceFieldGroup-flexContainer {
       display: inline-flex;
       justify-content: flex-start;
-      border: 1px solid $primary-1;
+      border: 1px solid $secondary-4;
       border-radius: 20px;
       overflow: hidden;
       background-color: $primary-1;
