@@ -287,15 +287,13 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           <div className='panelInnerbox'>
             <div className="ms-Grid">
               <div className="ms-Grid-row">
-                <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 customTextFiled">
+                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="text" id="Title" value={addProductInputList.Title ? addProductInputList.Title : ""} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Title</label>
                   </div>
                   {errorList.Title && <span className='requiredmsg'>{errorList.Title}</span>}
                 </div>
-              </div>
-              <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield-dropdown">
                     <Dropdown
@@ -308,7 +306,8 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                   </div>
                   {errorList.CV_productCategory && <span className='requiredmsg'>{errorList.CV_productCategory}</span>}
                 </div>
-
+              </div>
+              <div className="ms-Grid-row">
                 {addProductInputList.CV_productCategory === "Other" ?
                   <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                     <div className="material-textfield">
@@ -319,17 +318,14 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                   </div>
                   :
                   ""}
-
-                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
+                    <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="number" id="CV_productPrice" value={addProductInputList.CV_productPrice ? addProductInputList.CV_productPrice : ""} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Price</label>
                   </div>
                   {errorList.CV_productPrice && <span className='requiredmsg'>{errorList.CV_productPrice}</span>}
                 </div>
-              </div>
 
-              <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="number" id="CV_ContactNo" value={addProductInputList.CV_ContactNo ? addProductInputList.CV_ContactNo : ""} onChange={(e) => { handleChangeProductInput(e) }} />
@@ -337,10 +333,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                   </div>
                   {errorList.CV_ContactNo && <span className='requiredmsg'>{errorList.CV_ContactNo}</span>}
                 </div>
-              </div>
 
-
-              <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="text" id="CV_location" value={addProductInputList.CV_location ? addProductInputList.CV_location : ""} onChange={(e) => { handleChangeProductInput(e) }} />
@@ -348,6 +341,8 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                   </div>
                   {errorList.CV_location && <span className='requiredmsg'>{errorList.CV_location}</span>}
                 </div>
+
+
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield-dropdown">
                     <Dropdown

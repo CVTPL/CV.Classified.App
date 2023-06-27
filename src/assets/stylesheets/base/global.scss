@@ -95,6 +95,14 @@ html, body {
   padding: 27px 20px;
   position: relative;
   border-radius: 20px;
+  .contentPivot{
+    > .noItemsDataMsg{
+      color: $secondary-11;
+      text-align: center;
+      padding: 50px 0px;
+      font-size: $fs-36;
+    }
+  }
     .ms-SearchBox{
       min-width: 500px;
       width: 100%;
@@ -389,6 +397,7 @@ html, body {
       border: 1px solid $secondary-4;
       padding: 20px;
       margin-top: -4px;
+      height: 200px;
       .card-content{
         p{
           @include text-styles($fs-16, 22px ,$secondary-5, );
@@ -975,6 +984,8 @@ html, body {
             }
             .ms-Panel-contentInner {
               position: relative;
+              height: calc(100vh - 137px);
+              overflow-y: auto;
               .ms-Panel-scrollableContent {
                 overflow: inherit;
                 .ms-Panel-content {
@@ -985,9 +996,10 @@ html, body {
 
                   .panel-body {
                     padding: 20px 30px;
-                    height: calc(100vh - 180px);
-                    overflow: auto;
-                    background-color: $secondary-2;
+                    height: calc(100vh - 137px);
+                    @include media-breakpoint-down(xs){
+                      height: calc(100vh - -474px)
+                    }
                     @include media-breakpoint-down(xxs) {
                       padding: 10px;
                     }
@@ -1073,9 +1085,9 @@ html, body {
                       
                       label {
                         position: absolute;
-                        font-size: 1rem;
+                        font-size: $fs-16;
                         left: 0;
-                        top: 39%;
+                        top: 44%;
                         transform: translateY(-50%);
                         background-color: $secondary-2;
                         color: gray;
@@ -1145,26 +1157,29 @@ html, body {
                             border: none;
                             background-color: $secondary-2;
                             padding: 0px;
+                            font-size: $fs-16;
+                            color: $primary-3;
                           }
                         }
                       }
                     }
-
-                    // .quill .ql-editor{
-                    //  boredr
-                    // }
                   }
 
                   .panel-footer {
                     padding: 15px 25px;
                     background-color: $secondary-2;
                     box-shadow: 0px 0px 20px $secondary-9;
-                    width: 100%;
-                    position: absolute;
-                    bottom: 0;
-                    right: 0;
-                    left: 0;
-                    height: 70px;
+                    position: sticky;
+                      top: 0;
+                      bottom: 0;
+                      left: 0;
+                      right: 0;
+                    // width: 100%;
+                    // position: absolute;
+                    // bottom: 0;
+                    // right: 0;
+                    // left: 0;
+                    // height: 70px;
                     @include media-breakpoint-down(sm) {
                       padding: 15px;
                     }
@@ -1199,13 +1214,7 @@ html, body {
         -webkit-backdrop-filter: blur(2px);
         -moz-backdrop-filter: blur(2px);
           }
-          // .ms-Panel-main{
-          //   div:first-child , div:last-child{
-          //    pointer-events: visible !important;
-          //   }
-          // }
           &.product-panel-container {
-            // pointer-events: visible !important;
             @include panelResponsiveCommanWidthStyle(800px);
           }
         }

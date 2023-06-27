@@ -468,7 +468,10 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                     <div className="ms-Grid-row">
                       <div className='ms-Grid-col ms-sm12 ms-md12 ms-lg12'>
                         <div className='contentPivot'>
-                          <BuyProducts choiceGroupVisibility={setShowChoiceGroup} productCardData={productCardData} />
+                          {productCardData.length > 0 ?
+                            <BuyProducts choiceGroupVisibility={setShowChoiceGroup} productCardData={productCardData} />
+                            : 
+                            <h1 className='noItemsDataMsg'>No items found</h1>}
                         </div>
                       </div>
                     </div>
