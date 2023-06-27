@@ -302,7 +302,8 @@ const ClassifiedCardComponent: React.FunctionComponent<IClassifiedCardComponentP
       {/* Panel Start Region */}
       <div>
         <Panel
-          className="panel-container product-panel-container"
+           className="panel-containers product-panel-container"
+          // 
           onRenderHeader={panelHeader}
           isOpen={isPanel}
           onDismiss={() => { setIsPanel(false) }}

@@ -595,7 +595,7 @@ html, body {
 
 // custom row and custom column css
 .custmRow{
-  display: inline-flex;
+  display: flex;
   flex-wrap: wrap;
   margin: 0px -20px;
   box-sizing: border-box;
@@ -886,12 +886,12 @@ html, body {
   .ms-Layer {
     .ms-Layer-content {
       .ms-Panel {
-        &.panel-container {
+        &.panel-containers {
           .ms-Panel-main {
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            height: 100vh;
+            // height: 100vh;
             .ms-Panel-commands {
               margin-top: 0px;
               .ms-Panel-navigation {
@@ -902,6 +902,7 @@ html, body {
                 padding: 15px 25px;
                 position: relative;
                 z-index: 1;
+                height: 70px;
                 @include media-breakpoint-down(sm) {
                   padding: 15px 20px 15px 25px;
                 }
@@ -973,32 +974,28 @@ html, body {
               }
             }
             .ms-Panel-contentInner {
-              flex: 1;
+              position: relative;
               .ms-Panel-scrollableContent {
-                height: 100%;
-                flex: 1;
-                overflow: unset;
+                overflow: inherit;
                 .ms-Panel-content {
                   height: 100%;
                   display: flex;
                   flex-direction: column;
-                  padding: 0px;
+                  padding: 0px !important;
 
                   .panel-body {
-                    max-height: calc(100vh - 137px);
-                    flex: 1;
                     padding: 20px 30px;
-                    overflow-y: scroll;
+                    height: calc(100vh - 180px);
+                    overflow: auto;
                     background-color: $secondary-2;
                     @include media-breakpoint-down(xxs) {
                       padding: 10px;
-                      max-height: calc(100vh - 116px);
                     }
                     &.sticky-with-content {
                       display: flex;
                       flex-direction: column;
                       .cmn-white-shadow-box {
-                        flex: 1;
+                        // flex: 1;
                         overflow-y: scroll;
 
                       }
@@ -1006,37 +1003,29 @@ html, body {
                         margin: 0px;
                       }
                     }
-
                     .panelContainer{
                       .customTextFiled{
                         position: relative;
+                        margin-bottom: 12px;
                         .requiredmsg{
-                          position: absolute;
-                            top: 43px;
                             color: $secondary-11;
-                            font-weight: 600;
-                            margin: 10px 0px 10px 0px;
+                            font-weight: 500;
                         }
                       }
 
                       .requiredmsgRichText , .requiredmsgUploadImages{
                         color: $secondary-11;
-                        font-weight: 600;
-                        padding-left: 8px;
+                        font-weight: 500;
+                        padding-left: 1px;
                       }
 
 
                       .material-textfield {
-                        position: relative;  
-                        margin-bottom: 20px;
+                        position: relative; 
 
                       }
                       .customRichText{
                         position: relative;
-                        .requiredmsg{
-                          position: absolute;
-                          top: 110px;
-                        }
                       }
                       .textareaContainer {
                         position: relative;
@@ -1052,7 +1041,7 @@ html, body {
                         color: $primary-3;
                         transition: 0.1s ease-out;
                         width: 100%;
-                        margin-bottom: 8px;
+                        margin-bottom: 0px;
                       }
 
                       textarea:not(:placeholder-shown)+label {
@@ -1086,7 +1075,7 @@ html, body {
                         position: absolute;
                         font-size: 1rem;
                         left: 0;
-                        top: 50%;
+                        top: 39%;
                         transform: translateY(-50%);
                         background-color: $secondary-2;
                         color: gray;
@@ -1106,14 +1095,14 @@ html, body {
                         color: $primary-3;
                         transition: 0.1s ease-out;
                         width: 100%;
-                        margin-bottom: 8px;
+                        margin-bottom: 2px;
                       }
                       .quill{
                         .ql-editor{
                         border-radius: 10px;
                         margin-bottom: 20px;
                         height: 114px;
-                        margin-bottom: 8px;
+                        margin-bottom: 2px;
 
                         &::after{
                           display: none;
@@ -1138,13 +1127,13 @@ html, body {
                       font-size: $fs-16;
                       outline: 0;
                       height: 50px;
-                      padding: 10px 20px;
+                      padding: 10px 14px;
                       border: 1px solid $primary-2;
                       border-radius: 10px;
                       color: $primary-3;
                       transition: .1s ease-out;
                       width: 100%;
-                      margin-bottom: 28px;
+                      // margin-bottom: 28px;
                       .ms-Dropdown-container{
                         .ms-Dropdown{
                           &:focus{
@@ -1155,6 +1144,7 @@ html, body {
                           .ms-Dropdown-title{
                             border: none;
                             background-color: $secondary-2;
+                            padding: 0px;
                           }
                         }
                       }
@@ -1169,6 +1159,12 @@ html, body {
                     padding: 15px 25px;
                     background-color: $secondary-2;
                     box-shadow: 0px 0px 20px $secondary-9;
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    right: 0;
+                    left: 0;
+                    height: 70px;
                     @include media-breakpoint-down(sm) {
                       padding: 15px;
                     }
@@ -1203,7 +1199,13 @@ html, body {
         -webkit-backdrop-filter: blur(2px);
         -moz-backdrop-filter: blur(2px);
           }
+          // .ms-Panel-main{
+          //   div:first-child , div:last-child{
+          //    pointer-events: visible !important;
+          //   }
+          // }
           &.product-panel-container {
+            // pointer-events: visible !important;
             @include panelResponsiveCommanWidthStyle(800px);
           }
         }
@@ -1602,11 +1604,13 @@ html, body {
   .zoneContent{
     padding-left: 8px;
     margin-top: 10px;
-    P{
+    p{
       @include text-styles($fs-16 , 24px , $secondary-10);
-      margin-bottom:9px;
+      margin-bottom:-2px;
     }
   .dropZoneContainer {
+    height: 100px;
+    margin-bottom: 3px;
     // display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
@@ -1635,7 +1639,7 @@ html, body {
       margin-top: 16px;
       transition: border .24s ease-in-out;
       max-width: 100px;
-      height: 100px;
+      height: 100%;
       &:focus{
         border-color: $primary-2;
       }

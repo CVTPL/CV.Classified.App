@@ -156,7 +156,8 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
 
             {/* Panel Start Region */}
             <Panel
-                className="panel-container product-panel-container"
+                className="panel-containers product-panel-container"
+                // panel-container product-panel-container
                 onRenderHeader={panelHeader}
                 isOpen={isPanel}
                 onDismiss={() => { setIsPanel(false) }}
