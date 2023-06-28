@@ -109,20 +109,19 @@ html, body {
      }
     }
 }
-
 .classified-cards{
   .content-card{
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    .linkItem{
+      height: 100%;
+      display: flex;
+      flex-direction: column;
     .card-body{
       flex: 1;
     }
   }
+  }
 
 }
-
-    
   }
     .ms-SearchBox{
       min-width: 500px;

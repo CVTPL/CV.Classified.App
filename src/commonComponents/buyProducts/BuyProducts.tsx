@@ -84,7 +84,7 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
                     {props.productCardData.map((card) => (
                         <div className='custmCols' key={card.Id}>
                             <div className={card.CV_productStatus === "Sold" ? "content-card" + " " + 'disabled' : "content-card" + " " + ''}>
-                                <Link to={`${path}/productDetails?productId=${card.Id}`} >
+                                <Link to={`${path}/productDetails?productId=${card.Id}`}  className='linkItem'>
                                     <div className='card-header'>
                                         <div className='prdPrice'>
                                             <img src={card.AttachmentFiles[0].ServerRelativeUrl} alt={card.Title} />
