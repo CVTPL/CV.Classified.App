@@ -29,6 +29,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
 
   const filterIcon: IIconProps = { iconName: 'FilterSolid' };
 
+
   const [selectedView, setSelectedView] = React.useState("buy");
 
   // const locationOption: IDropdownOption[] = [
@@ -471,7 +472,10 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                           {productCardData.length > 0 ?
                             <BuyProducts choiceGroupVisibility={setShowChoiceGroup} productCardData={productCardData} />
                             : 
-                            <h1 className='noItemsDataMsg'>No items found</h1>}
+                            <div className='errMsg'>
+                             <img src={require('../../assets/images/png/no-data-found.png')} className='noDataIcon' />
+                            </div>
+                            }
                         </div>
                       </div>
                     </div>
