@@ -208,7 +208,7 @@ const commonServices = {
         return await sp.web.lists.getByTitle(ListName).breakRoleInheritance(copyRoleAssignments, clearSubscopes);
     },
 
-    _createNewPermission: async (sp: any, roleDefinitionsName: any, roleDefinitionsDescription: any, order: number, basePermission: any) => {
+    _createNewPermissionLevel: async (sp: any, roleDefinitionsName: any, roleDefinitionsDescription: any, order: number, basePermission: any) => {
         return await sp.web.roleDefinitions.add(roleDefinitionsName, roleDefinitionsDescription, order, basePermission);
     },
 

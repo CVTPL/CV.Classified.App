@@ -7,6 +7,7 @@ require('../../../assets/stylesheets/base/global.scss');
 import { spfi, SPFx } from "@pnp/sp";
 import commonServices from '../../../services/commonServices';
 import * as alasql from 'alasql';
+import { Spinner, SpinnerSize } from 'office-ui-fabric-react';
 
 export default class CvClassified extends React.Component<ICvClassifiedProps, any, {}> {
 
@@ -14,151 +15,147 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
     super(props);
     this.state = {
       alasql: alasql,
+      initializationStatus: false,
+      loading: true
     };
   }
 
   public sp = spfi().using(SPFx(this.props.context));
 
-  /**
-   * customPermission
-   */
-  public customPermission = (): void => {
-    commonServices._getAllRoleDefinitions(this.sp).then((allRoleDefitions) => {
-
-      //check AddItems permission exist or not
-      let checkCustomPermissionAddItems = allRoleDefitions.filter((ele: any) => ele.Name === "AddItems");
-      let rolDefId: number;
-
-      //permission not exist
-      if (checkCustomPermissionAddItems.length === 0) {
-        //create new permission
-        commonServices._createNewPermission(this.sp, "AddItems", "Can add Only", 99, { High: 1, Low: 2 }).then((response) => {
-          rolDefId = response.data.Id;
-          alert("AddItems Custom Permission Created");
-          //break inheritance permission
-          commonServices._breakRollAssignments(this.sp, "Classified Products", true, true).then((breakRollAssignmentRes) => {
-            //get principalId from sitegroup
-            commonServices._getSiteGroupByName(this.sp, "CV_Classified_App Visitors").then((siteGroupRes) => {
-              let principalId = siteGroupRes.Id;
-              //assign custom permission to list
-              commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId).then((roleAssignmentRes) => {
-                alert("Custom permission applied");
-              })
-            })
-          })
-        })
-      }
-      //permission exist
-      else {
-        rolDefId = checkCustomPermissionAddItems[0].Id;
-        //break inheritance permission
-        commonServices._breakRollAssignments(this.sp, "Classified Products", true, true).then((breakRollAssignmentRes) => {
-          //get principalId from sitegroup
-          commonServices._getSiteGroupByName(this.sp, "CV_Classified_App Visitors").then((siteGroupRes) => {
-            let principalId = siteGroupRes.Id;
-            //assign custom permission to list
-            commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId).then((roleAssignmentRes) => {
-              alert("Custom permission applied");
-            })
-          })
-        })
-      }
-
-      //check EditItems permission exist or not
-      let checkCustomPermissionEditItems = allRoleDefitions.filter((ele: any) => ele.Name === "EditItems");
-
-      //permission not exist
-      if (checkCustomPermissionEditItems.length === 0) {
-        //create new permission
-        commonServices._createNewPermission(this.sp, "EditItems", "Can Edit Only", 99, { High: 0, Low: 196613 }).then((response) => {
-          alert("EditItems Custom Permission Created");
-
-        })
-      }
-
-    });
-  }
-
   componentDidMount(): void {
 
     //check list is exist or not
     if (Object.keys(this.props.context).length > 0) {
+      // let siteUrl = this.props.context.pageContext.legacyPageContext.webAbsoluteUrl;
+      this.initializeFunction();
 
-      let siteUrl = this.props.context.pageContext.legacyPageContext.webAbsoluteUrl;
 
-      commonServices._getSiteListByName(this.props.context, "Classified Products").then((response) => {
-        if (response.status == 404) {//list is not available
-
-          //list is not available than check site design available
-          commonServices._getSiteDesign(this.sp).then((allSiteDesign) => {
-            let checkSiteDesign = allSiteDesign.filter((ele: any) => ele.Title == "ClassifiedSiteDesign");
-
-            if (checkSiteDesign.length > 0) {
-              //site design is available so apply that site design to site.
-              return commonServices._applySiteDesignToSite(this.sp, checkSiteDesign[0].Id, siteUrl).then((response) => {
-                alert("Site design applied");
-
-                this.customPermission();
-
-              });
-            }
-            else {
-              //site design is not available then check site script available
-              return commonServices._getSiteScript(this.sp).then((allSiteScripts) => {
-                let checkSiteScript = allSiteScripts.filter((ele: any) => ele.Title == "ClassifiedSiteScript");
-
-                if (checkSiteScript.length > 0) {
-                  //site script is available so create site design and apply to site
-                  return commonServices._createSiteDesign(this.sp, checkSiteScript[0].Id).then((response) => {
-                    return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
-                  }).then((response) => {
-                    alert("Site design applied");
-
-                    this.customPermission();
-
-                  });
-                }
-                else {
-                  // site script is not available so create site script and site design and apply to site
-                  commonServices._createSiteScript(this.props.context, this.sp).then((response) => {
-                    return commonServices._createSiteDesign(this.sp, response.Id);
-                  }).then((response) => {
-                    return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
-                  }).then((response) => {
-                    alert("Site design applied");
-
-                    this.customPermission();
-
-                  });
-                }
-              });
-            }
-          });
-        }
-        else {
-          // alert("list already exit")
-        }
-      });
     }
   }
 
 
   public render(): React.ReactElement<ICvClassifiedProps> {
-    const {
-      description,
-      isDarkTheme,
-      environmentMessage,
-      hasTeamsContext,
-      userDisplayName
-    } = this.props;
-
-
 
     return (
       <>
-        <ProductComponents context={this.props.context} alasql={this.state.alasql} />
+        {this.state.initializationStatus ?
+          <ProductComponents context={this.props.context} alasql={this.state.alasql} />
+          : ""}
+
+        {this.state.loading &&
+          <Spinner label="Please wait, We are getting things for you..." size={SpinnerSize.large} />
+        }
       </>
     );
   }
+
+  /**
+   * initializeFunction
+   */
+  public initializeFunction() {
+    let siteUrl = this.props.context.pageContext.legacyPageContext.webAbsoluteUrl;
+
+    commonServices._getSiteListByName(this.props.context, "Classified Products").then((response) => {
+      if (response.status == 404) {//list is not available
+
+        //list is not available than check site design available
+        commonServices._getSiteDesign(this.sp).then((allSiteDesign) => {
+          let checkSiteDesign = allSiteDesign.filter((ele: any) => ele.Title == "ClassifiedSiteDesign");
+
+          if (checkSiteDesign.length > 0) {
+            //site design is available so apply that site design to site.
+            return commonServices._applySiteDesignToSite(this.sp, checkSiteDesign[0].Id, siteUrl).then((response) => {
+              alert("Site design applied");
+              this.checkAndApplyCustomPermission();
+            });
+          }
+          else {
+            //site design is not available then check site script available
+            return commonServices._getSiteScript(this.sp).then((allSiteScripts) => {
+              let checkSiteScript = allSiteScripts.filter((ele: any) => ele.Title == "ClassifiedSiteScript");
+
+              if (checkSiteScript.length > 0) {
+                //site script is available so create site design and apply to site
+                return commonServices._createSiteDesign(this.sp, checkSiteScript[0].Id).then((response) => {
+                  return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
+                }).then((response) => {
+                  this.checkAndApplyCustomPermission();
+                });
+              }
+              else {
+                // site script is not available so create site script and site design and apply to site
+                commonServices._createSiteScript(this.props.context, this.sp).then((response) => {
+                  return commonServices._createSiteDesign(this.sp, response.Id);
+                }).then((response) => {
+                  return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
+                }).then((response) => {
+                  this.checkAndApplyCustomPermission();
+                });
+              }
+            });
+          }
+        });
+      }
+      else {
+        return;
+      }
+    });
+  }
+
+  /**
+   * checkAndApplyCustomPermission
+   */
+  public checkAndApplyCustomPermission = (): void => {
+    commonServices._getAllRoleDefinitions(this.sp).then((allRoleDefitions) => {
+
+      //check AddItems permission level exist or not
+      let addItemCustomPermissionLevel = allRoleDefitions.filter((ele: any) => ele.Name === "AddItems");
+      let editItemCustomPermissionLevel = allRoleDefitions.filter((ele: any) => ele.Name === "EditItems");
+
+      let rolDefId: number;
+
+      if (addItemCustomPermissionLevel.length === 0) {//AddItem permission level does not exist
+        //create Add Items permission level for visitors group.
+        commonServices._createNewPermissionLevel(this.sp, "AddItems", "Can add Only", 101, { High: 1, Low: 2 }).then((response) => {
+          rolDefId = response.data.Id;
+          //break list level inheritance permission
+          return commonServices._breakRollAssignments(this.sp, "Classified Products", true, true);
+        }).then((breakRollAssignmentRes) => {
+          //get site group details for assign custom permission level.
+          let groupName = this.props.context.pageContext.web.title + " Visitors";
+          return commonServices._getSiteGroupByName(this.sp, groupName);
+        }).then((visitorGroupRes) => {
+          let principalId = visitorGroupRes.Id;
+          //assign custom permission level AddItems to visitor group in list.
+          return commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId);
+        }).then((roleAssignRes) => {
+          this.setState({ initializationStatus: true, loading: false });
+        });
+      }
+      else { //AddItem permission exist
+        rolDefId = addItemCustomPermissionLevel[0].Id;
+        //break the inheritance permission at list level.
+        commonServices._breakRollAssignments(this.sp, "Classified Products", true, true).then((breakInheritanceRes) => {
+          //get site group details for assign custom permission level.
+          return commonServices._getSiteGroupByName(this.sp, "CV_Classified_App Visitors");
+        }).then((visitorGroupRes) => {
+          let principalId = visitorGroupRes.Id;
+          //assign custom permission level AddItems to visitor group in list.
+          return commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId);
+        }).then((roleAssignRes) => {
+          this.setState({ initializationStatus: true, loading: false });
+        });
+      }
+
+      if (editItemCustomPermissionLevel.length === 0) {//EditItem permission level does not exist
+        //create EditItem permission level for visitors group.
+        commonServices._createNewPermissionLevel(this.sp, "EditItems", "Can Edit Only", 102, { High: 0, Low: 196613 }).then((response) => {
+          this.setState({ initializationStatus: true, loading: false });
+        });
+      }
+    });
+  }
+
+
 }
 
