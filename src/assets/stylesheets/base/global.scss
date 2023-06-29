@@ -541,7 +541,7 @@ html, body {
     margin-left: 10px;
   }
   .filter-dropDown{
-    background-color: $secondary-2;;
+    background-color: $secondary-2;
     position: absolute;
     z-index: 1;
     right: 0px;
@@ -1499,6 +1499,11 @@ html, body {
                 }
               }
             }
+           .emptyCardContainer{
+            .addIcon{
+              transform: translateY(173px);
+            }
+           }
           }
 
 
@@ -1533,6 +1538,11 @@ html, body {
                     margin-top: 30px;
                   }
                 }
+              }
+            }
+            .emptyCardContainer{
+              .addIcon{
+                transform: none;
               }
             }
             }
@@ -1623,6 +1633,12 @@ html, body {
           }
 
         }
+      }
+    }
+
+    .emptyCardContainer{
+      .addIcon{
+        transform: none;
       }
     }
    
