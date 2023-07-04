@@ -87,7 +87,7 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
                                 <Link to={`${path}/productDetails?productId=${card.Id}`}  className='linkItem'>
                                     <div className='card-header'>
                                         <div className='prdPrice'>
-                                            <img src={card.AttachmentFiles[0].ServerRelativeUrl} alt={card.Title} />
+                                            <img src={card.AttachmentFiles && card.AttachmentFiles[0] ? card.AttachmentFiles[0].ServerRelativeUrl : ""} alt={card.Title} />
                                             <div className='prd-amt'>
                                                 {card.CV_productPrice}
                                             </div>

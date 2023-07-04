@@ -47,7 +47,9 @@ const commonServices = {
             return response;
         });
     },
-
+    _createFolder: async (sp: any, folderUrl: string) => {
+        return await sp.web.folders.addUsingPath(folderUrl);
+    },
     _getSiteScript: async (sp: any) => {
         return await sp.siteScripts.getSiteScripts();
     },
@@ -195,7 +197,9 @@ const commonServices = {
     _applySiteDesignToSite: async (sp: any, siteDesignId: string, siteUrl: string) => {
         return await sp.siteDesigns.applySiteDesign(siteDesignId, siteUrl);
     },
-
+    _ensureSiteAssetsLibraryexist: async (sp: any) => {
+        return await sp.web.lists.ensureSiteAssetsLibrary();
+    },
     _getAllRoleDefinitions: async (sp: any) => {
         return await sp.web.roleDefinitions();
     },

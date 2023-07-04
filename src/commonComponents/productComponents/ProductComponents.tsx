@@ -257,7 +257,8 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
   }
 
   React.useEffect(() => {
-
+    window.location.href = '#/buyProducts';
+    
     let tempLocationOptions: any = [];
     let tempProductCategoryOptions: any = [];
     let tempStatusOptions: any = [];

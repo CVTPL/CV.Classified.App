@@ -660,14 +660,15 @@ html, body {
     border-radius: 20px;
     padding: 10px;
     height: 100%;
-    min-width: 273px;
+    max-width: 257px;
     cursor: pointer;
-    .addIcon{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transform: translateY(210px);
-    }
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 430px;
+    // .addIcon{
+     
+    // }
   }
   }
 
@@ -1501,7 +1502,7 @@ html, body {
             }
            .emptyCardContainer{
             .addIcon{
-              transform: translateY(173px);
+              // transform: translateY(173px);
             }
            }
           }
