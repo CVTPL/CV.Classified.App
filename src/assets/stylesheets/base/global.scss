@@ -329,6 +329,102 @@ html, body {
     //   }
     //   }
     // }
+
+    .sellProducts{
+      .ms-ChoiceFieldGroup{
+        .ms-ChoiceFieldGroup-flexContainer{
+          display: flex;
+          margin-bottom: 16px;
+          .ms-ChoiceField{
+            &:first-child{
+              margin-right: 10px;
+            }
+            .ms-ChoiceField-wrapper{
+              width: 100%;
+              .ms-ChoiceField-field {
+                min-width: 156px;
+                border-width: 1px;
+                border-style: solid;
+                border-color: $primary-1;
+                border-radius: 8px;
+                padding: 12px 19px;
+                text-align: center;
+                min-height: auto;
+                &::before{
+                  display: none;
+                }
+                &::after{
+                  display: none;
+                }
+              }
+              .ms-ChoiceField-input:checked + label{
+                // background-color: $primary-1
+              }
+              .is-checked {
+              .ms-ChoiceField-field{
+                border-width: 1px;
+                border-style: solid;
+                border-color: $primary-1;
+                width: 100%;
+                border-radius: 10px;
+                padding: 11px 19px;
+                min-width: 156px;
+              }
+
+              }
+              .ms-ChoiceField-field{
+              .ms-ChoiceFieldLabel{
+                padding-left: 0px !important;
+                color: $primary-1;
+              }
+              }
+            }
+            .is-inFocus{
+              background-color: $primary-1;
+              // border: 1px solid $primary-1;
+              color: $secondary-2;
+              min-width: 156px;
+              border-radius: 10px;
+              min-height: auto;
+              // padding: 12px 40px;
+              .ms-ChoiceField-field{
+                &:hover{
+                  .ms-ChoiceFieldLabel , .ms-ChoiceFieldLabel{
+                  color: $secondary-2;
+                  }
+
+
+                }
+                .ms-ChoiceFieldLabel{
+                  color: $secondary-2;
+                &:hover{
+                  color: $secondary-2;
+                }
+                }
+              }
+              .ms-ChoiceField-input{
+                &:hover{
+                  color: $secondary-2;
+                }
+              }
+            }
+
+          }
+        }
+      }
+      .cardRequest{
+        .content-card{
+          .card-header{
+            position: relative;
+            .soldLabel{
+              position: absolute;
+              top: 0;
+              right: 0;
+            }
+          }
+        }
+      }
+    }
 }
 }
 

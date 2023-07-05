@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ISellProductsProps } from './ISellProductsProps';
-import { Panel } from 'office-ui-fabric-react';
+import { ChoiceGroup, IChoiceGroupOption, Panel } from 'office-ui-fabric-react';
 import AddEditProductPanelComponent from '../addEditProductPanelComponent/AddEditProductPanelComponent';
 
 const classifiedCard = [
@@ -12,8 +12,8 @@ const classifiedCard = [
         location: 'Iskcon Ahmedabad',
         userName: 'Bhavin Patel',
         price: '₹12000',
-        class: 'disabled',
-        sold: require('../../assets/images/svg/sold.svg'),
+        // class: 'disabled',
+        requested: require('../../assets/images/svg/requested.svg'),
 
 
     },
@@ -24,7 +24,8 @@ const classifiedCard = [
         content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard.',
         location: 'Iskcon Ahmedabad',
         userName: 'Bhavin Patel',
-        price: '₹15000'
+        price: '₹15000',
+        requested: require('../../assets/images/svg/requested.svg'),
     },
     {
         id: 3,
@@ -33,7 +34,8 @@ const classifiedCard = [
         content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard.',
         location: 'Iskcon Ahmedabad',
         userName: 'Bhavin Patel',
-        price: '₹14000'
+        price: '₹14000',
+        requested: require('../../assets/images/svg/requested.svg'),
     },
     {
         id: 4,
@@ -42,7 +44,8 @@ const classifiedCard = [
         content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard.',
         location: 'Iskcon Ahmedabad',
         userName: 'Bhavin Patel',
-        price: '₹21000'
+        price: '₹21000',
+        requested: require('../../assets/images/svg/requested.svg'),
     },
 
     {
@@ -52,19 +55,19 @@ const classifiedCard = [
         content: 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry’s standard.',
         location: 'Iskcon Ahmedabad',
         userName: 'Bhavin Patel',
-        price: '₹45000'
+        price: '₹21000',
+        requested: require('../../assets/images/svg/requested.svg'),
     },
+
 ];
 
 const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
-
-    // const [isPanelOpen, setIsPanelOpen] = React.useState(false);
 
     const [isPanel, setIsPanel] = React.useState(false);
 
     const [AddPageToggle, setAddPageToggle] = React.useState(true);
 
-    // const soldIcon = require('../../assets/images/svg/sold.svg');
+    const [selectedView, setSelectedView] = React.useState("myproducts");
 
     const panelHeader = () => (
         AddPageToggle ?
@@ -76,6 +79,7 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
             </div>
     )
 
+    
     function showpanels(action: any, event: any) {
         if (action == "showAddPanel") {
             setAddPageToggle(true);
@@ -90,8 +94,26 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
 
     }
 
+
+    const options = [
+        {
+          key: 'myproducts',
+          text: 'My Products',
+        },
+        {
+          key: 'requestedProducts',
+          text: 'Requested Products',
+        },
+      ];
+
+
     return (
         <>
+
+{/* <ChoiceGroup defaultSelectedKey={selectedView} className="switch-button-container" options={options} onChange={_onChangeChoiceGroup} /> */}
+<ChoiceGroup  defaultSelectedKey={selectedView} options={options}  onChange={_onChangeChoiceGroup} />
+
+{selectedView == "myproducts" ?  
             <div className='classified-cards'>
                 <div className="custmRow">
                     {props.productCardData.map((card) => (
@@ -153,6 +175,77 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                     </div>
                 </div>
             </div>
+            : 
+            <div className='classified-cards cardRequest'>
+                <div className="custmRow">
+                    {classifiedCard.map((card) => (
+                        <div className='custmCols' key={card.id}>
+                            <div className={"content-card"}>
+                            {/* + " " + card.class} */}
+                                <div className='card-header'>
+                                    <div className='prdPrice'>
+                                        <img src={card.urlImage} alt={card.title} />
+                                        <div className='prd-amt'>
+                                            {card.price}
+                                        </div>
+                                    </div>
+                                    <div className='soldLabel'>
+                                        <img src={card.requested} alt="icon" style={{ display: card.requested ? 'block' : 'none' }} />
+                                    </div>
+                                    <div className='soldLabel'>
+                                        {/* <img src={require('../../assets/images/svg/sold.svg')} alt="icon" style={{ display: card.CV_productStatus === "Sold" ? 'block' : 'none' }} /> */}
+                                    </div>
+                                    <div className='edit-icon' onClick={() => { setIsPanel(true) }}>
+                                        <img src={require('../../assets/images/svg/edit-icon.svg')} />
+                                        {/* onClick={() => { setIsPanelOpen(true) }} */}
+                                    </div>
+                                    <div>
+                                    </div>
+                                </div>
+                                <div className='card-body'>
+                                    <div className='card-title'>
+                                        <p>{card.title}</p>
+                                    </div>
+                                    <div className='card-content'>
+                                        <p>{card.content}</p>
+                                        <div className='card-location'>
+                                            <img src={require('../../assets/images/svg/location.svg')} alt='Location Icon' />
+                                            <p>{card.location}</p>
+                                        </div>
+                                        <div className='card-userName'>
+                                            <img src={require('../../assets/images/svg/user-icon.svg')} alt='User Icon' />
+                                            <p>{card.userName}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='social-icons'>
+                                    <ul>
+                                        <li><a onClick={() => { window.location.href = "https://teams.microsoft.com/l/chat/0/0?users=ankit@thecodevision.com" }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
+                                        <li><a onClick={() => { window.location.href = "mailTo:ankit@thecodevision.com" }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
+                                        <li><a onClick={() => { window.location.href = "tel:+91 7852693210" }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
+                                        <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {/* <div className='pagination-empty-card'> */}
+                    {/* <div className='pagination-empty-card'>
+                        <div className='custmCols emptyCard'>
+                            <div className='emptyCardContainer'  onClick={() => { setIsPanelOpen(true) }}>
+                           
+                                <div className='addIcon'>
+                                    <img src={require('../../assets/images/svg/plus-icon.svg')} />
+                                </div>
+                            </div>
+                        </div>
+                    </div> */}
+                </div>
+            </div>
+}
+
+{/********************************************************************admin flow sell end region********************************************************************/}
 
             {/* Panel Start Region */}
             <Panel
@@ -165,8 +258,12 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                 <AddEditProductPanelComponent context={props.context} onPanelChange={setIsPanel} onChangeAddPageToggle={AddPageToggle} />
             </Panel>
             {/* Panel End Region */}
-        </>
+        </>   
     );
+    function _onChangeChoiceGroup(ev: React.FormEvent<HTMLInputElement>, option: IChoiceGroupOption): void {
+        setSelectedView(option.key)
+    }
+    
 };
 
 export default SellProducts;
