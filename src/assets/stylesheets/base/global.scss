@@ -370,6 +370,10 @@ html, body {
                 padding: 11px 19px;
                 min-width: 156px;
               }
+              background-color: $primary-1;
+              .ms-ChoiceFieldLabel{
+              color: $secondary-2 !important;
+              }
 
               }
               .ms-ChoiceField-field{
@@ -419,11 +423,24 @@ html, body {
             .soldLabel{
               position: absolute;
               top: 0;
-              right: 0;
+              right: 0px;
             }
           }
         }
       }
+      .classified-cards{
+        .content-card {
+          .card-header{
+            position: relative;
+            .rejectedCard{
+              position: absolute;
+              top: 0;
+              right: -2px;
+            }
+          }
+        }
+      }
+     
     }
 }
 }
@@ -502,6 +519,7 @@ html, body {
         border-radius: 5px;
         height: 40px;
         width: 40px;
+        cursor: pointer;
         > img{
          width: 24px;
          height: 24px;
@@ -1141,6 +1159,38 @@ html, body {
                         }
                       }
 
+                      .messageBar{
+                        .ms-MessageBar{
+                          border-width: 1px;
+                          border-style: solid;
+                          border-color: $secondary-11;
+                          margin-bottom: 20px;
+                          border-radius: 10px;
+                          .ms-MessageBar-icon{
+                            display: none;
+                          }
+                          .ms-MessageBar-text{
+                            padding: 9px 14px 9px 10px;
+                            margin: 0px;
+                            background-color: $secondar-15;
+                            color: $secondary-11;
+                            border-radius: 10px;
+                            .ms-MessageBar-innerText{
+                              > span{
+                                display: flex;
+                                align-items: center;
+                                color: $secondary-11;
+                                font-size: $fs-16;
+                                line-height: 24px;
+                                img{
+                                  margin-right: 10px;
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+
                       .requiredmsgRichText , .requiredmsgUploadImages{
                         color: $secondary-11;
                         font-weight: 500;
@@ -1388,6 +1438,11 @@ html, body {
     @include text-styles($fs-14, 17px ,$secondary-2);
   }
 
+  .btn-secondary-5{
+    background-color: $secondary-13;
+    @include text-styles($fs-14, 17px ,$secondary-14);
+  }
+
   .btn-secondary-2{
     background-color: $secondary-12;
     @include text-styles ($fs-14 , 17px , $secondary-11);
@@ -1516,9 +1571,72 @@ html, body {
                       }
                     }
                   }
+                  .rejectModal{
+                    .modal-body{
+                      p , .ms-TextField{
+                        margin-bottom: 30px;
+                        border-radius: 10px;
+                      }
+                      p{
+                        font-size: $fs-18;
+                        line-height: 22px;
+                      }
+                      .ms-TextField-fieldGroup{
+                        border-radius: 10px;
+                        .ms-TextField-field{
+                          height: 138px;
+                        }
+                          &::after{
+                            display: none;
+                          }
+                      }
+
+                    }
+                    .ms-Dialog-inner{
+                    padding: 30px;
+                    }
+                  }
+                  .ApproveModal{
+                    .modal-header{
+                      .bg-secondary-18{
+                        background-color: $secondary-13 !important;
+                      }
+                    }
+                  }
                 }
               }
             }
+          }
+        }
+
+        &.reject-dialog-container{
+          .ms-Dialog-main{
+            min-width: 627px;
+            max-width: 627px;
+            width: 627px;
+            @include media-breakpoint-down(sm){
+              min-width: 100%;
+              width: 100%;
+              max-width: 100%;
+            }
+            .ms-Dialog-inner{
+              padding: 30px;
+              @include media-breakpoint-down(mxs){
+                padding: 42px 20px;
+              }
+              .ms-Dialog-actions{
+                .ms-Dialog-actionsRight{
+                  .ms-Dialog-action{
+                    .btn-container{
+                      .btn-green , .btn-red{
+                      flex: 0 !important;
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
           }
         }
 }}}
