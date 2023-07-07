@@ -151,7 +151,10 @@ html, body {
         @include text-styles($fs-22, 27px , $primary-3)
         }
       }
-
+      @include media-breakpoint-down(mxs){
+        display: flex;
+        justify-content: center;
+      }
 
     }
  

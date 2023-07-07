@@ -48,7 +48,7 @@ const CommonAlertDailog: React.FunctionComponent<ICommonAlertDailog> = (props) =
           <div className="modal-body">
             {/* <h3>Are you sure?</h3> */}
             <p>{props.message}</p>
-            <TextField multiline resizable={false} />
+            <TextField multiline resizable={false} placeholder='Enter Reason' />
           </div>
           <DialogFooter>
             <div className="btn-container btn-center">
