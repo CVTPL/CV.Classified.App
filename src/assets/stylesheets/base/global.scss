@@ -335,6 +335,11 @@ html, body {
         .ms-ChoiceFieldGroup-flexContainer{
           display: flex;
           margin-bottom: 16px;
+          @include media-breakpoint-down(mxs){
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+          }
           .ms-ChoiceField{
             &:first-child{
               margin-right: 10px;
@@ -1118,7 +1123,8 @@ html, body {
             }
             .ms-Panel-contentInner {
               position: relative;
-              height: calc(100vh - 137px);
+              // height: calc(100vh - -137px);
+              height: calc(100vh - -800px);
               overflow-y: auto;
               .ms-Panel-scrollableContent {
                 overflow: inherit;
@@ -1130,9 +1136,10 @@ html, body {
 
                   .panel-body {
                     padding: 20px 30px;
-                    height: calc(100vh - 137px);
+                    // height: calc(100vh - -137px);
+                    height: calc(100vh - -800px);
                     @include media-breakpoint-down(xs){
-                      height: calc(100vh - -474px)
+                      height: calc(100vh + 1640px);
                     }
                     @include media-breakpoint-down(xxs) {
                       padding: 10px;
@@ -1622,7 +1629,7 @@ html, body {
             .ms-Dialog-inner{
               padding: 30px;
               @include media-breakpoint-down(mxs){
-                padding: 42px 20px;
+                padding: 42px 20px !important;
               }
               .ms-Dialog-actions{
                 .ms-Dialog-actionsRight{
