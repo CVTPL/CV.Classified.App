@@ -470,7 +470,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
 
       {/* Reject Modal popup start region  */}
-      <Dialog hidden={!rejectHideDialog} onDismiss={rejectHideDialog} modalProps={rejectedModelProps}>
+      <Dialog hidden={!rejectHideDialog} onDismiss={rejectHideDialogs} modalProps={rejectedModelProps}>
         <CommonAlertDailog
           alertBoxFor={"RejectModal"}
           closeDailogBox={() => { setIsPanel(false); }}
@@ -478,14 +478,14 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           rejectSubmit={"RequiredFieldError"} //for reject only 
           message={"You have successfully rejected this request."}
           _deleteFunction={""}
-          toggleHideDialog={undefined}
+          toggleHideDialog={rejectHideDialogs}
         />
       </Dialog>
       {/*  */}
 
 
        {/* Approve Modal popup start region  */}
-       <Dialog hidden={!approveDialog} onDismiss={approveDialog} modalProps={successModalProps}>
+       <Dialog hidden={!approveDialog} onDismiss={approveDialogs} modalProps={successModalProps}>
         <CommonAlertDailog
           alertBoxFor={"approvedModal"}
           closeDailogBox={() => { setIsPanel(false); }}
@@ -493,7 +493,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           rejectSubmit={""} //for reject only 
           message={"You have successfully approved this request."}
           _deleteFunction={""}
-          toggleHideDialog={undefined}
+          toggleHideDialog={approveDialogs}
         />
       </Dialog>
       {/*  */}
@@ -511,6 +511,25 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
   function toggleHideDialog() {
     setHideDialog(false);
   }
+
+  function rejectHideDialogs(){
+    setRejectHideDialog(false)
+  }
+
+
+  
+  // function approveDialogs(){
+  //   setApproveDialog(false)
+  // }
+
+  function approveDialogs() {
+    setApproveDialog(false);
+  
+    setTimeout(() => {
+      setApproveDialog(true);
+    }, 3000); // 3000 milliseconds = 3 seconds
+  }
+
 };
 
 export default AddEditProductPanelComponent;
