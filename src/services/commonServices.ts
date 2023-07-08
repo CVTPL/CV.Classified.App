@@ -224,8 +224,8 @@ const commonServices = {
         return await sp.web.lists.getByTitle(listName).items.getAll();
     },
 
-    _getListItemWithExpand: async (sp: any, listName: any, selectString: string, expandString: string) => {
-        return await sp.web.lists.getByTitle(listName).items.select(selectString).expand(expandString).getAll();
+    _getListItemWithExpandAndFilter: async (sp: any, listName: any, selectString: string, expandString: string, filterString: string) => {
+        return await sp.web.lists.getByTitle(listName).items.select(selectString).expand(expandString).filter(filterString).getAll();
     },
 
     _updateListItem: async (sp: any, listName: any, data: any, itemId: any) => {

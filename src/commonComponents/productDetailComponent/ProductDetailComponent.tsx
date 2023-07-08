@@ -5,9 +5,12 @@ import ImageGallerySliderComponent from '../imageGallerySliderComponent/ImageGal
 import { ActionButton, IIconProps } from 'office-ui-fabric-react';
 import { useLocation, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
+import commonServices from '../../services/commonServices';
+import { spfi, SPFx } from "@pnp/sp";
 
 
 const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentProps> = (props) => {
+  const sp = spfi().using(SPFx(props.context));
   const [currentProduct, setCurrentProduct] = React.useState(0);
 
   const classifiedCard = [
@@ -63,6 +66,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
     },
   ];
   let { path, url } = useRouteMatch();
+
   React.useEffect(() => {
     const productId = parseInt(new URL(`https://1.com?${window.location.href.split("?")[1]}`).searchParams.get("productId"));
     setCurrentProduct(productId)
@@ -202,6 +206,25 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
     setCurrentProduct(productId);
     const element = document.getElementById("prdCardContainer");
     element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+  }
+
+  /**
+   * Function for get product details based on Product Id
+   * @param Id 
+   * @returns 
+   */
+  async function _getProductDetailsById(Id: any): Promise<any> {
+    let selectString = "";
+    let expandString = "";
+    let filterString = "";
+    return new Promise((resolve, reject) => {
+      commonServices._getListItemWithExpandAndFilter(sp, "Classified Products", selectString, expandString, filterString).then((response) => {
+        resolve(response);
+      },
+        (error: any): any => {
+          reject(error);
+        });
+    });
   }
 };
 

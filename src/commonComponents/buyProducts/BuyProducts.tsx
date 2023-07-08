@@ -133,23 +133,6 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
                 totalPages={(props.productCardData.length / pageSize) - 1}
                 limiter={3}
                 onChange={(page) => getPage(page)} />
-            {/* <HashRouter>
-                <Switch>
-                    <Route exact path={path} component={() => (
-                        <>
-                            <div className="ms-Grid">
-                                <div className="ms-Grid-row">
-                                    <div className='ms-Grid-col ms-sm12 ms-md12 ms-lg12'>
-                                        <div className='contentPivot'>
-                                            <ProductDetailComponent />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </>
-                    )} />
-                </Switch>
-            </HashRouter> */}
         </>
     );
 };

@@ -229,7 +229,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
     let expandString = "AttachmentFiles,Author";
 
     return new Promise((resolve, reject) => {
-      commonServices._getListItemWithExpand(sp, "Classified Products", selectString, expandString)
+      commonServices._getListItemWithExpandAndFilter(sp, "Classified Products", selectString, expandString, "")
         .then((response: any) => {
           resolve(response);
         },
@@ -258,7 +258,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
 
   React.useEffect(() => {
     window.location.href = '#/buyProducts';
-    
+
     let tempLocationOptions: any = [];
     let tempProductCategoryOptions: any = [];
     let tempStatusOptions: any = [];
@@ -472,11 +472,11 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                         <div className='contentPivot'>
                           {productCardData.length > 0 ?
                             <BuyProducts choiceGroupVisibility={setShowChoiceGroup} productCardData={productCardData} />
-                            : 
+                            :
                             <div className='errMsg'>
-                             <img src={require('../../assets/images/png/no-data-found.png')} className='noDataIcon' />
+                              <img src={require('../../assets/images/png/no-data-found.png')} className='noDataIcon' />
                             </div>
-                            }
+                          }
                         </div>
                       </div>
                     </div>
@@ -500,7 +500,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
               {/* Product Details Component */}
               <Route path="/buyProducts/productDetails" component={() => (
                 <>
-                  <ProductDetailComponent choiceGroupVisibility={setShowChoiceGroup} />
+                  <ProductDetailComponent choiceGroupVisibility={setShowChoiceGroup} context={props.context} />
                 </>
               )} />
               {/* Default Route */}
