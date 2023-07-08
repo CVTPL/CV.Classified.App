@@ -2,14 +2,15 @@ import * as React from 'react';
 import { createRef, useState } from 'react';
 import Dropzone, { useDropzone } from 'react-dropzone';
 import { IAddEditProductPanelComponentProps } from './IAddEditProductPanelComponentProps';
-import { Dialog, Dropdown, IDropdownOption, IIconProps, Icon, IconButton, PrimaryButton, TextField } from 'office-ui-fabric-react';
+import { Dialog, Dropdown, IDropdownOption, IIconProps, Icon, IconButton, MessageBar, PrimaryButton, TextField } from 'office-ui-fabric-react';
 import { IFilePickerResult, FilePicker } from '@pnp/spfx-controls-react/lib/FilePicker';
 import { RichText } from "@pnp/spfx-controls-react/lib/RichText";
-import CommonDeleteDailog from '../CommonDeleteDailog/CommonDeleteDailog';
+// import CommonDeleteDailog from '../CommonDeleteDailog/CommonDeleteDailog';
 import commonServices from '../../services/commonServices';
 import { BallTriangle } from 'react-loader-spinner';
 
 import { spfi, SPFx } from "@pnp/sp";
+import CommonAlertDailog from '../CommonAlertDailog/CommonAlertDailog';
 
 const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanelComponentProps> = (props) => {
 
@@ -43,11 +44,33 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
   });
 
   const [hideDialog, setHideDialog]: any = React.useState(false);
+
+  const [rejectHideDialog, setRejectHideDialog]: any = React.useState(false);
+
+  const [approveDialog , setApproveDialog] : any = React.useState(false)
+
+
+
+
   const modelProps = {
     isBlocking: false,
     styles: { main: { maxWidth: 450 } },
+
   };
 
+
+  const rejectedModelProps = {
+    isBlocking: false,
+    className: "reject-dialog-container",
+  }
+
+
+  const successModalProps = React.useMemo(
+    () => ({
+      isBlocking: true,
+      className: "success-dialog-container",
+    }), [],
+  );
 
   const productOptions: IDropdownOption[] = [
     { key: 'Iphone', text: 'Iphone' },
@@ -274,6 +297,10 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
     })
   }, []);
 
+  function setIsPanel(arg0: boolean) {
+    throw new Error('Function not implemented.');
+  }
+
   return (
     <>
       <div className={"LoaderDivCustom"} hidden={!showLoader}>
@@ -287,6 +314,14 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           <div className='panelInnerbox'>
             <div className="ms-Grid">
               <div className="ms-Grid-row">
+                <div className='messageBar'>
+                  <MessageBar className='message-alert-bar' role="none">
+                  <img src={require("../../assets/images/svg/info-red-icon.svg")} alt="Not Available Now" title="Info Icon" />
+                  <span>
+                  The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
+                  </span>
+                </MessageBar>                
+            </div>
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="text" id="Title" value={addProductInputList.Title ? addProductInputList.Title : ""} onChange={(e) => { handleChangeProductInput(e) }} />
@@ -318,7 +353,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                   </div>
                   :
                   ""}
-                    <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
+                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="number" id="CV_productPrice" value={addProductInputList.CV_productPrice ? addProductInputList.CV_productPrice : ""} onChange={(e) => { handleChangeProductInput(e) }} />
                     <label>Price</label>
@@ -408,8 +443,10 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           <div className="panel-footer">
             <div className="btn-container btn-end">
               <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { props.onPanelChange(false) }} />
-              <PrimaryButton className="btn-secondary-2" text="Delete" onClick={toggleShowDialog} />
+              <PrimaryButton className="btn-secondary-2" text="Delete" onClick={() => { toggleShowDialog() }} />
               <PrimaryButton className="btn-secondary-3" text="Update" onClick={() => { addProductSubmit() }} />
+              <PrimaryButton className="btn-secondary-2" text="Reject" onClick={() => { setRejectHideDialog(true) }} />
+              <PrimaryButton className="btn-secondary-5" text="Approve" onClick={() => { setApproveDialog(true) }} />
             </div>
           </div>
 
@@ -419,10 +456,48 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
       <Dialog
         hidden={!hideDialog}
         onDismiss={toggleHideDialog}
-        // dialogContentProps={dialogContentProps}
         modalProps={modelProps}>
-        <CommonDeleteDailog toggleHideDialog={toggleHideDialog} />
+        <CommonAlertDailog
+          toggleHideDialog={toggleHideDialog}
+          rejectMsg={undefined}
+          rejectSubmit={undefined}
+          alertBoxFor={"DeleteModal"}
+          closeDailogBox={undefined}
+          message={"Are you sure do you want to delete"}
+          _deleteFunction={undefined}
+        />
       </Dialog>
+
+
+      {/* Reject Modal popup start region  */}
+      <Dialog hidden={!rejectHideDialog} onDismiss={rejectHideDialogs} modalProps={rejectedModelProps}>
+        <CommonAlertDailog
+          alertBoxFor={"RejectModal"}
+          closeDailogBox={() => { setIsPanel(false); }}
+          rejectMsg={"Are you sure do u want to reject this product?"} //for reject only
+          rejectSubmit={"RequiredFieldError"} //for reject only 
+          message={"You have successfully rejected this request."}
+          _deleteFunction={""}
+          toggleHideDialog={rejectHideDialogs}
+        />
+      </Dialog>
+      {/*  */}
+
+
+       {/* Approve Modal popup start region  */}
+       <Dialog hidden={!approveDialog} onDismiss={approveDialogs} modalProps={successModalProps}>
+        <CommonAlertDailog
+          alertBoxFor={"approvedModal"}
+          closeDailogBox={() => { setIsPanel(false); }}
+          rejectMsg={""} //for reject only
+          rejectSubmit={""} //for reject only 
+          message={"You have successfully approved this request."}
+          _deleteFunction={""}
+          toggleHideDialog={approveDialogs}
+        />
+      </Dialog>
+      {/*  */}
+
     </>
 
   );
@@ -436,6 +511,25 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
   function toggleHideDialog() {
     setHideDialog(false);
   }
+
+  function rejectHideDialogs(){
+    setRejectHideDialog(false)
+  }
+
+
+  
+  // function approveDialogs(){
+  //   setApproveDialog(false)
+  // }
+
+  function approveDialogs() {
+    setApproveDialog(false);
+  
+    setTimeout(() => {
+      setApproveDialog(true);
+    }, 3000); // 3000 milliseconds = 3 seconds
+  }
+
 };
 
 export default AddEditProductPanelComponent;
