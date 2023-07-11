@@ -1,12 +1,12 @@
 import "@pnp/sp/webs";
 import "@pnp/sp/security/web";
 import "@pnp/sp/lists";
-
 import "@pnp/sp/items/get-all";
 import "@pnp/sp/site-scripts";
 import "@pnp/sp/site-designs";
 import "@pnp/sp/files";
 import "@pnp/sp/folders";
+import "@pnp/sp/files/folder";
 import "@pnp/sp/batching";
 import "@pnp/sp/regional-settings/web";
 import "@pnp/sp/attachments";
@@ -33,23 +33,6 @@ const commonServices = {
         });
     },
 
-    _getFolderByPath: async (context: any, folderPath: string) => {
-        var myHeaders = new Headers({
-            'Accept': 'application/json; odata=verbose'
-        });
-
-        var myInit = {
-            method: 'GET',
-            headers: myHeaders,
-        }
-
-        return await fetch(context.pageContext.legacyPageContext.webAbsoluteUrl + "/_api/web/getFolderByServerRelativeUrl('" + folderPath + "')", myInit).then((response) => {
-            return response;
-        });
-    },
-    _createFolder: async (sp: any, folderUrl: string) => {
-        return await sp.web.folders.addUsingPath(folderUrl);
-    },
     _getSiteScript: async (sp: any) => {
         return await sp.siteScripts.getSiteScripts();
     },
@@ -85,7 +68,7 @@ const commonServices = {
                 },
                 {
                     "verb": "createSiteColumnXml",
-                    "schemaXml": "<Field Type=\"Choice\" ID=\"{7779c80b-59f0-4a50-aff9-998c30a97344}\" Name=\"CV_productStatus\" DisplayName=\"Product Status\" Required=\"TRUE\" Group=\"_CV\" StaticName=\"CV_productStatus\" Customization=\"\" Format=\"Dropdown\" FillInChoice=\"FALSE\" IsModern=\"TRUE\"> <Default>Active</Default><CHOICES><CHOICE>Active</CHOICE><CHOICE>InActive</CHOICE><CHOICE>Sold</CHOICE></CHOICES></Field>"
+                    "schemaXml": "<Field Type=\"Choice\" ID=\"{7779c80b-59f0-4a50-aff9-998c30a97344}\" Name=\"CV_productStatus\" DisplayName=\"Product Status\" Required=\"TRUE\" Group=\"_CV\" StaticName=\"CV_productStatus\" Customization=\"\" Format=\"Dropdown\" FillInChoice=\"FALSE\" IsModern=\"TRUE\"> <Default>Active</Default><CHOICES><CHOICE>Active</CHOICE><CHOICE>InActive</CHOICE><CHOICE>Sold</CHOICE><CHOICE>Approve</CHOICE><CHOICE>Reject</CHOICE><CHOICE>Requested</CHOICE></CHOICES></Field>"
                 },
                 {
                     "verb": "createSiteColumnXml",
@@ -94,6 +77,10 @@ const commonServices = {
                 {
                     "verb": "createSiteColumnXml",
                     "schemaXml": "<Field Type=\"Note\" ID=\"{8e0c5a02-aee9-4e30-a111-92c260899642}\" Name=\"CV_productDescription\" DisplayName=\"Product Description\" Required=\"FALSE\" NumLines=\"10\" IsolateStyles=\"TRUE\" StaticName=\"CV_productDescription\" Group=\"_CV\" Customization=\"\" />"
+                },
+                {
+                    "verb": "createSiteColumnXml",
+                    "schemaXml": "<Field Type=\"Note\" ID=\"{d76e5ecd-44b5-4780-81be-864de6c2a7be}\" Name=\"CV_comment\" DisplayName=\"Comment\" Required=\"FALSE\" NumLines=\"10\" IsolateStyles=\"TRUE\" StaticName=\"CV_comment\" Group=\"_CV\" Customization=\"\" />"
                 },
                 {
                     "verb": "createContentType",
@@ -136,6 +123,10 @@ const commonServices = {
                                 "verb": "addSiteColumn",
                                 "internalName": "CV_productDescription"
                             },
+                            {
+                                "verb": "addSiteColumn",
+                                "internalName": "CV_comment"
+                            },
                         ]
                 },
                 {
@@ -168,7 +159,7 @@ const commonServices = {
                                 "CV_productStatus",
                                 "CV_shortDescription",
                                 "CV_productDescription",
-                                "Attachments"
+                                "CV_comment"
                             ],
                             "query": "",
                             "rowLimit": 100,
@@ -197,15 +188,17 @@ const commonServices = {
     _applySiteDesignToSite: async (sp: any, siteDesignId: string, siteUrl: string) => {
         return await sp.siteDesigns.applySiteDesign(siteDesignId, siteUrl);
     },
-    _ensureSiteAssetsLibraryexist: async (sp: any) => {
-        return await sp.web.lists.ensureSiteAssetsLibrary();
-    },
+
     _getAllRoleDefinitions: async (sp: any) => {
         return await sp.web.roleDefinitions();
     },
 
-    _getSiteGroupByName: async (sp: any, groupName: any) => {
-        return await sp.web.siteGroups.getByName(groupName)();
+    _getVisitorSiteGroup: async (sp: any) => {
+        return await sp.web.associatedVisitorGroup();
+    },
+
+    _getOwnerSiteGroupUsers: async (sp: any) => {
+        return await sp.web.associatedOwnerGroup.users();
     },
 
     _breakRollAssignments: async (sp: any, ListName: string, copyRoleAssignments: boolean, clearSubscopes: boolean) => {
@@ -224,7 +217,11 @@ const commonServices = {
         return await sp.web.lists.getByTitle(listName).items.getAll();
     },
 
-    _getListItemWithExpandAndFilter: async (sp: any, listName: any, selectString: string, expandString: string, filterString: string) => {
+    _getListItemWithExpand: async (sp: any, listName: any, selectString: string, expandString: string) => {
+        return await sp.web.lists.getByTitle(listName).items.select(selectString).expand(expandString).getAll();
+    },
+
+    _getListItemWithExpandAndFilter: async (sp: any, listName: any, selectString: string, filterString: string, expandString: string) => {
         return await sp.web.lists.getByTitle(listName).items.select(selectString).expand(expandString).filter(filterString).getAll();
     },
 
@@ -232,8 +229,9 @@ const commonServices = {
         return await sp.web.lists.getByTitle(listName).items.getById(itemId).update(data);
     },
 
-    _getContentTypeColumns: async (sp: any, contentTypeId: any) => {
-        return await sp.web.contentTypes.getById(contentTypeId).fields();
+    _getListColumns: async (sp: any, listName: any) => {
+        return await sp.web.lists.getByTitle(listName).fields();
+        //  await sp.web.contentTypes.getById(contentTypeId).fields();
     },
 
     _addListItem: async (sp: any, listName: any, item: any) => {
@@ -250,21 +248,91 @@ const commonServices = {
         return res;
     },
 
+    _getFolderByPath: async (context: any, folderPath: string) => {
+        var myHeaders = new Headers({
+            'Accept': 'application/json; odata=verbose'
+        });
+
+        var myInit = {
+            method: 'GET',
+            headers: myHeaders,
+        }
+
+        return await fetch(context.pageContext.legacyPageContext.webAbsoluteUrl + "/_api/web/getFolderByServerRelativeUrl('" + folderPath + "')", myInit).then((response) => {
+            return response;
+        });
+    },
+
+    _createFolder: async (sp: any, folderUrl: string) => {
+        return await sp.web.folders.addUsingPath(folderUrl);
+    },
+
+    _addMultipleImage: async (sp: any, folderUrl : string ,files: any) => {
+        const res: any = [];
+        files.forEach(async (file: any) => {
+            // const fileNamePath = encodeURI(file.name);
+            return await sp.web.getFolderByServerRelativePath(folderUrl).files.addUsingPath(file.name, file, { Overwrite: true }).then((r: any) => res.push(r));
+        });
+        // for (let i = 0; i < files.length; i++) {
+        //     const fileNamePath = encodeURI(file.name);
+        //     // return await sp.web.getFolderByServerRelativePath("/sites/CV_Classified_App/SiteAssets/Lists/6329a85e-d213-4ef4-9c78-d9b1929fb08e/Sony Headphones 6_7_2023_16_25_20").addUsingPath(files[i].Name, files[i], { Overwrite: true }).then((r: any) => res.push(r));
+        //     return await sp.web.getFolderByServerRelativePath("SiteAssets/Lists/6329a85e-d213-4ef4-9c78-d9b1929fb08e/Sony Headphones 6_7_2023_16_25_20").files.addUsingPath(files[i].Name, files[i], { Overwrite: true }).then((r: any) => res.push(r));
+        // }
+        return res;
+
+    },
+
+    _deleteMultipleImages: async (sp: any, files: any) => {
+        const res: any = [];
+        files.forEach(async (file: any) => {
+            return await sp.web.getFolderByServerRelativePath("/sites/CV_Classified_App/SiteAssets/Lists/6329a85e-d213-4ef4-9c78-d9b1929fb08e/Sony Headphones 6_7_2023_16_25_20").files.getByUrl(file.Name).delete().then((r: any) => res.push(r));
+        });
+        return res;
+        // return await sp.web.getFolderByServerRelativePath(files).files.getByName(files.name).delete();
+        // return await sp.web.getFolderByServerRelativePath("{folder relative path}").files.getByUrl("filename.txt").delete();
+    },
+
+    _ensureSiteAssetsLibraryexist: async (sp: any) => {
+        return await sp.web.lists.ensureSiteAssetsLibrary();
+    },
+
+    _getImageFromFolder: async (sp: any, folderUrl: any) => {
+        return await sp.web.getFolderByServerRelativePath(folderUrl).files();
+    },
+
+    _getSiteGroupByName: async (sp: any, groupName: any) => {
+        return await sp.web.siteGroups.getByName(groupName)();
+    },
+
+    _getContentTypeColumns: async (sp: any, contentTypeId: any) => {
+        return await sp.web.contentTypes.getById(contentTypeId).fields();
+    },
+
     _checkRequiredValidation: async (dataObject: any, richTextValue: any, attachments: any, requiredFields: any) => {
         let errorMessage: any = {};
+        var mobString = /^\d{10}$/;
+        let priceString = /^[0-9]+$/;
         requiredFields.forEach((requiredElement: any) => {
 
-            if (dataObject[requiredElement] == "" || dataObject[requiredElement] === undefined) {
+            if (dataObject[requiredElement] === "" || dataObject[requiredElement] === undefined) {
                 errorMessage[requiredElement] = "*Required!";
             }
 
-            if (dataObject["CV_productCategory"] == "Other") {
+            if (dataObject["CV_productCategory"] === "Other") {
                 if (dataObject["CV_otherProductCategory"] == "" || dataObject["CV_otherProductCategory"] === undefined) {
                     errorMessage["CV_otherProductCategory"] = "*Required!";
                 }
             }
 
-            if (richTextValue == "" || richTextValue === undefined) {
+            if (dataObject["CV_ContactNo"] !== undefined && mobString.test(dataObject["CV_ContactNo"]) === false) {
+                errorMessage["CV_ContactNo"] = "*Invalid";
+            }
+
+            if (dataObject["CV_productPrice"] !== undefined && priceString.test(dataObject["CV_productPrice"]) === false) {
+                errorMessage["CV_productPrice"] = "*Invalid";
+            }
+
+            if (richTextValue === "" || richTextValue === undefined) {
                 errorMessage["CV_productDescription"] = "*Required!";
             }
 

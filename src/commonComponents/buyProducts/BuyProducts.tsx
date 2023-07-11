@@ -4,6 +4,8 @@ import { Route, BrowserRouter as Router, HashRouter, Link, NavLink, Switch, useR
 import ProductDetailComponent from '../productDetailComponent/ProductDetailComponent';
 import { Pagination } from "@pnp/spfx-controls-react/lib/pagination";
 
+const slice: any = require('lodash/slice');
+
 const classifiedCard = [
     {
         id: 1,
@@ -62,32 +64,32 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
 
     // const soldIcon = require('../../assets/images/svg/sold.svg');
 
-    const [paginatedItems, setPaginatedItems] = React.useState([]);
-    const [pageSize, setPageSize] = React.useState(1);
-
-    const getPage = (page: number) => {
-        // round a number up to the next largest integer.
-        const roundupPage = Math.ceil(page);
-        const tempPaginatedItems = props.productCardData.slice(roundupPage * pageSize, (roundupPage * pageSize) + pageSize)
-        setPaginatedItems(tempPaginatedItems);
-    }
+    const [pagedItems, setPagedItems] = React.useState<any[]>([]);
+    const [pageSize, setPageSize] = React.useState<number>(10);
+    const [currentPage, setCurrentPage] = React.useState<number>(1);
 
     React.useEffect(() => {
         props.choiceGroupVisibility(true);//show choice group which is available in parent component.
-    }, [])
+
+        if (props.productCardData.length > 0) {
+            onPageUpdate();
+        }
+
+    }, []);
+
     return (
         <>
             <div className='classified-cards'>
                 <div className="custmRow">
-                    {props.productCardData.map((card) => (
+                    {pagedItems.map((card) => (
                         <div className='custmCols' key={card.Id}>
                             <div className={card.CV_productStatus === "Sold" ? "content-card" + " " + 'disabled' : "content-card" + " " + ''}>
                                 <Link to={`${path}/productDetails?productId=${card.Id}`} className='linkItem'>
                                     <div className='card-header'>
                                         <div className='prdPrice'>
-                                            <img src={card.AttachmentFiles && card.AttachmentFiles[0] ? card.AttachmentFiles[0].ServerRelativeUrl : ""} alt={card.Title} />
+                                            <img src={card.Images && card.Images[0] ? card.Images[0].ServerRelativeUrl : ""} alt={card.Title} />
                                             <div className='prd-amt'>
-                                                {card.CV_productPrice}
+                                                {Number(card.CV_productPrice).toLocaleString()}
                                             </div>
                                         </div>
                                         <div className='soldLabel'>
@@ -115,9 +117,9 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
                                 </Link>
                                 <div className='social-icons'>
                                     <ul>
-                                        <li><a onClick={() => { window.location.href = "https://teams.microsoft.com/l/chat/0/0?users=ankit@thecodevision.com" }}><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
-                                        <li><a onClick={() => { window.location.href = "mailTo:ankit@thecodevision.com" }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
-                                        <li><a onClick={() => { window.location.href = "tel:+91 7852693210" }} ><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
+                                        <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${card.Author.EMail}` }}><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
+                                        <li><a onClick={() => { window.location.href = `mailTo:${card.Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
+                                        <li><a onClick={() => { window.location.href = `tel:${card.CV_ContactNo}` }} ><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
                                         <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                                     </ul>
                                 </div>
@@ -127,12 +129,23 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
                 </div>
             </div>
             <Pagination
-                currentPage={1}
-                totalPages={(props.productCardData.length / pageSize) - 1}
+                currentPage={currentPage}
+                totalPages={Math.ceil(props.productCardData.length / pageSize)}
+                onChange={(page) => onPageUpdate(page)}
                 limiter={3}
-                onChange={(page) => getPage(page)} />
+            />
         </>
     );
+
+    // Pagination Handler
+    function onPageUpdate(pageno?: number) {
+        var currentPge = (pageno) ? pageno : currentPage;
+        var startItem = ((currentPge - 1) * pageSize);
+        var endItem = currentPge * pageSize;
+        let filItems: any = slice(props.productCardData, startItem, endItem);
+        setCurrentPage(currentPge);
+        setPagedItems(filItems);
+    };
 };
 
 export default BuyProducts;

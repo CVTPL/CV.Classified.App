@@ -1,1 +1,3 @@
-export interface IImageGallerySliderComponentProps {}
+export interface IImageGallerySliderComponentProps {
+    imagesData: any;
+}
