@@ -27,10 +27,6 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
     //check list is exist or not
     if (Object.keys(this.props.context).length > 0) {
       this.initializeFunction().then((response) => {
-        return this.folderConfiguration();
-      }).then((response) => {
-        return this.checkAndApplyCustomPermission();
-      }).then((response) => {
         this.setState({ initializationStatus: true, loading: false });
       });
     }
@@ -67,7 +63,11 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
 
           if (checkSiteDesign.length > 0) {
             //site design is available so apply that site design to site.
-            return commonServices._applySiteDesignToSite(this.sp, checkSiteDesign[0].Id, siteUrl);
+            return commonServices._applySiteDesignToSite(this.sp, checkSiteDesign[0].Id, siteUrl).then((response)=>{
+              return this.folderConfiguration();
+            }).then((response)=>{
+              return this.checkAndApplyCustomPermission();
+            });
           }
           else {
             //site design is not available then check site script available
@@ -78,6 +78,8 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
                 //site script is available so create site design and apply to site
                 return commonServices._createSiteDesign(this.sp, checkSiteScript[0].Id).then((response) => {
                   return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
+                }).then((response)=>{
+                  return this.folderConfiguration();
                 });
               }
               else {
@@ -86,6 +88,8 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
                   return commonServices._createSiteDesign(this.sp, response.Id);
                 }).then((response) => {
                   return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
+                }).then((response)=>{
+                  return this.folderConfiguration();
                 });
               }
             });
@@ -170,6 +174,5 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
       return commonServices._createFolder(this.sp, "SiteAssets/Lists/" + listId + "");
     });
   }
-
 }
 

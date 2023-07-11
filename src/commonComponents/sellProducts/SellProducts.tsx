@@ -255,7 +255,6 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
             }
 
             {/********************************************************************admin flow sell end region********************************************************************/}
-
             {/* Panel Start Region */}
             <Panel
                 className="panel-containers product-panel-container"
@@ -267,13 +266,9 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                 <AddEditProductPanelComponent context={props.context} onPanelChange={setIsPanel} onChangeAddPageToggle={AddPageToggle} />
             </Panel>
             {/* Panel End Region */}
-
-
-
-
-
         </>
     );
+    
     function _onChangeChoiceGroup(ev: React.FormEvent<HTMLInputElement>, option: IChoiceGroupOption): void {
         setSelectedView(option.key)
     }

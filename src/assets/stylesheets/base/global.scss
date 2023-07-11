@@ -2334,4 +2334,35 @@ html, body {
   }
 }
 
+/* Loader Relative Style CSS Start */
+.fixed-loader-container {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  left: 0px;
+  top: 0px;
+  background: rgb($secondary-2, 0.8);
+  z-index: 10000000;
+  @include loaderMixinCommanCode();
+}
+
+.relative-box-loader-container {
+  position: relative;
+
+  .fixed-loader-child {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgb($secondary-2, 0.8);
+    z-index: 10000000;
+  }
+}
+
+/* Loader Relative Style CSS End */
+
 

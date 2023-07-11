@@ -45,4 +45,14 @@
   }
 }
 
+/* Loader Mixin Comman Code - Mixin Start */
+@mixin loaderMixinCommanCode(){
+  .fixed-loader-child {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+/* Loader Mixin Comman Code - Mixin End */
 

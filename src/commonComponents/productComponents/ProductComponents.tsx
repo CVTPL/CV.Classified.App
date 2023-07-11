@@ -257,7 +257,10 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
   }
 
   React.useEffect(() => {
-    window.location.href = '#/buyProducts';
+    let currentURL: any = window.location.hash;
+    if (!currentURL.includes("productId")) {
+      window.location.href = '#/buyProducts';
+    }
 
     let tempLocationOptions: any = [];
     let tempProductCategoryOptions: any = [];
