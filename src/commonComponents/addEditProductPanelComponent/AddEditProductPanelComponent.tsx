@@ -189,20 +189,11 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
   return (
     <>
-      {/* Loader Start */}
-      <div className="fixed-loader-container" hidden={!showLoader}>
-        <div className="fixed-loader-child">
-          <BallTriangle
-            height={100}
-            width={100}
-            radius={5}
-            color="#5F9BE7"
-            ariaLabel="ball-triangle-loading"
-            visible={showLoader}
-          />
+      <div className={"LoaderDivCustom"} hidden={!showLoader}>
+        <div className={"LoaderChild"}>
+          <BallTriangle height={100} width={100} radius={5} color="#5F9BE7" ariaLabel="ball-triangle-loading" visible={showLoader} />
         </div>
       </div>
-      {/* Loader End */}
 
       <div className="panel-body">
         <div className='panelContainer'>
@@ -422,10 +413,10 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
   // }
 
   function approveDialogs() {
-    setApproveDialog(false);
+    setApproveDialog(true);
 
     setTimeout(() => {
-      setApproveDialog(true);
+      setApproveDialog(false);
     }, 3000); // 3000 milliseconds = 3 seconds
   }
 
@@ -711,11 +702,28 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
       CV_productStatus: "Approve"
     }
     _updateProductData(productData, item.Id).then((response) => {
-      setApproveDialog(true);
-    })
+      commonServices._getRoleDefinitionByName(sp, "EditItems").then((roleDefitions) => {
+        let roleDefId = roleDefitions.Id;
 
+        //break inheritance permission at item level
+        commonServices._breakRollAssignmentsAtItemLevel(sp, "Classified Products", item.Id, true, true).then((breakRollAssignmentRes) => {
+          //assign custom permission to item
+          commonServices._roleAssignmentsAtItemLevel(sp, "Classified Products", item.Id, item.Author.ID, roleDefId).then((breakRollAssignmentRes) => {
+            // Check site assets exit or not
+            commonServices._ensureSiteAssetsLibraryexist(sp).then((response) => {
+              //break inheritance permission at document library(site assets)
+              commonServices._breakRollAssignments(sp, "Site Assets", true, true).then((breakRollAssignmentRes) => {
+                //assign custom permission to document library(site assets)
+                commonServices._roleAssignments(sp, "Site Assets", item.Author.ID, roleDefId).then((roleAssignmentRes) => {
+                  approveDialogs();
+                });
+              });
+            })
+          })
+        });
+      });
+    });
   }
-
-};
+}
 
 export default AddEditProductPanelComponent;
