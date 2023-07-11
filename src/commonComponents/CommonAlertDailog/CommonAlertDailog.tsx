@@ -36,7 +36,7 @@ const CommonAlertDailog: React.FunctionComponent<ICommonAlertDailog> = (props) =
             </div>
           </DialogFooter>
         </div>
-      ):""}
+      ) : ""}
 
       {props.alertBoxFor === "RejectModal" ? (
         <div className="modal-custom-content rejectModal">
@@ -57,16 +57,13 @@ const CommonAlertDailog: React.FunctionComponent<ICommonAlertDailog> = (props) =
             </div>
           </DialogFooter>
         </div>
-      ):""}
+      ) : ""}
 
-
-
-{props.alertBoxFor === "approvedModal" ? (
+      {props.alertBoxFor === "approvedModal" ? (
         <div className="modal-custom-content ApproveModal">
           <div className="modal-header">
             <div className="circle-box bg-secondary-18">
               <img src={require("../../assets/images/svg/right-icon.svg")} alt="reject-icon" />
-              
             </div>
           </div>
           <div className="modal-body">
@@ -74,7 +71,7 @@ const CommonAlertDailog: React.FunctionComponent<ICommonAlertDailog> = (props) =
             <p>{props.message}</p>
           </div>
         </div>
-      ):""}
+      ) : ""}
     </>
   );
 };

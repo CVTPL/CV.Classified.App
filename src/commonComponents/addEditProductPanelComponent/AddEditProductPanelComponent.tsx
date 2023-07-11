@@ -10,47 +10,29 @@ import commonServices from '../../services/commonServices';
 import { BallTriangle } from 'react-loader-spinner';
 
 import { spfi, SPFx } from "@pnp/sp";
+import { clone } from '@microsoft/sp-lodash-subset';
 import CommonAlertDailog from '../CommonAlertDailog/CommonAlertDailog';
 
 const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanelComponentProps> = (props) => {
-
   const sp = spfi().using(SPFx(props.context));
 
-  const [addProductInputList, setAddProductInputList] = React.useState<any>({});
+  const todayDate = new Date();
+  const currentTime = todayDate.getDate() + '_' + (todayDate.getMonth() + 1) + '_' + todayDate.getFullYear() + '_' + todayDate.getHours() + '_' + todayDate.getMinutes() + '_' + todayDate.getSeconds();
+
+  const [addProductInputList, setAddProductInputList] = React.useState<any>({ CV_productStatus: "Requested" });
   const [errorList, setErrorList] = React.useState<any>({});
   const [richTextValue, setRichTextValue] = useState('');
   const dropzoneRef: any = createRef()
-  const [files, setFiles]: any = React.useState([]);
+  const [files, setFiles]: any = React.useState([{}]);
 
   const [productCategoryOptions, setProductCategoryOptions] = useState([]);
   const [statusOptions, setStatusOptions] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
-
-  const { getRootProps, getInputProps } = useDropzone({
-    accept: {
-      'image/*': []
-    },
-    onDrop: acceptedFiles => {
-      const errorsCopy = errorList
-      if (errorsCopy["Attachments"] && errorsCopy["Attachments"].length > 0) {
-        delete errorsCopy["Attachments"];
-      }
-      setErrorList(errorsCopy);
-      setFiles(acceptedFiles);
-      // setFiles(acceptedFiles.map(file => Object.assign(file, {
-      //     preview: URL.createObjectURL(file)
-      //   })))
-    }
-  });
-
   const [hideDialog, setHideDialog]: any = React.useState(false);
 
   const [rejectHideDialog, setRejectHideDialog]: any = React.useState(false);
 
-  const [approveDialog , setApproveDialog] : any = React.useState(false)
-
-
-
+  const [approveDialog, setApproveDialog]: any = React.useState(false)
 
   const modelProps = {
     isBlocking: false,
@@ -58,12 +40,28 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
   };
 
+  // Dropzone handler
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      'image/*': []
+    },
+    onDrop: acceptedFiles => {
+      const errorsCopy = errorList;
+      if (errorsCopy["Attachments"] && errorsCopy["Attachments"].length > 0) {
+        delete errorsCopy["Attachments"];
+      }
+      setErrorList(errorsCopy);
+      const combinedFiles = [...files, ...acceptedFiles];
+      combinedFiles.splice(combinedFiles.lastIndexOf(combinedFiles.filter((ele: any) => Object.keys(ele).length == 0)[0]), 1);
+      combinedFiles.push({});
+      setFiles(combinedFiles);
+    }
+  });
 
   const rejectedModelProps = {
     isBlocking: false,
     className: "reject-dialog-container",
   }
-
 
   const successModalProps = React.useMemo(
     () => ({
@@ -118,157 +116,35 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
     height: '100%'
   };
 
-
   const addFriendIconProps: IIconProps = {
     iconName: 'ChromeClose',
   };
 
-
+  // Images display & input styles
   const thumbs = files.map((file: any) => {
     return (
-      <div style={thumb} key={file.name}>
-        <div style={thumbInner}>
-          <img
-            src={URL.createObjectURL(file)}
-            style={img}
-            // Revoke data URI after the image is loaded
-            onLoad={() => { URL.revokeObjectURL(file.preview) }}
-            alt="Preview"
-          />
+      Object.keys(file).length > 0 ?
+        <div style={thumb} key={file.ServerRelativeUrl ? file.Name : file.name}>
+          <div style={thumbInner}>
+            <img
+              // src={URL.createObjectURL(file.ServerRelativeUrl)}
+              src={file.ServerRelativeUrl ? file.ServerRelativeUrl : URL.createObjectURL(file)}
+              style={img}
+              // Revoke data URI after the image is loaded
+              onLoad={() => { URL.revokeObjectURL(file.preview) }}
+              alt="Preview"
+            />
 
+          </div>
+          <IconButton iconProps={addFriendIconProps} className='crossIconBtn' onClick={() => { file.ServerRelativeUrl ? removeInputImage(file.Name) : removeInputImage(file.name) }} />
         </div>
-        <IconButton iconProps={addFriendIconProps} className='crossIconBtn' />
-      </div>
+        :
+        <div {...getRootProps({ className: 'dropzone' })}>
+          <input {...getInputProps()} />
+          <p>+</p>
+        </div>
     )
   });
-
-  const handleChangeProductInput = (e: any) => {
-    const errorsCopy = errorList;
-    if (errorsCopy[e.target.id] && errorsCopy[e.target.id].length > 0) {
-      delete errorsCopy[e.target.id];
-    }
-    setErrorList(errorsCopy);
-
-    setAddProductInputList({ ...addProductInputList, [e.target.id]: e.target.value });
-  }
-
-
-  const handleChangeDropdown = (ev: any, op: any, i: any) => {
-    const errorsCopy = errorList;
-    if (errorsCopy[ev.target.id] && errorsCopy[ev.target.id].length > 0) {
-      delete errorsCopy[ev.target.id];
-    }
-
-    if (op.key === "Other") {
-      delete errorsCopy["CV_otherProductCategory"];
-      delete addProductInputList["CV_otherProductCategory"];
-    }
-    setErrorList(errorsCopy);
-
-    // if (ev.target.id === "CV_productCategory") {
-    //   if (op.key === "Other") {
-    //     setTextfieldVisible(true);
-    //   }
-    //   else {
-    //     setTextfieldVisible(false);
-    //   }
-    // }
-
-    setAddProductInputList({ ...addProductInputList, [ev.target.id]: op.key });
-  }
-
-  function onTextChange(newText: string) {
-    // console.log(newText);
-    const errorsCopy = errorList;
-    if (errorsCopy["CV_productDescription"] && errorsCopy["CV_productDescription"].length > 0) {
-      delete errorsCopy["CV_productDescription"];
-    }
-    setErrorList(errorsCopy);
-
-    setRichTextValue(newText);
-    return newText;
-  }
-
-  const _getListColumns = (): Promise<any> => {
-
-    return new Promise((resolve, reject) => {
-      commonServices._getContentTypeColumns(sp, "0x0100947717a5ffce43278ebe6ce504996740")
-        .then((response: any) => {
-          resolve(response);
-        },
-          (error: any): any => {
-            reject(error);
-            console.log(error);
-            alert("Error while getting data");
-          });
-    });
-  }
-
-  const _addProductData = (productData: any): Promise<any> => {
-
-    return new Promise((resolve, reject) => {
-      commonServices._addListItem(sp, "Classified Products", productData)
-        .then((response: any) => {
-          resolve(response);
-        },
-          (error: any): any => {
-            reject(error);
-            console.log(error);
-            alert("Error while adding data");
-          });
-    });
-  }
-
-  const _addProductAttachments = (itemId: any, productAttachment: any): Promise<any> => {
-
-    return new Promise((resolve, reject) => {
-      commonServices._addMultipleAttachment(sp, "Classified Products", itemId, productAttachment)
-        .then((response: any) => {
-          resolve(response);
-        },
-          (error: any): any => {
-            reject(error);
-            console.log(error);
-            alert("Error while adding data");
-          });
-    });
-  }
-
-  const addProductSubmit = () => {
-
-    let productData = { ...addProductInputList, ["CV_productDescription"]: richTextValue };
-    let requiredFieldArr = ["Title", "CV_productCategory", "CV_productPrice", "CV_ContactNo", "CV_location", "CV_productStatus", "CV_shortDescription"];
-
-    commonServices._checkRequiredValidation(addProductInputList, richTextValue, files, requiredFieldArr).then((response) => {
-
-      if (Object.keys(response).length > 0) {
-        setErrorList(response);
-      }
-      else {
-        // console.log(addProductInputList);
-        // console.log(files);
-
-        _addProductData(productData).then((response) => {
-          // console.log(response);
-          setShowLoader(true);
-
-          _addProductAttachments(response.data.Id, files).then((response) => {
-
-            // console.log(response);
-            setAddProductInputList({});
-            setRichTextValue('');
-            setFiles([]);
-            setErrorList({});
-            // setTextfieldVisible(false);
-            setShowLoader(false);
-            props.onPanelChange(false);
-          })
-        })
-
-        // console.log(productData);
-      }
-    });
-  }
 
   React.useEffect(() => {
 
@@ -295,6 +171,16 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
       // console.log(tempStatusOptions);
       setStatusOptions(tempStatusOptions);
     })
+
+    if (Object.keys(props.editData).length > 0) {
+      setAddProductInputList(props.editData);
+      setRichTextValue(props.editData.CV_productDescription);
+      const combinedFiles = [...files, ...props.editData.Images];
+      combinedFiles.splice(combinedFiles.lastIndexOf(combinedFiles.filter((ele: any) => Object.keys(ele).length == 0)[0]), 1);
+      combinedFiles.push({});
+      setFiles(combinedFiles);
+    }
+
   }, []);
 
   function setIsPanel(arg0: boolean) {
@@ -315,13 +201,17 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
             <div className="ms-Grid">
               <div className="ms-Grid-row">
                 <div className='messageBar'>
-                  <MessageBar className='message-alert-bar' role="none">
-                  <img src={require("../../assets/images/svg/info-red-icon.svg")} alt="Not Available Now" title="Info Icon" />
-                  <span>
-                  The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.
-                  </span>
-                </MessageBar>                
-            </div>
+                  {
+                    addProductInputList.CV_comment && props.onChangeAddPageToggle ?
+                      <MessageBar className='message-alert-bar' role="none">
+                        <img src={require("../../assets/images/svg/info-red-icon.svg")} alt="Not Available Now" title="Info Icon" />
+                        <span> {addProductInputList.CV_comment}
+                          {/* The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. */}
+                        </span>
+                      </MessageBar>
+                      : ""
+                  }
+                </div>
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
                     <input placeholder=" " type="text" id="Title" value={addProductInputList.Title ? addProductInputList.Title : ""} onChange={(e) => { handleChangeProductInput(e) }} />
@@ -383,9 +273,11 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                     <Dropdown
                       placeholder="Status"
                       selectedKey={addProductInputList.CV_productStatus ? addProductInputList.CV_productStatus : ""}
+                      defaultSelectedKey="Requested"
                       options={statusOptions}
                       id="CV_productStatus"
                       onChange={(ev, op, i) => handleChangeDropdown(ev, op, i)}
+                      disabled={true}
                     />
                   </div>
                   {errorList.CV_productStatus && <span className='requiredmsg'>{errorList.CV_productStatus}</span>}
@@ -415,10 +307,6 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                 <div className='zoneContent'>
                   <p>Product Images</p>
                   <section className="dropZoneContainer">
-                    <div {...getRootProps({ className: 'dropzone' })}>
-                      <input {...getInputProps()} />
-                      <p>+</p>
-                    </div>
                     <aside style={thumbsContainer}>
                       {thumbs}
                     </aside>
@@ -435,21 +323,27 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
         props.onChangeAddPageToggle ?
           <div className="panel-footer">
             <div className="btn-container btn-end">
-              <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { props.onPanelChange(false) }} />
+              <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { closePanel() }} />
               <PrimaryButton className="btn-secondary-3" text="Add" onClick={() => { addProductSubmit() }} />
             </div>
           </div>
           :
-          <div className="panel-footer">
-            <div className="btn-container btn-end">
-              <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { props.onPanelChange(false) }} />
-              <PrimaryButton className="btn-secondary-2" text="Delete" onClick={() => { toggleShowDialog() }} />
-              <PrimaryButton className="btn-secondary-3" text="Update" onClick={() => { addProductSubmit() }} />
-              <PrimaryButton className="btn-secondary-2" text="Reject" onClick={() => { setRejectHideDialog(true) }} />
-              <PrimaryButton className="btn-secondary-5" text="Approve" onClick={() => { setApproveDialog(true) }} />
+          props.selectedView === "myproducts" ?
+            <div className="panel-footer">
+              <div className="btn-container btn-end">
+                <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { closePanel() }} />
+                <PrimaryButton className="btn-secondary-2" text="Delete" onClick={() => { toggleShowDialog() }} />
+                <PrimaryButton className="btn-secondary-3" text="Update" onClick={() => { editProductSubmit() }} />
+              </div>
             </div>
-          </div>
-
+            :
+            <div className="panel-footer">
+              <div className="btn-container btn-end">
+                <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { closePanel() }} />
+                <PrimaryButton className="btn-secondary-2" text="Reject" onClick={() => { setRejectHideDialog(true) }} />
+                <PrimaryButton className="btn-secondary-5" text="Approve" onClick={() => { setApproveBtn(addProductInputList) }} />
+              </div>
+            </div>
       }
 
       {/* <DefaultButton secondaryText="Opens the Sample Dialog" text="Open Dialog" /> */}
@@ -484,8 +378,8 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
       {/*  */}
 
 
-       {/* Approve Modal popup start region  */}
-       <Dialog hidden={!approveDialog} onDismiss={approveDialogs} modalProps={successModalProps}>
+      {/* Approve Modal popup start region  */}
+      <Dialog hidden={!approveDialog} onDismiss={approveDialogs} modalProps={successModalProps}>
         <CommonAlertDailog
           alertBoxFor={"approvedModal"}
           closeDailogBox={() => { setIsPanel(false); }}
@@ -502,8 +396,6 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
   );
 
-
-
   function toggleShowDialog() {
     setHideDialog(true);
   }
@@ -512,22 +404,307 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
     setHideDialog(false);
   }
 
-  function rejectHideDialogs(){
+  function rejectHideDialogs() {
     setRejectHideDialog(false)
   }
 
-
-  
   // function approveDialogs(){
   //   setApproveDialog(false)
   // }
 
   function approveDialogs() {
     setApproveDialog(false);
-  
+
     setTimeout(() => {
       setApproveDialog(true);
     }, 3000); // 3000 milliseconds = 3 seconds
+  }
+
+  // Remove Image handler
+  function removeInputImage(fileName: any) {
+    setFiles(files.filter((val: any) => ((val.name || val.Name) !== fileName)))
+  }
+
+  // TextField Input Handler
+  function handleChangeProductInput(e: any) {
+    const errorsCopy = errorList;
+    if (errorsCopy[e.target.id] && errorsCopy[e.target.id].length > 0) {
+      delete errorsCopy[e.target.id];
+    }
+    setErrorList(errorsCopy);
+    setAddProductInputList({ ...addProductInputList, [e.target.id]: e.target.value });
+
+  }
+
+  // Dropdown Input Handler
+  function handleChangeDropdown(ev: any, op: any, i: any) {
+    const errorsCopy = errorList;
+    if (errorsCopy[ev.target.id] && errorsCopy[ev.target.id].length > 0) {
+      delete errorsCopy[ev.target.id];
+    }
+
+    if (op.key === "Other") {
+      delete errorsCopy["CV_otherProductCategory"];
+      delete addProductInputList["CV_otherProductCategory"];
+    }
+    setErrorList(errorsCopy);
+    setAddProductInputList({ ...addProductInputList, [ev.target.id]: op.key });
+  }
+
+  // Richtext Input Handler
+  function onTextChange(newText: string) {
+    // console.log(newText);
+    const errorsCopy = errorList;
+    if (errorsCopy["CV_productDescription"] && errorsCopy["CV_productDescription"].length > 0) {
+      delete errorsCopy["CV_productDescription"];
+    }
+    setErrorList(errorsCopy);
+    setRichTextValue(newText);
+    return newText;
+  }
+
+  // Fetch list columns from content types service
+  async function _getListColumns(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      commonServices._getListColumns(sp, "Classified Products")
+        .then((response: any) => {
+          resolve(response);
+        },
+          (error: any): any => {
+            reject(error);
+            console.log(error);
+            alert("Error while getting data");
+          });
+    });
+  }
+
+  // Add products data in list service
+  async function _addProductData(productData: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      commonServices._addListItem(sp, "Classified Products", productData)
+        .then((response: any) => {
+          resolve(response);
+        },
+          (error: any): any => {
+            reject(error);
+            console.log(error);
+            alert("Error while adding data");
+          });
+    });
+  }
+
+  async function _updateImageUrl(imageUrl: any, itemID: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      commonServices._updateListItem(sp, "Classified Products", imageUrl, itemID).then((response: any) => {
+        resolve(response);
+      },
+        (error: any): any => {
+          reject(error);
+          console.log(error);
+          alert("Error while updating Data");
+        });
+    });
+  }
+
+  // Add attachments data in list service
+  async function _addProductAttachments(itemId: any, productAttachment: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      commonServices._addMultipleAttachment(sp, "Classified Products", itemId, productAttachment)
+        .then((response: any) => {
+          resolve(response);
+        },
+          (error: any): any => {
+            reject(error);
+            console.log(error);
+            alert("Error while adding data");
+          });
+    });
+  }
+
+  // Add Image and Product in List/Folder
+  async function _AddImageInFolder(item: any, inputFiles: any): Promise<any> {
+    let listId = "";
+    let itemFolderName = `${item.Title} ${currentTime}`;
+
+    await commonServices._getSiteListByName(props.context, "Classified Products").then(async (response) => {
+      return await response.json();
+    }).then(async (response) => {
+      listId = response.d.Id;
+      return await commonServices._createFolder(sp, "SiteAssets/Lists/" + listId + "/" + itemFolderName + "")
+    }).then(async (response) => {
+      return await commonServices._addMultipleImage(sp, "SiteAssets/Lists/" + listId + "/" + itemFolderName + "", inputFiles);
+    }).then((response) => {
+      let productData = { ...item, ["CV_imageUrl"]: "SiteAssets/Lists/" + listId + "/" + itemFolderName + "" };
+      _addProductData(productData).then((ItemRes) => {
+        closePanel();
+      });
+    })
+  }
+
+  // On submit product data handler
+  function addProductSubmit() {
+    let inputFiles = clone(files);
+    let productData = { ...addProductInputList, ["CV_productDescription"]: richTextValue };
+    let requiredFieldArr = ["Title", "CV_productCategory", "CV_productPrice", "CV_ContactNo", "CV_location", "CV_productStatus", "CV_shortDescription"];
+
+    inputFiles.splice(inputFiles.lastIndexOf(inputFiles.filter((ele: any) => Object.keys(ele).length == 0)[0]), 1);
+    commonServices._checkRequiredValidation(addProductInputList, richTextValue, inputFiles, requiredFieldArr).then((response) => {
+
+      if (Object.keys(response).length > 0) {
+        setErrorList(response);
+      }
+      else {
+        setShowLoader(true);
+        _AddImageInFolder(productData, inputFiles);
+      }
+    });
+  }
+
+  // Update products data in list service
+  async function _updateProductData(productData: any, productId: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      commonServices._updateListItem(sp, "Classified Products", productData, productId)
+        .then((response: any) => {
+          resolve(response);
+        },
+          (error: any): any => {
+            reject(error);
+            console.log(error);
+            alert("Error while updating data");
+          });
+    });
+  }
+
+  // Add Image and Product in List/Folder
+  async function _updateImageInFolder(item: any, inputFiles: any): Promise<any> {
+    let imageObjUpdate: any = [];
+    let imageObjDelete: any = [];
+    let imageForAdd = []
+    let imageForDelete = []
+    commonServices._getImageFromFolder(sp, item.CV_imageUrl).then((imageResponse) => {
+
+      inputFiles.forEach((newItmes: any) => {
+        if (imageResponse.filter((filterVal: any) => filterVal.Name == newItmes.name).length == 0) {
+          imageForAdd.push(newItmes);
+        }
+        // if (imageResponse.filter((filterVal: any) => filterVal.Name != newItmes.name).length > 0) {
+        //   let temp = imageResponse.filter((filterVal: any) => filterVal.Name != newItmes.name);
+        //   temp.forEach((deleteFile: any) => {
+        //     imageForDelete.push(deleteFile);
+        //   });
+        // }
+        // imageObjUpdate = imageResponse.filter((filterVal: any) => ((filterVal.name || filterVal.Name) == newItmes.Name));
+        // imageObjDelete = imageResponse.filter((filterVal: any) => ((filterVal.name || filterVal.Name) != newItmes.Name));
+      });
+
+      imageResponse.forEach((responseFile: any) => {
+        if (inputFiles.filter((filterVal: any) => filterVal.name != responseFile.Name).length > 0) {
+          imageForDelete = inputFiles.filter((filterVal: any) => filterVal.name != responseFile.Name);
+        }
+      });
+
+      // imageResponse.forEach((imgFromFolder: any) => {
+      //   imageObjUpdate = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) !== imgFromFolder.Name));
+      //   imageObjDelete = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) === imgFromFolder.Name));
+      // });
+      if (imageResponse.length > 0) {
+        return
+        // commonServices._deleteMultipleImages(sp, imageResponse);
+      }
+      else {
+        return;
+      }
+      // response.map((resVal: any) => {
+      //   imageObjUpdate = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) !== resVal.Name))
+      //   imageObjDelete = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) === resVal.Name))
+      // })
+    }).then((response) => {
+      return
+      // commonServices._addImage(sp, inputFiles);
+    }).then((response) => {
+      // _updateProductData(item).then((ItemRes) => {
+      //   closePanel();
+      // });
+    });
+
+    // commonServices._getImageFromFolder(sp, item.CV_imageUrl).then((response) => {
+    //   response.map((resVal: any) => {
+    //     imageObjUpdate = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) !== resVal.Name))
+    //     imageObjDelete = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) === resVal.Name))
+    //   })
+
+    //   imageObjDelete.map((val: any) => {
+    //     // commonServices._deleteImage(sp, val.ServerRelativeUrl, val);
+    //   })
+
+    //   return imageObjUpdate;
+    // }).then((response) => {
+    //   const res: any = [];
+    //   response.forEach(async (image: any) => {
+    //     await commonServices._addImage(sp, item.CV_imageUrl, image).then((r: any) => res.push(r));
+    //   });
+    //   return res;
+    // }).then((response) => {
+    //   _updateProductData(item).then((ItemRes) => {
+    //     closePanel();
+    //   });
+    // })
+  }
+
+  // On edit product data handler
+  function editProductSubmit() {
+
+    let inputFiles = clone(files);
+    let productData = { ...addProductInputList, ["CV_productDescription"]: richTextValue };
+    let requiredFieldArr = ["Title", "CV_productCategory", "CV_productPrice", "CV_ContactNo", "CV_location", "CV_productStatus", "CV_shortDescription"];
+
+    inputFiles.splice(inputFiles.lastIndexOf(inputFiles.filter((ele: any) => Object.keys(ele).length == 0)[0]), 1);
+
+    commonServices._checkRequiredValidation(addProductInputList, richTextValue, inputFiles, requiredFieldArr).then((response) => {
+
+      if (Object.keys(response).length > 0) {
+        setErrorList(response);
+      }
+      else {
+        setShowLoader(true);
+        let updateData = {
+          Id: productData.Id,
+          Title: productData.Title,
+          CV_productCategory: productData.CV_productCategory,
+          CV_otherProductCategory: productData.CV_otherProductCategory,
+          CV_productPrice: productData.CV_productPrice,
+          CV_ContactNo: productData.CV_ContactNo,
+          CV_location: productData.CV_location,
+          CV_productStatus: productData.CV_productStatus,
+          CV_shortDescription: productData.CV_shortDescription,
+          CV_productDescription: productData.CV_productDescription,
+          CV_imageUrl: productData.CV_imageUrl,
+        }
+        _updateImageInFolder(updateData, inputFiles);
+      }
+    });
+  }
+
+  // Close Add-Edit Panel With Clear Data
+  function closePanel() {
+    props.callFetchSetData();
+    setAddProductInputList({});
+    setRichTextValue('');
+    setFiles([]);
+    setErrorList({});
+    setShowLoader(false);
+    props.onPanelChange(false);
+  }
+
+  // Approve Product data & change Status
+  function setApproveBtn(item: any) {
+    let productData = {
+      CV_productStatus: "Approve"
+    }
+    _updateProductData(productData, item.Id).then((response) => {
+      setApproveDialog(true);
+    })
+
   }
 
 };

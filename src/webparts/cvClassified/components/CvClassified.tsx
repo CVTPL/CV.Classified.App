@@ -141,7 +141,7 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
 
       if (editItemCustomPermissionLevel.length === 0) {//EditItem permission level does not exist
         //create EditItem permission level for visitors group.
-        return commonServices._createNewPermissionLevel(this.sp, "EditItems", "Can Edit Only", 102, { High: 0, Low: 196613 });
+        return commonServices._createNewPermissionLevel(this.sp, "EditItems", "Can Edit and Delete Item", 102, { High: 0, Low: 196621 });
       }
     });
   }
