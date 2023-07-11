@@ -40,37 +40,6 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
 
   const filterIcon: IIconProps = { iconName: 'FilterSolid' };
   const [selectedView, setSelectedView] = React.useState("buy");
-
-  // const locationOption: IDropdownOption[] = [
-  //   { key: 'Ahmedabad', text: 'Ahmedabad' },
-  //   { key: 'Surat', text: 'Surat' },
-  //   { key: 'Goa', text: 'Goa' },
-  //   { key: 'Varanasi', text: 'Varanasi' },
-  //   { key: 'Bombay', text: 'Bombay' },
-  //   { key: 'Kolkata', text: 'Kolkata' },
-  //   { key: 'Cheenai', text: 'Cheenai' },
-  // ];
-
-
-  // const category: IDropdownOption[] = [
-  //   { key: 'Laptop', text: 'Laptop' },
-  //   { key: 'Mobile', text: 'Mobile' },
-  //   { key: 'Ipad', text: 'Ipad' },
-  //   { key: 'Iphone', text: 'Iphone' },
-  //   { key: 'Headphones', text: 'Headphones' },
-  //   { key: 'Smart Watch', text: 'Smart Watch' },
-  //   { key: 'Alexa Echodot', text: 'Alexa Echodot' },
-  // ];
-
-  // const status: IDropdownOption[] = [
-  //   { key: 'Active', text: 'Active' },
-  //   { key: 'InActive', text: 'InActive' },
-  //   { key: 'SoldOut', text: 'SoldOut' },
-  // ];
-
-  // const [selectedLocation, setSelectedLocation] = useState('');
-  // const [selectedCategory, setSelectedCategory] = useState('');
-  // const [selectedStatus, setSelectedStatus] = useState('');
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [showBuySection, setShowBuySection] = useState(true);
   const [showSellSection, setShowSellSection] = useState(true);
@@ -91,7 +60,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
   const [sliderMinValue, setSliderMinValue] = React.useState(0);
 
   React.useEffect(() => {
-    // window.location.href = '#/buyProducts';
+    window.location.href = '#/buyProducts';
     fetchSetProductData();
 
   }, []);

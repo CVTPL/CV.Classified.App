@@ -26,9 +26,7 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
 
     //check list is exist or not
     if (Object.keys(this.props.context).length > 0) {
-      this.initializeFunction().then((response) => {
-        this.setState({ initializationStatus: true, loading: false });
-      });
+      this.initializeFunction();
     }
   }
 
@@ -42,7 +40,7 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
           : ""}
 
         {this.state.loading &&
-          <Spinner label="Webpart initialization..." size={SpinnerSize.large} />
+          <Spinner label="Please wait, We are getting things for you..." size={SpinnerSize.large} />
         }
       </>
     );
@@ -63,10 +61,12 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
 
           if (checkSiteDesign.length > 0) {
             //site design is available so apply that site design to site.
-            return commonServices._applySiteDesignToSite(this.sp, checkSiteDesign[0].Id, siteUrl).then((response)=>{
+            return commonServices._applySiteDesignToSite(this.sp, checkSiteDesign[0].Id, siteUrl).then((response) => {
               return this.folderConfiguration();
-            }).then((response)=>{
+            }).then((response) => {
               return this.checkAndApplyCustomPermission();
+            }).then((response) => {
+              this.setState({ initializationStatus: true, loading: false });
             });
           }
           else {
@@ -78,8 +78,12 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
                 //site script is available so create site design and apply to site
                 return commonServices._createSiteDesign(this.sp, checkSiteScript[0].Id).then((response) => {
                   return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
-                }).then((response)=>{
+                }).then((response) => {
                   return this.folderConfiguration();
+                }).then((response) => {
+                  return this.checkAndApplyCustomPermission();
+                }).then((response) => {
+                  this.setState({ initializationStatus: true, loading: false });
                 });
               }
               else {
@@ -88,8 +92,12 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
                   return commonServices._createSiteDesign(this.sp, response.Id);
                 }).then((response) => {
                   return commonServices._applySiteDesignToSite(this.sp, response.Id, siteUrl);
-                }).then((response)=>{
+                }).then((response) => {
                   return this.folderConfiguration();
+                }).then((response) => {
+                  return this.checkAndApplyCustomPermission();
+                }).then((response) => {
+                  this.setState({ initializationStatus: true, loading: false });
                 });
               }
             });
@@ -108,7 +116,7 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
    */
   private checkAndApplyCustomPermission = async () => {
     commonServices._getAllRoleDefinitions(this.sp).then((allRoleDefitions) => {
-
+      let principalId = 0;
       //check AddItems permission level exist or not
       let addItemCustomPermissionLevel = allRoleDefitions.filter((ele: any) => ele.Name === "AddItems");
       let editItemCustomPermissionLevel = allRoleDefitions.filter((ele: any) => ele.Name === "EditItems");
@@ -125,9 +133,13 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
           //get site group details for assign custom permission level.
           return commonServices._getSiteGroupByName(this.sp, groupName);
         }).then((visitorGroupRes) => {
-          let principalId = visitorGroupRes.Id;
+          principalId = visitorGroupRes.Id;
           //assign custom permission level AddItems to visitor group in list.
           return commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId);
+        }).then((response) => {
+          return commonServices._breakRollAssignments(this.sp, "Site Assets", true, true);
+        }).then((response) => {
+          return commonServices._roleAssignments(this.sp, "Site Assets", principalId, rolDefId);
         });
       }
       else { //AddItem permission exist
@@ -140,6 +152,10 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
           let principalId = visitorGroupRes.Id;
           //assign custom permission level AddItems to visitor group in list.
           return commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId);
+        }).then((response) => {
+          return commonServices._breakRollAssignments(this.sp, "Site Assets", true, true);
+        }).then((response) => {
+          return commonServices._roleAssignments(this.sp, "Site Assets", principalId, rolDefId);
         });
       }
 
