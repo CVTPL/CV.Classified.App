@@ -197,6 +197,10 @@ const commonServices = {
         return await sp.web.associatedVisitorGroup();
     },
 
+    _getRoleDefinitionByName: async (sp: any, rolDefName: string) => {
+        return await sp.web.roleDefinitions.getByName(rolDefName)();
+    },
+
     _getOwnerSiteGroupUsers: async (sp: any) => {
         return await sp.web.associatedOwnerGroup.users();
     },
@@ -211,6 +215,14 @@ const commonServices = {
 
     _roleAssignments: async (sp: any, ListName: any, principalId: number, roleDefId: number) => {
         return await sp.web.lists.getByTitle(ListName).roleAssignments.add(principalId, roleDefId);
+    },
+
+    _breakRollAssignmentsAtItemLevel: async (sp: any, ListName: string, itemId : number ,copyRoleAssignments: boolean, clearSubscopes: boolean) => {
+        return await sp.web.lists.getByTitle(ListName).items.getById(itemId).breakRoleInheritance(copyRoleAssignments, clearSubscopes);
+    },
+
+    _roleAssignmentsAtItemLevel: async (sp: any, ListName: any, itemId : number , principalId: number, roleDefId: number) => {
+        return await await sp.web.lists.getByTitle(ListName).items.getById(itemId).roleAssignments.add(principalId, roleDefId);
     },
 
     _getListAllItems: async (sp: any, listName: any) => {
@@ -267,7 +279,7 @@ const commonServices = {
         return await sp.web.folders.addUsingPath(folderUrl);
     },
 
-    _addMultipleImage: async (sp: any, folderUrl : string ,files: any) => {
+    _addMultipleImage: async (sp: any, folderUrl: string, files: any) => {
         const res: any = [];
         files.forEach(async (file: any) => {
             // const fileNamePath = encodeURI(file.name);
