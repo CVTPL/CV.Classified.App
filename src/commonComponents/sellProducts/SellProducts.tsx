@@ -2,8 +2,6 @@ import * as React from 'react';
 import { ISellProductsProps } from './ISellProductsProps';
 import { ChoiceGroup, Dialog, IChoiceGroupOption, Panel } from 'office-ui-fabric-react';
 import AddEditProductPanelComponent from '../addEditProductPanelComponent/AddEditProductPanelComponent';
-import commonServices from '../../services/commonServices';
-import { spfi, SPFx } from "@pnp/sp";
 
 const classifiedCard = [
     {
@@ -66,14 +64,10 @@ const classifiedCard = [
 
 const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
 
-    const sp = spfi().using(SPFx(props.context));
-
     const [isPanel, setIsPanel] = React.useState(false);
     const [AddPageToggle, setAddPageToggle] = React.useState(true);
     const [selectedView, setSelectedView] = React.useState("myproducts");
     const [editData, setEditData]: any = React.useState([]);
-
-    const [isAdmin, setIsAdmin] = React.useState(false);
 
     const options = [
         {
@@ -97,31 +91,22 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
             </div>
     )
 
+    const hidePanel = React.useMemo(()=> {
+        setIsPanel(false);
+        setSelectedView(preVal => preVal)
+      }, [selectedView])
+
     function setHideDialog(arg0: boolean) {
         throw new Error('Function not implemented.');
     }
 
-    React.useEffect(() => {
-        _getAdminUser().then((AdminRes) => {
-            AdminRes.forEach((adminEle: any) => {
-                if (props.productCardData.filter((filterVal: any) => (filterVal.Author.EMail === adminEle.Email)).length > 0) {
-                    setIsAdmin(true);
-                }
-            });
-        });
-    }, [])
-
     return (
         <>
-
             {/* <ChoiceGroup defaultSelectedKey={selectedView} className="switch-button-container" options={options} onChange={_onChangeChoiceGroup} /> */}
-            {
-                isAdmin ? <ChoiceGroup defaultSelectedKey={selectedView} options={options} onChange={_onChangeChoiceGroup} /> : ""
-            }
-
+            {props.isAdmin ? <ChoiceGroup defaultSelectedKey={selectedView} options={options} onChange={_onChangeChoiceGroup} /> : ""}
 
             {selectedView == "myproducts" ?
-                <div className='classified-cards'>
+                <div className='classified-cards cardRequest'>
                     <div className="custmRow">
                         {props.productCardData.map((card) => (
                             <div className='custmCols' key={card.Id}>
@@ -133,13 +118,21 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                                                 {Number(card.CV_productPrice).toLocaleString()}
                                             </div>
                                         </div>
-                                        <div className='soldLabel'>
-                                            <img src={require('../../assets/images/svg/sold.svg')} alt="icon" style={{ display: card.CV_productStatus === "Sold" ? 'block' : 'none' }} />
-                                        </div>
+
+                                        {card.CV_productStatus === "Sold" ?
+                                            <div className='soldLabel'>
+                                                <img src={require('../../assets/images/svg/sold.svg')} alt="icon" style={{ display: card.CV_productStatus === "Sold" ? 'block' : 'none' }} />
+                                            </div> : ""
+                                        }
+                                        {
+                                            card.CV_productStatus === "Requested" ?
+                                                <div className='soldLabel'>
+                                                    <img src={require('../../assets/images/svg/requested.svg')} alt="icon" style={{ display: card.CV_productStatus === "Requested" ? 'block' : 'none' }} />
+                                                </div> : ""
+                                        }
                                         <div className='edit-icon' >
                                             <img src={require('../../assets/images/svg/edit-icon.svg')} onClick={(e) => showpanels("showEditPanel", e, card)} />
                                         </div>
-
                                         {
                                             card.CV_productStatus === "Reject" ?
                                                 <div className='rejectedCard'>
@@ -148,7 +141,6 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                                                 </div>
                                                 : ""
                                         }
-
                                         <div>
                                         </div>
                                     </div>
@@ -173,7 +165,7 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                                             <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${card.Author.EMail}` }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
                                             <li><a onClick={() => { window.location.href = `mailTo:${card.Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
                                             <li><a onClick={() => { window.location.href = `tel:${card.CV_ContactNo}` }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                                            <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                                            <li><a onClick={() => { navigator.share({ title: 'Classified App', url: window.location.href }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -238,7 +230,7 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                                             <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${card.Author.EMail}` }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
                                             <li><a onClick={() => { window.location.href = `mailTo:${card.Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
                                             <li><a onClick={() => { window.location.href = `tel:${card.CV_ContactNo}` }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                                            <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                                            <li><a onClick={() => { navigator.share({ title: 'Classified App', url: window.location.href }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -269,12 +261,19 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
                 isOpen={isPanel}
                 onDismiss={() => { setIsPanel(false) }}
                 closeButtonAriaLabel="Close">
-                <AddEditProductPanelComponent context={props.context} onPanelChange={setIsPanel} onChangeAddPageToggle={AddPageToggle} callFetchSetData={props.callFetchSetData} editData={editData} selectedView={selectedView}/>
+                <AddEditProductPanelComponent
+                    context={props.context}
+                    onPanelChange={hidePanel}
+                    onChangeAddPageToggle={AddPageToggle}
+                    callFetchSetData={props.callFetchSetData}
+                    editData={editData}
+                    selectedView={selectedView}
+                    isAdmin={props.isAdmin} />
             </Panel>
             {/* Panel End Region */}
         </>
     );
-    
+
     function _onChangeChoiceGroup(ev: React.FormEvent<HTMLInputElement>, option: IChoiceGroupOption): void {
         setSelectedView(option.key)
     }
@@ -295,21 +294,13 @@ const SellProducts: React.FunctionComponent<ISellProductsProps> = (props) => {
         }
     }
 
-    // Fetch current login user Service
-    async function _getAdminUser(): Promise<any> {
-        return new Promise((resolve, reject) => {
-            commonServices._getOwnerSiteGroupUsers(sp)
-                .then((response: any) => {
-                    resolve(response);
-                },
-                    (error: any): any => {
-                        reject(error);
-                        console.log(error);
-                        alert("Error while geting data");
-                    });
-        });
-    }
+    // function hidePanel() {
+    //     setIsPanel(false);
+    //     setSelectedView(preVal => preVal)
+    //     // console.log(selectedView);
+    //     // setSelectedView(selectedView);
 
+    // }
 };
 
 export default SellProducts;

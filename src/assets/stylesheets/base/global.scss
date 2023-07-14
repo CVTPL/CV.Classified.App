@@ -1605,6 +1605,13 @@ html, body {
                     .ms-Dialog-inner{
                     padding: 30px;
                     }
+                    .ms-TextField--multiline{
+                      margin-bottom: 15px !important;
+                    }
+                    .requiredmsg{
+                      color: $secondary-11;
+                      font-weight: 500;
+                  }
                   }
                   .ApproveModal{
                     .modal-header{

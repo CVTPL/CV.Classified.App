@@ -128,34 +128,34 @@ export default class CvClassified extends React.Component<ICvClassifiedProps, an
         commonServices._createNewPermissionLevel(this.sp, "AddItems", "Can add Only", 101, { High: 1, Low: 2 }).then((response) => {
           rolDefId = response.data.Id;
           //break list level inheritance permission
-          return commonServices._breakRollAssignments(this.sp, "Classified Products", true, true);
+          return commonServices._breakRollAssignmentsAtListLevel(this.sp, "Classified Products", true, true);
         }).then((breakRollAssignmentRes) => {
           //get site group details for assign custom permission level.
           return commonServices._getSiteGroupByName(this.sp, groupName);
         }).then((visitorGroupRes) => {
           principalId = visitorGroupRes.Id;
           //assign custom permission level AddItems to visitor group in list.
-          return commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId);
+          return commonServices._roleAssignmentsAtListLevel(this.sp, "Classified Products", principalId, rolDefId);
         }).then((response) => {
-          return commonServices._breakRollAssignments(this.sp, "Site Assets", true, true);
+          return commonServices._breakRollAssignmentsAtListLevel(this.sp, "Site Assets", true, true);
         }).then((response) => {
-          return commonServices._roleAssignments(this.sp, "Site Assets", principalId, rolDefId);
+          return commonServices._roleAssignmentsAtListLevel(this.sp, "Site Assets", principalId, rolDefId);
         });
       }
       else { //AddItem permission exist
         rolDefId = addItemCustomPermissionLevel[0].Id;
         //break the inheritance permission at list level.
-        commonServices._breakRollAssignments(this.sp, "Classified Products", true, true).then((breakInheritanceRes) => {
+        commonServices._breakRollAssignmentsAtListLevel(this.sp, "Classified Products", true, true).then((breakInheritanceRes) => {
           //get site group details for assign custom permission level.
           return commonServices._getSiteGroupByName(this.sp, groupName);
         }).then((visitorGroupRes) => {
           let principalId = visitorGroupRes.Id;
           //assign custom permission level AddItems to visitor group in list.
-          return commonServices._roleAssignments(this.sp, "Classified Products", principalId, rolDefId);
+          return commonServices._roleAssignmentsAtListLevel(this.sp, "Classified Products", principalId, rolDefId);
         }).then((response) => {
-          return commonServices._breakRollAssignments(this.sp, "Site Assets", true, true);
+          return commonServices._breakRollAssignmentsAtListLevel(this.sp, "Site Assets", true, true);
         }).then((response) => {
-          return commonServices._roleAssignments(this.sp, "Site Assets", principalId, rolDefId);
+          return commonServices._roleAssignmentsAtListLevel(this.sp, "Site Assets", principalId, rolDefId);
         });
       }
 

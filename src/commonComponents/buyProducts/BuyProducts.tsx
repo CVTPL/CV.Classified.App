@@ -62,26 +62,19 @@ const classifiedCard = [
 const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
     let { path, url } = useRouteMatch();
 
-    // const soldIcon = require('../../assets/images/svg/sold.svg');
-
-    const [pagedItems, setPagedItems] = React.useState<any[]>([]);
-    const [pageSize, setPageSize] = React.useState<number>(10);
+    const [pageSize, setPageSize] = React.useState<number>(5);
     const [currentPage, setCurrentPage] = React.useState<number>(1);
+    const [pagedItems, setPagedItems] = React.useState(slice(props.productCardData, 0, currentPage * pageSize));
 
     React.useEffect(() => {
         props.choiceGroupVisibility(true);//show choice group which is available in parent component.
-
-        if (props.productCardData.length > 0) {
-            onPageUpdate();
-        }
-
     }, []);
 
     return (
         <>
             <div className='classified-cards'>
                 <div className="custmRow">
-                    {pagedItems.map((card) => (
+                    {pagedItems.map((card: any) => (
                         <div className='custmCols' key={card.Id}>
                             <div className={card.CV_productStatus === "Sold" ? "content-card" + " " + 'disabled' : "content-card" + " " + ''}>
                                 <Link to={`${path}/productDetails?productId=${card.Id}`} className='linkItem'>
@@ -120,7 +113,7 @@ const BuyProducts: React.FunctionComponent<IBuyProductsProps> = (props) => {
                                         <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${card.Author.EMail}` }}><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
                                         <li><a onClick={() => { window.location.href = `mailTo:${card.Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
                                         <li><a onClick={() => { window.location.href = `tel:${card.CV_ContactNo}` }} ><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                                        <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                                        <li><a onClick={() => { navigator.share({ title: 'Classified App', url: window.location.href }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                                     </ul>
                                 </div>
                             </div>

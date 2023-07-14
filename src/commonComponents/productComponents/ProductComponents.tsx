@@ -38,6 +38,13 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
     }
   ];
 
+  // Filter Status options
+  const statusOptions: IDropdownOption[] = [
+    { key: 'Active', text: 'Active' },
+    { key: 'InActive', text: 'InActive' },
+    { key: 'Sold', text: 'Sold' },
+  ];
+
   const filterIcon: IIconProps = { iconName: 'FilterSolid' };
   const [selectedView, setSelectedView] = React.useState("buy");
   const [showFilterOptions, setShowFilterOptions] = useState(false);
@@ -53,16 +60,16 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
   const [requestedProductData, setRequestedProductData] = useState([]);
   const [filterItem, setFilterItem]: any = React.useState({});
   const [productCategoryOptions, setProductCategoryOptions] = useState([]);
-  const [statusOptions, setStatusOptions] = useState([]);
+  // const [statusOptions, setStatusOptions] = useState([]);
   const [locationOptions, setLocationOptions] = useState([]);
   const [filterInputs, setFilterInputs] = React.useState<any>({});
   const [sliderMaxValue, setSliderMaxValue] = React.useState(0);
   const [sliderMinValue, setSliderMinValue] = React.useState(0);
+  const [isAdmin, setIsAdmin] = React.useState(false);
 
   React.useEffect(() => {
     window.location.href = '#/buyProducts';
     fetchSetProductData();
-
   }, []);
 
   return (
@@ -154,7 +161,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                                         options={productCategoryOptions}
                                       />
 
-                                      <Dropdown
+                                      {/* <Dropdown
                                         label="Status"
                                         // selectedKey="Active"
                                         placeholder="Status"
@@ -163,7 +170,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                                         // onChange={handleStatusChange}
                                         onChange={(ev, op, i) => handleChangeFilterDropdown(ev, op, i)}
                                         options={statusOptions}
-                                      />
+                                      /> */}
 
                                       <div className='minMaxInput'>
                                         <Slider ranged label="Price Range" min={0} max={50000} className='sliderName' value={sliderMaxValue} showValue
@@ -233,7 +240,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                     <div className="ms-Grid-row">
                       <div className='ms-Grid-col ms-sm12 ms-md12 ms-lg12'>
                         <div className='contentPivot sellProducts'>
-                          <SellProducts context={props.context} productCardData={createdByUserProductCardData} requestedProductCardData={requestedProductData} callFetchSetData={fetchSetProductData} />
+                          <SellProducts context={props.context} productCardData={createdByUserProductCardData} requestedProductCardData={requestedProductData} callFetchSetData={fetchSetProductData} isAdmin={isAdmin} />
                         </div>
                       </div>
                     </div>
@@ -342,7 +349,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
 
     if (Object.keys(itemdata).length > 0) {
 
-      const searchText = itemdata.seachInput ? "Title like '%" + itemdata.seachInput + "%' or CV_productCategory like '%" + itemdata.seachInput + "%' or CV_otherProductCategory like '%" + itemdata.seachInput + "%' or CV_productPrice like '%" + itemdata.seachInput + "%' or CV_ContactNo like '%" + itemdata.seachInput + "%' or CV_location like '%" + itemdata.seachInput + "%'  or CV_shortDescription like '%" + itemdata.seachInput + "%' or Author->Title like '%" + itemdata.seachInput + "%'" : "Title != 'null'";
+      const searchText = itemdata.seachInput ? "Title like '%" + itemdata.seachInput + "%' or CV_productCategory like '%" + itemdata.seachInput + "%' or CV_otherProductCategory like '%" + itemdata.seachInput + "%' or CV_productStatus like '%" + itemdata.seachInput + "%' or CV_productPrice like '%" + itemdata.seachInput + "%' or CV_ContactNo like '%" + itemdata.seachInput + "%' or CV_location like '%" + itemdata.seachInput + "%'  or CV_shortDescription like '%" + itemdata.seachInput + "%' or Author->Title like '%" + itemdata.seachInput + "%'" : "Title != 'null'";
 
       const location = itemdata.Location !== "All" && itemdata.Location !== undefined ? "CV_location like '%" + itemdata.Location + "%'" : "CV_location != 'null'";
       const category = itemdata.Category !== "All" && itemdata.Category !== undefined ? "CV_productCategory like '%" + itemdata.Category + "%'" : "CV_productCategory != 'null'";
@@ -397,15 +404,26 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
     });
   }
 
+  // Fetch admin users list Service
+  async function _getAdminUser(): Promise<any> {
+    return new Promise((resolve, reject) => {
+      commonServices._getOwnerSiteGroupUsers(sp)
+        .then((response: any) => {
+          resolve(response);
+        },
+          (error: any): any => {
+            reject(error);
+            console.log(error);
+            alert("Error while geting data");
+          });
+    });
+  }
+
   // Fetch list data using select & expand service
   async function _getClassifiedAppsListData(): Promise<any> {
 
     // let selectString = "*,Author/ID,Author/Title,Author/EMail,AttachmentFiles";
     // let expandString = "AttachmentFiles,Author";
-
-    // let selectString = "*,Author/ID,Author/Title,Author/EMail";
-    // let expandString = "Author";
-    // let filterString = `CV_productStatus eq 'Active' or CV_productStatus eq 'Sold'`;
 
     let selectString = "*,Author/ID,Author/Title,Author/EMail";
     let expandString = "Author";
@@ -423,7 +441,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
     });
   }
 
-  // Fetch list column using content type service
+  // Fetch list column from list service
   async function _getListColumns(): Promise<any> {
     return new Promise((resolve, reject) => {
       commonServices._getListColumns(sp, "Classified Products")
@@ -447,7 +465,16 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
 
     _getCurrentLoginUser().then((LoginRes) => {
       // console.log(LoginRes);
-      return _getClassifiedAppsListData().then(async (ListRes) => {
+
+      _getAdminUser().then((adminRes: any) => {
+        adminRes.forEach((adminEle: any) => {
+          if (LoginRes.Email === adminEle.Email) {
+            setIsAdmin(true);
+          }
+        });
+      });
+
+      _getClassifiedAppsListData().then(async (ListRes) => {
         if (ListRes.length > 0) {
           let count = 0;
           do {
@@ -457,7 +484,6 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
             count = count + 1;
           } while (count < ListRes.length);
         }
-
         return ListRes;
       }).then((response) => {
         response.map((valChoice: any) => {
@@ -477,7 +503,6 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
 
         let tempRequestedProductData = response.filter((filterVal: any) => (filterVal.CV_productStatus === "Requested"));
         setRequestedProductData(tempRequestedProductData); // Requested product data
-
       });
     })
 
@@ -492,13 +517,12 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
       tempProductCategoryOptions.push({ key: "Other", text: "Other" });
       setProductCategoryOptions(tempProductCategoryOptions);
 
-      let filterStatusOptions: any = response.filter((filterRes: any) => (filterRes.InternalName === "CV_productStatus")); // Status Options
-      filterStatusOptions[0].Choices.map((valChoice: any) => {
-        tempStatusOptions.push({ key: valChoice, text: valChoice });
-      });
-      // console.log(tempStatusOptions);
-      setStatusOptions(tempStatusOptions);
-
+      // let filterStatusOptions: any = response.filter((filterRes: any) => (filterRes.InternalName === "CV_productStatus")); // Status Options
+      // filterStatusOptions[0].Choices.map((valChoice: any) => {
+      //   tempStatusOptions.push({ key: valChoice, text: valChoice });
+      // });
+      // // console.log(tempStatusOptions);
+      // setStatusOptions(tempStatusOptions);
     })
   }
 };

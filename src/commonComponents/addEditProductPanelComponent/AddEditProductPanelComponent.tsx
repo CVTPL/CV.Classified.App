@@ -19,19 +19,17 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
   const todayDate = new Date();
   const currentTime = todayDate.getDate() + '_' + (todayDate.getMonth() + 1) + '_' + todayDate.getFullYear() + '_' + todayDate.getHours() + '_' + todayDate.getMinutes() + '_' + todayDate.getSeconds();
 
-  const [addProductInputList, setAddProductInputList] = React.useState<any>({ CV_productStatus: "Requested" });
+  const [addProductInputList, setAddProductInputList] = React.useState<any>({});
   const [errorList, setErrorList] = React.useState<any>({});
   const [richTextValue, setRichTextValue] = useState('');
   const dropzoneRef: any = createRef()
   const [files, setFiles]: any = React.useState([{}]);
 
   const [productCategoryOptions, setProductCategoryOptions] = useState([]);
-  const [statusOptions, setStatusOptions] = useState([]);
+  // const [statusOptions, setStatusOptions] = useState([]);
   const [showLoader, setShowLoader] = useState(false);
   const [hideDialog, setHideDialog]: any = React.useState(false);
-
   const [rejectHideDialog, setRejectHideDialog]: any = React.useState(false);
-
   const [approveDialog, setApproveDialog]: any = React.useState(false)
 
   const modelProps = {
@@ -78,12 +76,12 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
     { key: 'laptop', text: 'Laptop' },
   ];
 
-  const statusOpts: IDropdownOption[] = [
+  // product edit status options
+  const statusOptions: IDropdownOption[] = [
     { key: 'Active', text: 'Active' },
     { key: 'InActive', text: 'InActive' },
-    { key: 'Draft', text: 'Draft' },
+    { key: 'Sold', text: 'Sold' },
   ];
-
 
   const thumbsContainer: any = {
     display: 'flex',
@@ -136,13 +134,19 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
             />
 
           </div>
-          <IconButton iconProps={addFriendIconProps} className='crossIconBtn' onClick={() => { file.ServerRelativeUrl ? removeInputImage(file.Name) : removeInputImage(file.name) }} />
+          {
+            addProductInputList.CV_productStatus !== "Requested" ?
+              <IconButton iconProps={addFriendIconProps} className='crossIconBtn' onClick={() => { file.ServerRelativeUrl ? removeInputImage(file.Name) : removeInputImage(file.name) }} />
+              : ""
+          }
         </div>
         :
-        <div {...getRootProps({ className: 'dropzone' })}>
-          <input {...getInputProps()} />
-          <p>+</p>
-        </div>
+        addProductInputList.CV_productStatus !== "Requested" ?
+          <div {...getRootProps({ className: 'dropzone' })}>
+            <input {...getInputProps()} />
+            <p>+</p>
+          </div>
+          : ""
     )
   });
 
@@ -163,13 +167,13 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
       tempProductCategoryOptions.push({ key: "Other", text: "Other" });
       setProductCategoryOptions(tempProductCategoryOptions);
 
-      let filterStatusOptions: any = response.filter((filterRes: any) => (filterRes.InternalName === "CV_productStatus"));
+      // let filterStatusOptions: any = response.filter((filterRes: any) => (filterRes.InternalName === "CV_productStatus"));
 
-      filterStatusOptions[0].Choices.map((valChoice: any) => {
-        tempStatusOptions.push({ key: valChoice, text: valChoice });
-      });
+      // filterStatusOptions[0].Choices.map((valChoice: any) => {
+      //   tempStatusOptions.push({ key: valChoice, text: valChoice });
+      // });
       // console.log(tempStatusOptions);
-      setStatusOptions(tempStatusOptions);
+      // setStatusOptions(tempStatusOptions);
     })
 
     if (Object.keys(props.editData).length > 0) {
@@ -189,12 +193,20 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
   return (
     <>
-      <div className={"LoaderDivCustom"} hidden={!showLoader}>
-        <div className={"LoaderChild"}>
-          <BallTriangle height={100} width={100} radius={5} color="#5F9BE7" ariaLabel="ball-triangle-loading" visible={showLoader} />
+      {/* {/ Loader Start /} */}
+      <div className="fixed-loader-container" hidden={!showLoader}>
+        <div className="fixed-loader-child">
+          <BallTriangle
+            height={100}
+            width={100}
+            radius={5}
+            color="#5F9BE7"
+            ariaLabel="ball-triangle-loading"
+            visible={showLoader}
+          />
         </div>
       </div>
-
+      {/* Loader End  */}
       <div className="panel-body">
         <div className='panelContainer'>
           <div className='panelInnerbox'>
@@ -202,7 +214,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
               <div className="ms-Grid-row">
                 <div className='messageBar'>
                   {
-                    addProductInputList.CV_comment && props.onChangeAddPageToggle ?
+                    addProductInputList.CV_comment ?
                       <MessageBar className='message-alert-bar' role="none">
                         <img src={require("../../assets/images/svg/info-red-icon.svg")} alt="Not Available Now" title="Info Icon" />
                         <span> {addProductInputList.CV_comment}
@@ -212,13 +224,15 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                       : ""
                   }
                 </div>
+
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
-                    <input placeholder=" " type="text" id="Title" value={addProductInputList.Title ? addProductInputList.Title : ""} onChange={(e) => { handleChangeProductInput(e) }} />
+                    <input placeholder=" " type="text" id="Title" value={addProductInputList.Title ? addProductInputList.Title : ""} onChange={(e) => { handleChangeProductInput(e) }} disabled={addProductInputList.CV_productStatus == "Requested" ? true : false} />
                     <label>Title</label>
                   </div>
                   {errorList.Title && <span className='requiredmsg'>{errorList.Title}</span>}
                 </div>
+
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield-dropdown">
                     <Dropdown
@@ -227,25 +241,28 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                       options={productCategoryOptions}
                       id="CV_productCategory"
                       onChange={(ev, op, i) => handleChangeDropdown(ev, op, i)}
+                      disabled={addProductInputList.CV_productStatus == "Requested" ? true : false}
                     />
                   </div>
                   {errorList.CV_productCategory && <span className='requiredmsg'>{errorList.CV_productCategory}</span>}
                 </div>
               </div>
+
               <div className="ms-Grid-row">
                 {addProductInputList.CV_productCategory === "Other" ?
                   <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                     <div className="material-textfield">
-                      <input placeholder=" " type="text" id="CV_otherProductCategory" value={addProductInputList.CV_otherProductCategory ? addProductInputList.CV_otherProductCategory : ""} onChange={(e) => { handleChangeProductInput(e) }} />
+                      <input placeholder=" " type="text" id="CV_otherProductCategory" value={addProductInputList.CV_otherProductCategory ? addProductInputList.CV_otherProductCategory : ""} onChange={(e) => { handleChangeProductInput(e) }} disabled={addProductInputList.CV_productStatus == "Requested" ? true : false} />
                       <label>Other Category</label>
                     </div>
                     {errorList.CV_otherProductCategory && <span className='requiredmsg'>{errorList.CV_otherProductCategory}</span>}
                   </div>
                   :
                   ""}
+
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
-                    <input placeholder=" " type="number" id="CV_productPrice" value={addProductInputList.CV_productPrice ? addProductInputList.CV_productPrice : ""} onChange={(e) => { handleChangeProductInput(e) }} />
+                    <input placeholder=" " type="number" id="CV_productPrice" value={addProductInputList.CV_productPrice ? addProductInputList.CV_productPrice : ""} onChange={(e) => { handleChangeProductInput(e) }} disabled={addProductInputList.CV_productStatus == "Requested" ? true : false} />
                     <label>Price</label>
                   </div>
                   {errorList.CV_productPrice && <span className='requiredmsg'>{errorList.CV_productPrice}</span>}
@@ -253,53 +270,53 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
-                    <input placeholder=" " type="number" id="CV_ContactNo" value={addProductInputList.CV_ContactNo ? addProductInputList.CV_ContactNo : ""} onChange={(e) => { handleChangeProductInput(e) }} />
+                    <input placeholder=" " type="number" id="CV_ContactNo" value={addProductInputList.CV_ContactNo ? addProductInputList.CV_ContactNo : ""} onChange={(e) => { handleChangeProductInput(e) }} disabled={addProductInputList.CV_productStatus == "Requested" ? true : false} />
                     <label>Contact No</label>
                   </div>
                   {errorList.CV_ContactNo && <span className='requiredmsg'>{errorList.CV_ContactNo}</span>}
+
                 </div>
 
                 <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
                   <div className="material-textfield">
-                    <input placeholder=" " type="text" id="CV_location" value={addProductInputList.CV_location ? addProductInputList.CV_location : ""} onChange={(e) => { handleChangeProductInput(e) }} />
+                    <input placeholder=" " type="text" id="CV_location" value={addProductInputList.CV_location ? addProductInputList.CV_location : ""} onChange={(e) => { handleChangeProductInput(e) }} disabled={addProductInputList.CV_productStatus == "Requested" ? true : false} />
                     <label>Location</label>
                   </div>
                   {errorList.CV_location && <span className='requiredmsg'>{errorList.CV_location}</span>}
                 </div>
 
-
-                <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
-                  <div className="material-textfield-dropdown">
-                    <Dropdown
-                      placeholder="Status"
-                      selectedKey={addProductInputList.CV_productStatus ? addProductInputList.CV_productStatus : ""}
-                      defaultSelectedKey="Requested"
-                      options={statusOptions}
-                      id="CV_productStatus"
-                      onChange={(ev, op, i) => handleChangeDropdown(ev, op, i)}
-                      disabled={true}
-                    />
-                  </div>
-                  {errorList.CV_productStatus && <span className='requiredmsg'>{errorList.CV_productStatus}</span>}
-                </div>
+                {
+                  addProductInputList.CV_productStatus === undefined || addProductInputList.CV_productStatus === "" || addProductInputList.CV_productStatus === "Requested" || addProductInputList.CV_productStatus === "Reject" ? "" :
+                    <div className="ms-Grid-col ms-sm12 ms-md6 ms-lg6 customTextFiled">
+                      <div className="material-textfield-dropdown">
+                        <Dropdown
+                          placeholder="Status"
+                          selectedKey={addProductInputList.CV_productStatus ? addProductInputList.CV_productStatus : "Active"}
+                          options={statusOptions}
+                          id="CV_productStatus"
+                          onChange={(ev, op, i) => handleChangeDropdown(ev, op, i)}
+                          disabled={addProductInputList.CV_productStatus == "Requested" ? true : false}
+                        />
+                      </div>
+                      {errorList.CV_productStatus && <span className='requiredmsg'>{errorList.CV_productStatus}</span>}
+                    </div>
+                }
               </div>
 
               <div className="ms-Grid-row customRichText">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 customTextFiled">
                   <div className="material-textfield textareaContainer">
-                    <textarea placeholder=" " id="CV_shortDescription" value={addProductInputList.CV_shortDescription ? addProductInputList.CV_shortDescription : ""} onChange={(e) => { handleChangeProductInput(e) }} ></textarea>
+                    <textarea placeholder=" " id="CV_shortDescription" value={addProductInputList.CV_shortDescription ? addProductInputList.CV_shortDescription : ""} onChange={(e) => { handleChangeProductInput(e) }} disabled={addProductInputList.CV_productStatus == "Requested" ? true : false}></textarea>
                     <label>Short Description</label>
                   </div>
                   {errorList.CV_shortDescription && <span className='requiredmsg'>{errorList.CV_shortDescription}</span>}
                 </div>
               </div>
 
-
               <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 customTextFiled">
-                  <RichText value={richTextValue ? richTextValue : ''} onChange={(text) => onTextChange(text)} placeholder='Long Description' />
+                  <RichText value={richTextValue ? richTextValue : ''} onChange={(text) => onTextChange(text)} placeholder='Long Description' isEditMode={addProductInputList.CV_productStatus == "Requested" ? false : true} />
                   {errorList.CV_productDescription && <span className='requiredmsgRichText'>{errorList.CV_productDescription}</span>}
-
                 </div>
               </div>
 
@@ -312,38 +329,37 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
                     </aside>
                   </section>
                   {errorList.Attachments && <span className='requiredmsgUploadImages'>{errorList.Attachments}</span>}
-
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      {
-        props.onChangeAddPageToggle ?
+
+      {props.onChangeAddPageToggle ?
+        <div className="panel-footer">
+          <div className="btn-container btn-end">
+            <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { closePanel() }} />
+            <PrimaryButton className="btn-secondary-3" text="Add" onClick={() => { addProductSubmit() }} />
+          </div>
+        </div>
+        :
+        props.selectedView === "myproducts" ?
           <div className="panel-footer">
             <div className="btn-container btn-end">
               <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { closePanel() }} />
-              <PrimaryButton className="btn-secondary-3" text="Add" onClick={() => { addProductSubmit() }} />
+              <PrimaryButton className="btn-secondary-2" text="Delete" onClick={() => { toggleShowDialog() }} />
+              <PrimaryButton className="btn-secondary-3" text="Update" onClick={() => { editProductSubmit() }} />
             </div>
           </div>
           :
-          props.selectedView === "myproducts" ?
-            <div className="panel-footer">
-              <div className="btn-container btn-end">
-                <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { closePanel() }} />
-                <PrimaryButton className="btn-secondary-2" text="Delete" onClick={() => { toggleShowDialog() }} />
-                <PrimaryButton className="btn-secondary-3" text="Update" onClick={() => { editProductSubmit() }} />
-              </div>
+          <div className="panel-footer">
+            <div className="btn-container btn-end">
+              <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { closePanel() }} />
+              <PrimaryButton className="btn-secondary-2" text="Reject" onClick={() => { setRejectHideDialog(true) }} />
+              <PrimaryButton className="btn-secondary-5" text="Approve" onClick={() => { setApproveBtn(addProductInputList) }} />
             </div>
-            :
-            <div className="panel-footer">
-              <div className="btn-container btn-end">
-                <PrimaryButton className="btn-secondary-4" text="Cancel" onClick={() => { closePanel() }} />
-                <PrimaryButton className="btn-secondary-2" text="Reject" onClick={() => { setRejectHideDialog(true) }} />
-                <PrimaryButton className="btn-secondary-5" text="Approve" onClick={() => { setApproveBtn(addProductInputList) }} />
-              </div>
-            </div>
+          </div>
       }
 
       {/* <DefaultButton secondaryText="Opens the Sample Dialog" text="Open Dialog" /> */}
@@ -358,7 +374,9 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           alertBoxFor={"DeleteModal"}
           closeDailogBox={undefined}
           message={"Are you sure do you want to delete"}
-          _deleteFunction={undefined}
+          _deleteFunction={""}
+          productItem={addProductInputList}
+          context={props.context}
         />
       </Dialog>
 
@@ -367,12 +385,14 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
       <Dialog hidden={!rejectHideDialog} onDismiss={rejectHideDialogs} modalProps={rejectedModelProps}>
         <CommonAlertDailog
           alertBoxFor={"RejectModal"}
-          closeDailogBox={() => { setIsPanel(false); }}
+          closeDailogBox={() => { setIsPanel(false) }}
           rejectMsg={"Are you sure do u want to reject this product?"} //for reject only
-          rejectSubmit={"RequiredFieldError"} //for reject only 
+          rejectSubmit={"*Required!"} //for reject only 
           message={"You have successfully rejected this request."}
+          productItem={addProductInputList}
           _deleteFunction={""}
           toggleHideDialog={rejectHideDialogs}
+          context={props.context}
         />
       </Dialog>
       {/*  */}
@@ -382,12 +402,14 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
       <Dialog hidden={!approveDialog} onDismiss={approveDialogs} modalProps={successModalProps}>
         <CommonAlertDailog
           alertBoxFor={"approvedModal"}
-          closeDailogBox={() => { setIsPanel(false); }}
+          closeDailogBox={() => { setIsPanel(false) }}
           rejectMsg={""} //for reject only
           rejectSubmit={""} //for reject only 
           message={"You have successfully approved this request."}
           _deleteFunction={""}
           toggleHideDialog={approveDialogs}
+          productItem={""}
+          context={props.context}
         />
       </Dialog>
       {/*  */}
@@ -402,21 +424,20 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
   function toggleHideDialog() {
     setHideDialog(false);
+    closePanel();
   }
 
   function rejectHideDialogs() {
-    setRejectHideDialog(false)
+    setRejectHideDialog(false);
+    closePanel();
   }
-
-  // function approveDialogs(){
-  //   setApproveDialog(false)
-  // }
 
   function approveDialogs() {
     setApproveDialog(true);
 
     setTimeout(() => {
       setApproveDialog(false);
+      closePanel();
     }, 3000); // 3000 milliseconds = 3 seconds
   }
 
@@ -489,34 +510,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
             reject(error);
             console.log(error);
             alert("Error while adding data");
-          });
-    });
-  }
-
-  async function _updateImageUrl(imageUrl: any, itemID: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      commonServices._updateListItem(sp, "Classified Products", imageUrl, itemID).then((response: any) => {
-        resolve(response);
-      },
-        (error: any): any => {
-          reject(error);
-          console.log(error);
-          alert("Error while updating Data");
-        });
-    });
-  }
-
-  // Add attachments data in list service
-  async function _addProductAttachments(itemId: any, productAttachment: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      commonServices._addMultipleAttachment(sp, "Classified Products", itemId, productAttachment)
-        .then((response: any) => {
-          resolve(response);
-        },
-          (error: any): any => {
-            reject(error);
-            console.log(error);
-            alert("Error while adding data");
+            setShowLoader(false);
           });
     });
   }
@@ -545,7 +539,7 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
   function addProductSubmit() {
     let inputFiles = clone(files);
     let productData = { ...addProductInputList, ["CV_productDescription"]: richTextValue };
-    let requiredFieldArr = ["Title", "CV_productCategory", "CV_productPrice", "CV_ContactNo", "CV_location", "CV_productStatus", "CV_shortDescription"];
+    let requiredFieldArr = ["Title", "CV_productCategory", "CV_productPrice", "CV_ContactNo", "CV_location", "CV_shortDescription"];
 
     inputFiles.splice(inputFiles.lastIndexOf(inputFiles.filter((ele: any) => Object.keys(ele).length == 0)[0]), 1);
     commonServices._checkRequiredValidation(addProductInputList, richTextValue, inputFiles, requiredFieldArr).then((response) => {
@@ -554,6 +548,12 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
         setErrorList(response);
       }
       else {
+        if (props.isAdmin) {
+          productData["CV_productStatus"] = "Approve";
+        }
+        else {
+          productData["CV_productStatus"] = "Requested";
+        }
         setShowLoader(true);
         _AddImageInFolder(productData, inputFiles);
       }
@@ -571,89 +571,42 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
             reject(error);
             console.log(error);
             alert("Error while updating data");
+            setShowLoader(false);
           });
     });
   }
 
-  // Add Image and Product in List/Folder
-  async function _updateImageInFolder(item: any, inputFiles: any): Promise<any> {
+  // update & delete Image in Folder and update Product in List
+  async function _updateImageInFolder(item: any, inputFiles: any) {
     let imageObjUpdate: any = [];
     let imageObjDelete: any = [];
-    let imageForAdd = []
-    let imageForDelete = []
-    commonServices._getImageFromFolder(sp, item.CV_imageUrl).then((imageResponse) => {
 
-      inputFiles.forEach((newItmes: any) => {
-        if (imageResponse.filter((filterVal: any) => filterVal.Name == newItmes.name).length == 0) {
-          imageForAdd.push(newItmes);
-        }
-        // if (imageResponse.filter((filterVal: any) => filterVal.Name != newItmes.name).length > 0) {
-        //   let temp = imageResponse.filter((filterVal: any) => filterVal.Name != newItmes.name);
-        //   temp.forEach((deleteFile: any) => {
-        //     imageForDelete.push(deleteFile);
-        //   });
-        // }
-        // imageObjUpdate = imageResponse.filter((filterVal: any) => ((filterVal.name || filterVal.Name) == newItmes.Name));
-        // imageObjDelete = imageResponse.filter((filterVal: any) => ((filterVal.name || filterVal.Name) != newItmes.Name));
-      });
+    await commonServices._getImageFromFolder(sp, item.CV_imageUrl).then((imageResponse) => {
 
-      imageResponse.forEach((responseFile: any) => {
-        if (inputFiles.filter((filterVal: any) => filterVal.name != responseFile.Name).length > 0) {
-          imageForDelete = inputFiles.filter((filterVal: any) => filterVal.name != responseFile.Name);
-        }
-      });
+      imageObjDelete = imageResponse.filter((filterVal: any) =>
+        !inputFiles.some((imageItem: any) => filterVal.Name === (imageItem.Name || imageItem.name))
+      )
 
-      // imageResponse.forEach((imgFromFolder: any) => {
-      //   imageObjUpdate = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) !== imgFromFolder.Name));
-      //   imageObjDelete = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) === imgFromFolder.Name));
-      // });
-      if (imageResponse.length > 0) {
-        return
-        // commonServices._deleteMultipleImages(sp, imageResponse);
-      }
-      else {
-        return;
-      }
-      // response.map((resVal: any) => {
-      //   imageObjUpdate = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) !== resVal.Name))
-      //   imageObjDelete = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) === resVal.Name))
-      // })
+      imageObjUpdate = inputFiles.filter((filterVal: any) =>
+        !imageResponse.some((imageItem: any) => (filterVal.Name || filterVal.name) === imageItem.Name)
+      )
+
+      // console.log(imageObjUpdate);
+      // console.log(imageObjDelete);
+      return imageResponse;
+    }).then(async (response) => {
+      return await commonServices._deleteMultipleImages(sp, item.CV_imageUrl, imageObjDelete);
+    }).then(async (response) => {
+      return await commonServices._addMultipleImage(sp, item.CV_imageUrl, imageObjUpdate);
     }).then((response) => {
-      return
-      // commonServices._addImage(sp, inputFiles);
-    }).then((response) => {
-      // _updateProductData(item).then((ItemRes) => {
-      //   closePanel();
-      // });
-    });
-
-    // commonServices._getImageFromFolder(sp, item.CV_imageUrl).then((response) => {
-    //   response.map((resVal: any) => {
-    //     imageObjUpdate = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) !== resVal.Name))
-    //     imageObjDelete = inputFiles.filter((filterVal: any) => ((filterVal.name || filterVal.Name) === resVal.Name))
-    //   })
-
-    //   imageObjDelete.map((val: any) => {
-    //     // commonServices._deleteImage(sp, val.ServerRelativeUrl, val);
-    //   })
-
-    //   return imageObjUpdate;
-    // }).then((response) => {
-    //   const res: any = [];
-    //   response.forEach(async (image: any) => {
-    //     await commonServices._addImage(sp, item.CV_imageUrl, image).then((r: any) => res.push(r));
-    //   });
-    //   return res;
-    // }).then((response) => {
-    //   _updateProductData(item).then((ItemRes) => {
-    //     closePanel();
-    //   });
-    // })
+      _updateProductData(item, item.Id).then((ItemRes) => {
+        closePanel();
+      });
+    })
   }
 
   // On edit product data handler
   function editProductSubmit() {
-
     let inputFiles = clone(files);
     let productData = { ...addProductInputList, ["CV_productDescription"]: richTextValue };
     let requiredFieldArr = ["Title", "CV_productCategory", "CV_productPrice", "CV_ContactNo", "CV_location", "CV_productStatus", "CV_shortDescription"];
@@ -666,7 +619,6 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
         setErrorList(response);
       }
       else {
-        setShowLoader(true);
         let updateData = {
           Id: productData.Id,
           Title: productData.Title,
@@ -675,11 +627,33 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
           CV_productPrice: productData.CV_productPrice,
           CV_ContactNo: productData.CV_ContactNo,
           CV_location: productData.CV_location,
-          CV_productStatus: productData.CV_productStatus,
+          CV_productStatus: "Requested",
           CV_shortDescription: productData.CV_shortDescription,
           CV_productDescription: productData.CV_productDescription,
           CV_imageUrl: productData.CV_imageUrl,
+          CV_comment: "",
         }
+
+        if (props.isAdmin) {
+          updateData["CV_productStatus"] = productData.CV_productStatus;
+        }
+        else {
+
+          let originalArr = clone(props.editData);
+          let modifiedArr = clone(productData);
+
+          delete originalArr["CV_productStatus"];
+          delete modifiedArr["CV_productStatus"];
+
+          if (JSON.stringify(originalArr) === JSON.stringify(modifiedArr) && JSON.stringify(inputFiles) === JSON.stringify(originalArr.Images)) {
+            updateData["CV_productStatus"] = productData.CV_productStatus;
+          }
+          else {
+            updateData["CV_productStatus"] = "Requested";
+          }
+        }
+        // console.log(updateData);
+        setShowLoader(true);
         _updateImageInFolder(updateData, inputFiles);
       }
     });
@@ -687,13 +661,13 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
 
   // Close Add-Edit Panel With Clear Data
   function closePanel() {
-    props.callFetchSetData();
+    props.callFetchSetData(); // call product components function for new data render
     setAddProductInputList({});
     setRichTextValue('');
     setFiles([]);
     setErrorList({});
     setShowLoader(false);
-    props.onPanelChange(false);
+    props.onPanelChange(false); // close add/edit panel
   }
 
   // Approve Product data & change Status
@@ -712,9 +686,9 @@ const AddEditProductPanelComponent: React.FunctionComponent<IAddEditProductPanel
             // Check site assets exit or not
             commonServices._ensureSiteAssetsLibraryexist(sp).then((response) => {
               //break inheritance permission at document library(site assets)
-              commonServices._breakRollAssignments(sp, "Site Assets", true, true).then((breakRollAssignmentRes) => {
+              commonServices._breakRollAssignmentsAtListLevel(sp, "Site Assets", true, true).then((breakRollAssignmentRes) => {
                 //assign custom permission to document library(site assets)
-                commonServices._roleAssignments(sp, "Site Assets", item.Author.ID, roleDefId).then((roleAssignmentRes) => {
+                commonServices._roleAssignmentsAtListLevel(sp, "Site Assets", item.Author.ID, roleDefId).then((roleAssignmentRes) => {
                   approveDialogs();
                 });
               });

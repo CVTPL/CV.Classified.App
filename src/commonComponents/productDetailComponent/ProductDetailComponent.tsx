@@ -147,7 +147,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
                           <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${productDetailsData[0].Author.EMail}` }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
                           <li><a onClick={() => { window.location.href = `mailTo:${productDetailsData[0].Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
                           <li><a onClick={() => { window.location.href = `tel:${productDetailsData[0].CV_ContactNo}` }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                          <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                          <li><a onClick={() => { navigator.share({ title: 'Classified App', url: window.location.href }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                         </ul>
                       </div>
                     </div>
@@ -230,7 +230,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
                           <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${card.Author.EMail}` }}><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
                           <li><a onClick={() => { window.location.href = `mailTo:${card.Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
                           <li><a onClick={() => { window.location.href = `tel:${card.CV_ContactNo}` }} ><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                          <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                          <li><a onClick={() => { navigator.share({ title: 'Classified App', url: window.location.href }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                         </ul>
                       </div>
                     </div>
@@ -270,7 +270,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
     });
   }
 
-  // Fetch image from site assets folder
+  // Fetch image from site assets folder service
   async function _getImageFromFolder(folderUrl: any): Promise<any> {
     return new Promise((resolve, reject) => {
       commonServices._getImageFromFolder(sp, folderUrl)
@@ -285,8 +285,8 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
     });
   }
 
+  // Fetch list data using select,expand & filter service
   async function _getSimilarClassifiedAppsListData(productObj: any): Promise<any> {
-
     let selectString = "*,Author/ID,Author/Title,Author/EMail,AttachmentFiles";
     let expandString = "AttachmentFiles,Author";
     let filterString = `CV_productCategory eq '${productObj.CV_productCategory}' and Id ne ${productObj.Id} and CV_productStatus ne 'InActive' `;
