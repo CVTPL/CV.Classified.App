@@ -41,6 +41,14 @@ const commonServices = {
         return await sp.siteDesigns.getSiteDesigns();
     },
 
+    _getSiteGroupByName: async (sp: any, groupName: any) => {
+        return await sp.web.siteGroups.getByName(groupName)();
+    },
+
+    _ensureSiteAssetsLibraryexist: async (sp: any) => {
+        return await sp.web.lists.ensureSiteAssetsLibrary();
+    },
+
     _createSiteScript: async (context: any, sp: any) => {
 
         const classifiedSiteScript = {
@@ -60,7 +68,7 @@ const commonServices = {
                 },
                 {
                     "verb": "createSiteColumnXml",
-                    "schemaXml": "<Field Type=\"Number\" ID=\"{e67444b2-8f05-4bc6-9bd7-61b98fd25438}\" Name=\"CV_ContactNo\" DisplayName=\"Contact No\" Required=\"TRUE\" StaticName=\"CV_ContactNo\" Group=\"_CV\" Customization=\"\" />"
+                    "schemaXml": "<Field Type=\"Text\" ID=\"{e67444b2-8f05-4bc6-9bd7-61b98fd25438}\" Name=\"CV_ContactNo\" DisplayName=\"Contact No\" Required=\"TRUE\" StaticName=\"CV_ContactNo\" Group=\"_CV\" Customization=\"\" />"
                 },
                 {
                     "verb": "createSiteColumnXml",
@@ -205,7 +213,7 @@ const commonServices = {
         return await sp.web.associatedOwnerGroup.users();
     },
 
-    _breakRollAssignments: async (sp: any, ListName: string, copyRoleAssignments: boolean, clearSubscopes: boolean) => {
+    _breakRollAssignmentsAtListLevel: async (sp: any, ListName: string, copyRoleAssignments: boolean, clearSubscopes: boolean) => {
         return await sp.web.lists.getByTitle(ListName).breakRoleInheritance(copyRoleAssignments, clearSubscopes);
     },
 
@@ -213,15 +221,15 @@ const commonServices = {
         return await sp.web.roleDefinitions.add(roleDefinitionsName, roleDefinitionsDescription, order, basePermission);
     },
 
-    _roleAssignments: async (sp: any, ListName: any, principalId: number, roleDefId: number) => {
+    _roleAssignmentsAtListLevel: async (sp: any, ListName: any, principalId: number, roleDefId: number) => {
         return await sp.web.lists.getByTitle(ListName).roleAssignments.add(principalId, roleDefId);
     },
 
-    _breakRollAssignmentsAtItemLevel: async (sp: any, ListName: string, itemId : number ,copyRoleAssignments: boolean, clearSubscopes: boolean) => {
+    _breakRollAssignmentsAtItemLevel: async (sp: any, ListName: string, itemId: number, copyRoleAssignments: boolean, clearSubscopes: boolean) => {
         return await sp.web.lists.getByTitle(ListName).items.getById(itemId).breakRoleInheritance(copyRoleAssignments, clearSubscopes);
     },
 
-    _roleAssignmentsAtItemLevel: async (sp: any, ListName: any, itemId : number , principalId: number, roleDefId: number) => {
+    _roleAssignmentsAtItemLevel: async (sp: any, ListName: any, itemId: number, principalId: number, roleDefId: number) => {
         return await await sp.web.lists.getByTitle(ListName).items.getById(itemId).roleAssignments.add(principalId, roleDefId);
     },
 
@@ -250,16 +258,6 @@ const commonServices = {
         return await sp.web.lists.getByTitle(listName).items.add(item);
     },
 
-    _addMultipleAttachment: async (sp: any, listName: any, itemId: any, attachment: any) => {
-        // return await sp.web.lists.getByTitle(listName).items.getById(itemId).attachmentFiles.add(attachment.path, attachment);
-
-        const res: any = [];
-        for (let i = 0; i < attachment.length; i++) {
-            await sp.web.lists.getByTitle(listName).items.getById(itemId).attachmentFiles.add(attachment[i].name, attachment[i]).then((r: any) => res.push(r));
-        }
-        return res;
-    },
-
     _getFolderByPath: async (context: any, folderPath: string) => {
         var myHeaders = new Headers({
             'Accept': 'application/json; odata=verbose'
@@ -282,42 +280,29 @@ const commonServices = {
     _addMultipleImage: async (sp: any, folderUrl: string, files: any) => {
         const res: any = [];
         files.forEach(async (file: any) => {
-            // const fileNamePath = encodeURI(file.name);
             return await sp.web.getFolderByServerRelativePath(folderUrl).files.addUsingPath(file.name, file, { Overwrite: true }).then((r: any) => res.push(r));
         });
-        // for (let i = 0; i < files.length; i++) {
-        //     const fileNamePath = encodeURI(file.name);
-        //     // return await sp.web.getFolderByServerRelativePath("/sites/CV_Classified_App/SiteAssets/Lists/6329a85e-d213-4ef4-9c78-d9b1929fb08e/Sony Headphones 6_7_2023_16_25_20").addUsingPath(files[i].Name, files[i], { Overwrite: true }).then((r: any) => res.push(r));
-        //     return await sp.web.getFolderByServerRelativePath("SiteAssets/Lists/6329a85e-d213-4ef4-9c78-d9b1929fb08e/Sony Headphones 6_7_2023_16_25_20").files.addUsingPath(files[i].Name, files[i], { Overwrite: true }).then((r: any) => res.push(r));
-        // }
         return res;
-
     },
 
-    _deleteMultipleImages: async (sp: any, files: any) => {
+    _deleteMultipleImages: async (sp: any, folderUrl: string, files: any) => {
         const res: any = [];
         files.forEach(async (file: any) => {
-            return await sp.web.getFolderByServerRelativePath("/sites/CV_Classified_App/SiteAssets/Lists/6329a85e-d213-4ef4-9c78-d9b1929fb08e/Sony Headphones 6_7_2023_16_25_20").files.getByUrl(file.Name).delete().then((r: any) => res.push(r));
+            return await sp.web.getFolderByServerRelativePath(folderUrl).files.getByUrl(file.Name).delete().then((r: any) => res.push(r));
         });
         return res;
-        // return await sp.web.getFolderByServerRelativePath(files).files.getByName(files.name).delete();
-        // return await sp.web.getFolderByServerRelativePath("{folder relative path}").files.getByUrl("filename.txt").delete();
     },
 
-    _ensureSiteAssetsLibraryexist: async (sp: any) => {
-        return await sp.web.lists.ensureSiteAssetsLibrary();
+    _deleteListItem: async (sp: any, listName: any, itemId: any) => {
+        return await sp.web.lists.getByTitle(listName).items.getById(itemId).delete();
+    },
+
+    _deleteFolderByUrl: async (sp: any, folderUrl: string) => {
+        return await sp.web.getFolderByServerRelativePath(folderUrl).delete()
     },
 
     _getImageFromFolder: async (sp: any, folderUrl: any) => {
         return await sp.web.getFolderByServerRelativePath(folderUrl).files();
-    },
-
-    _getSiteGroupByName: async (sp: any, groupName: any) => {
-        return await sp.web.siteGroups.getByName(groupName)();
-    },
-
-    _getContentTypeColumns: async (sp: any, contentTypeId: any) => {
-        return await sp.web.contentTypes.getById(contentTypeId).fields();
     },
 
     _checkRequiredValidation: async (dataObject: any, richTextValue: any, attachments: any, requiredFields: any) => {
@@ -357,6 +342,20 @@ const commonServices = {
         });
         return errorMessage;
     },
+
+    // _addMultipleAttachment: async (sp: any, listName: any, itemId: any, attachment: any) => {
+    //     // return await sp.web.lists.getByTitle(listName).items.getById(itemId).attachmentFiles.add(attachment.path, attachment);
+
+    //     const res: any = [];
+    //     for (let i = 0; i < attachment.length; i++) {
+    //         await sp.web.lists.getByTitle(listName).items.getById(itemId).attachmentFiles.add(attachment[i].name, attachment[i]).then((r: any) => res.push(r));
+    //     }
+    //     return res;
+    // },
+
+    // _getContentTypeColumns: async (sp: any, contentTypeId: any) => {
+    //     return await sp.web.contentTypes.getById(contentTypeId).fields();
+    // },
 
 
 }

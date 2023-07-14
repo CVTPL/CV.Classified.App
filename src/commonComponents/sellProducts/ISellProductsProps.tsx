@@ -3,4 +3,5 @@ export interface ISellProductsProps {
     productCardData: any[];
     requestedProductCardData: any[];
     callFetchSetData: any;
+    isAdmin: any;
 }

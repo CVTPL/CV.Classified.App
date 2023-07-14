@@ -5,4 +5,5 @@ export interface IAddEditProductPanelComponentProps {
     callFetchSetData: any;
     editData: any;
     selectedView: any;
+    isAdmin: any;
 }

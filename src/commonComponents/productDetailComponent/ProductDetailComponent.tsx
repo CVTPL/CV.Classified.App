@@ -151,10 +151,10 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
 
                       <div className='social-icons'>
                         <ul>
-                          <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${productDetailsData.Author.EMail}` }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
-                          <li><a onClick={() => { window.location.href = `mailTo:${productDetailsData.Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
-                          <li><a onClick={() => { window.location.href = `tel:${productDetailsData.CV_ContactNo}` }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                          <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                          <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${productDetailsData[0].Author.EMail}` }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
+                          <li><a onClick={() => { window.location.href = `mailTo:${productDetailsData[0].Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
+                          <li><a onClick={() => { window.location.href = `tel:${productDetailsData[0].CV_ContactNo}` }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
+                          <li><a onClick={() => { navigator.share({ title: 'Classified App', url: window.location.href }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                         </ul>
                       </div>
                     </div>
@@ -237,7 +237,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
                           <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${card.Author.EMail}` }}><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
                           <li><a onClick={() => { window.location.href = `mailTo:${card.Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
                           <li><a onClick={() => { window.location.href = `tel:${card.CV_ContactNo}` }} ><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
-                          <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
+                          <li><a onClick={() => { navigator.share({ title: 'Classified App', url: window.location.href }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                         </ul>
                       </div>
                     </div>
