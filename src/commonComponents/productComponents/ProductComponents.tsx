@@ -12,6 +12,7 @@ import ProductDetailComponent from '../productDetailComponent/ProductDetailCompo
 import { spfi, SPFx } from "@pnp/sp";
 import { clone } from '@microsoft/sp-lodash-subset';
 import commonServices from '../../services/commonServices';
+import { BallTriangle } from 'react-loader-spinner';
 
 const onRenderCaretDown = (): JSX.Element => {
   return <Icon iconName="List" />;
@@ -46,7 +47,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
   ];
 
   const filterIcon: IIconProps = { iconName: 'FilterSolid' };
-  const [selectedView, setSelectedView] = React.useState("buy");
+  const [selectedView, setSelectedView] = React.useState("buyProducts");
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [showBuySection, setShowBuySection] = useState(true);
   const [showSellSection, setShowSellSection] = useState(true);
@@ -66,17 +67,38 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
   const [sliderMaxValue, setSliderMaxValue] = React.useState(0);
   const [sliderMinValue, setSliderMinValue] = React.useState(0);
   const [isAdmin, setIsAdmin] = React.useState(false);
+  const [showLoader, setShowLoader] = useState(true);
 
   React.useEffect(() => {
     const currentUrlParams: any = window.location.hash;
-    if (!currentUrlParams.includes("productId")) {
+    if(currentUrlParams.includes("sellProducts")){
+      window.location.href = '#/sellProducts';
+      setSelectedView("sellProducts");
+      fetchSetProductData();
+    }
+    else if (!currentUrlParams.includes("productId")) {
       window.location.href = '#/buyProducts';
       fetchSetProductData();
     }
+
   }, []);
 
   return (
     <>
+      {/* {/ Loader Start /} */}
+      <div className="fixed-loader-container" hidden={!showLoader}>
+        <div className="fixed-loader-child">
+          <BallTriangle
+            height={100}
+            width={100}
+            radius={5}
+            color="#5F9BE7"
+            ariaLabel="ball-triangle-loading"
+            visible={showLoader}
+          />
+        </div>
+      </div>
+      {/* Loader End  */}
       <div className='mainClassifiedContainer' onClick={(event) => { setShowFilterOptions(false) }}>
         <HashRouter>
           <div className='subClassified'>
@@ -88,7 +110,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                       <h1>Classified</h1>
                     </div>
                     {showChoiceGroup ?
-                      <ChoiceGroup defaultSelectedKey="buyProducts" className="switch-button-container" options={options} onChange={_onChangeChoiceGroup} />
+                      <ChoiceGroup selectedKey={selectedView} className="switch-button-container" options={options} onChange={_onChangeChoiceGroup} />
                       : ""}
                   </div>
                 </div>
@@ -230,6 +252,8 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
                               <img src={require('../../assets/images/png/no-data-found.png')} className='noDataIcon' />
                             </div>
                           }
+                          {productCardData.length == 0 ? 
+                          "" : ""}
                         </div>
                       </div>
                     </div>
@@ -500,12 +524,13 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
         let tempBuyProductData = response.filter((resVal: any) => (resVal.CV_productStatus === "Active" || resVal.CV_productStatus === "Sold"));
         setProductCardData(tempBuyProductData); // buy product data
         setProductCardDataDuplicate(tempBuyProductData); // for filtering buy product data
-
+        
         tempSellProductCardData = response.filter((filterVal: any) => (filterVal.Author.EMail === LoginRes.Email));
         setcreatedByUserProductCardData(tempSellProductCardData); // sell product data
 
         let tempRequestedProductData = response.filter((filterVal: any) => (filterVal.CV_productStatus === "Requested"));
         setRequestedProductData(tempRequestedProductData); // Requested product data
+        setShowLoader(false);
       });
     })
 
@@ -519,7 +544,7 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
       // console.log(tempProductCategoryOptions);
       tempProductCategoryOptions.push({ key: "Other", text: "Other" });
       setProductCategoryOptions(tempProductCategoryOptions);
-
+      
       // let filterStatusOptions: any = response.filter((filterRes: any) => (filterRes.InternalName === "CV_productStatus")); // Status Options
       // filterStatusOptions[0].Choices.map((valChoice: any) => {
       //   tempStatusOptions.push({ key: valChoice, text: valChoice });
@@ -527,6 +552,11 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
       // // console.log(tempStatusOptions);
       // setStatusOptions(tempStatusOptions);
     })
+  }
+
+
+  async function initializeFunction() {
+    
   }
 };
 
