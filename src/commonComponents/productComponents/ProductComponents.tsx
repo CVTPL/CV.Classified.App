@@ -60,9 +60,11 @@ const ProductComponents: React.FunctionComponent<IProductComponentsProps> = (pro
   const [sliderMinValue, setSliderMinValue] = React.useState(0);
 
   React.useEffect(() => {
-    window.location.href = '#/buyProducts';
-    fetchSetProductData();
-
+    const currentUrlParams: any = window.location.hash;
+    if (!currentUrlParams.includes("productId")) {
+      window.location.href = '#/buyProducts';
+      fetchSetProductData();
+    }
   }, []);
 
   return (

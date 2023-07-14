@@ -13,7 +13,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
   const sp = spfi().using(SPFx(props.context));
 
   const [currentProduct, setCurrentProduct] = React.useState(0);
-  const [productDetailsData, setProductDetailsData] = React.useState([]);
+  const [productDetailsData, setProductDetailsData]: any = React.useState([]);
   const [SimilarProductsData, setSimilarProductsData] = React.useState([]);
 
   const classifiedCard = [
@@ -74,40 +74,47 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
 
   React.useEffect(() => {
     const productId = parseInt(new URL(`https://1.com?${window.location.href.split("?")[1]}`).searchParams.get("productId"));
-    let tempProductDetailsData: any = [];
-    setCurrentProduct(productId);
-    props.choiceGroupVisibility(false);//show choice group which is available in parent component.
+    if (productId > 0) {
+      let tempProductDetailsData: any = [];
+      setCurrentProduct(productId);
+      props.choiceGroupVisibility(false);//show choice group which is available in parent component.
 
-    _getClassifiedAppsListData(productId).then((ListRes) => {
-      ListRes.forEach((element: any) => {
-        _getImageFromFolder(element.CV_imageUrl).then((res) => {
 
-          tempProductDetailsData.push({ ...element, ["Images"]: res });
-
+      //get selected product details
+      let selectedListItems: any = {};
+      _getProductDetailsById(productId).then((listItemResponse) => {
+        if (listItemResponse.length > 0) {
+          selectedListItems = listItemResponse[0];
+          //Set description with design
           let imageUrl = require('../../assets/images/svg/circle-right.svg');
-          tempProductDetailsData[0].CV_productDescription = tempProductDetailsData[0].CV_productDescription.replaceAll("<ul>", "<ul class='desc-details'>")
-          tempProductDetailsData[0].CV_productDescription = tempProductDetailsData[0].CV_productDescription.replaceAll("<li>", "<li class='description-line'><img src='" + imageUrl + "'/><p>")//'../../assets/images/svg/circle-right.svg'
-          tempProductDetailsData[0].CV_productDescription = tempProductDetailsData[0].CV_productDescription.replaceAll("</li>", "</p></li>")
 
-          setProductDetailsData(tempProductDetailsData);
-
-          return _getSimilarClassifiedAppsListData(tempProductDetailsData[0]).then(async (similarProdRes) => {
-            if (similarProdRes.length > 0) {
-              let count = 0;
-              do {
-                await commonServices._getImageFromFolder(sp, similarProdRes[count].CV_imageUrl).then((response) => {
-                  similarProdRes[count]["Images"] = response
-                })
-                count = count + 1;
-              } while (count < similarProdRes.length);
-            }
-            return similarProdRes;
-          }).then((response) => {
-            setSimilarProductsData(response);
-          })
-        });
+          selectedListItems.CV_productDescription = selectedListItems.CV_productDescription.replaceAll("<ul>", "<ul class='desc-details'>")
+          selectedListItems.CV_productDescription = selectedListItems.CV_productDescription.replaceAll("<li>", "<li class='description-line'><img src='" + imageUrl + "'/><p>")//'../../assets/images/svg/circle-right.svg'
+          selectedListItems.CV_productDescription = selectedListItems.CV_productDescription.replaceAll("</li>", "</p></li>")
+          return _getImageFromFolder(listItemResponse[0].CV_imageUrl);
+        }
+        else {
+          return;
+        }
+      }).then((imageResponse) => {
+        selectedListItems["Images"] = imageResponse
+        setProductDetailsData(selectedListItems);
+        return _getSimilarProductDetails(selectedListItems);//get similar product details
+      }).then(async (similarProductRes) => {
+        if (similarProductRes.length > 0) {
+          let count = 0;
+          do {
+            await commonServices._getImageFromFolder(sp, similarProductRes[count].CV_imageUrl).then((response) => {
+              similarProductRes[count]["Images"] = response
+            })
+            count = count + 1;
+          } while (count < similarProductRes.length);
+        }
+        return similarProductRes;
+      }).then((response) => {
+        setSimilarProductsData(response);
       });
-    });
+    }
   }, [currentProduct])
 
   return (
@@ -125,28 +132,28 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
                 <div className="ms-Grid-row">
                   <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6 colSize">
                     <div className='imageGallerySlider'>
-                      <ImageGallerySliderComponent imagesData={productDetailsData[0].Images} />
+                      <ImageGallerySliderComponent imagesData={productDetailsData.Images} />
                     </div>
                   </div>
                   <div className="ms-Grid-col ms-sm12 ms-md12 ms-lg12 ms-xl6 colSize">
                     <div className='prdCardContainer' id='prdCardContainer'>
                       <div className='prd-details'>
-                        <p className='prd-title' >{productDetailsData[0].Title}</p>
-                        <p className='prd-description'>{productDetailsData[0].CV_shortDescription}</p>
+                        <p className='prd-title' >{productDetailsData.Title}</p>
+                        <p className='prd-description'>{productDetailsData.CV_shortDescription}</p>
                         <div className='location'>
-                          <img src={require('../../assets/images/svg/location.svg')} alt='Location Icon' />{productDetailsData[0].CV_location}</div>
+                          <img src={require('../../assets/images/svg/location.svg')} alt='Location Icon' />{productDetailsData.CV_location}</div>
                         <div className='userName'>
-                          <img src={require('../../assets/images/svg/user-icon.svg')} />{productDetailsData[0].Author.Title}</div>
+                          <img src={require('../../assets/images/svg/user-icon.svg')} />{productDetailsData.Author.Title}</div>
                         <div className='amt'>
-                          {Number(productDetailsData[0].CV_productPrice).toLocaleString()}
+                          {Number(productDetailsData.CV_productPrice).toLocaleString()}
                         </div>
                       </div>
 
                       <div className='social-icons'>
                         <ul>
-                          <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${productDetailsData[0].Author.EMail}` }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
-                          <li><a onClick={() => { window.location.href = `mailTo:${productDetailsData[0].Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
-                          <li><a onClick={() => { window.location.href = `tel:${productDetailsData[0].CV_ContactNo}` }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
+                          <li><a onClick={() => { window.location.href = `https://teams.microsoft.com/l/chat/0/0?users=${productDetailsData.Author.EMail}` }} ><img src={require('../../assets/images/svg/ms-teams.svg')}></img></a></li>
+                          <li><a onClick={() => { window.location.href = `mailTo:${productDetailsData.Author.EMail}` }} ><img src={require('../../assets/images/svg/outlook.svg')}></img></a></li>
+                          <li><a onClick={() => { window.location.href = `tel:${productDetailsData.CV_ContactNo}` }}><img src={require('../../assets/images/svg/phone.svg')}></img></a></li>
                           <li><a onClick={() => { navigator.share({ title: 'TestUrlShare', url: 'https://www.google.com' }) }}><img src={require('../../assets/images/svg/share.svg')}></img></a></li>
                         </ul>
                       </div>
@@ -155,7 +162,7 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
                       <div className='desc-title'>
                         Description
                       </div>
-                      {parse(productDetailsData[0].CV_productDescription)}
+                      {parse(productDetailsData.CV_productDescription)}
 
                       {/* <div className='description-line'>
               <img src={require('../../assets/images/svg/circle-right.svg')} /> <p>13.5” PixelSense touchscreen for ultra-portable productivity, larger 13.5” for split-screen multitasking.</p>
@@ -251,10 +258,14 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
     element.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
   }
 
-  // Fetch list data accordingly productId service
-  async function _getClassifiedAppsListData(productId: any): Promise<any> {
-    let selectString = "*,Author/ID,Author/Title,Author/EMail,AttachmentFiles";
-    let expandString = "AttachmentFiles,Author";
+  /**
+   * Function for get selected product details from Classified Products list.
+   * @param productId 
+   * @returns 
+   */
+  async function _getProductDetailsById(productId: any): Promise<any> {
+    let selectString = "*,Author/ID,Author/Title,Author/EMail";
+    let expandString = "Author";
     let filterString = `Id eq ${productId}`;
 
     return new Promise((resolve, reject) => {
@@ -269,26 +280,15 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
           });
     });
   }
+  /**
+   * Function for get product details which is similar to selected product
+   * @param productObj 
+   * @returns 
+   */
+  async function _getSimilarProductDetails(productObj: any): Promise<any> {
 
-  // Fetch image from site assets folder
-  async function _getImageFromFolder(folderUrl: any): Promise<any> {
-    return new Promise((resolve, reject) => {
-      commonServices._getImageFromFolder(sp, folderUrl)
-        .then((response: any) => {
-          resolve(response);
-        },
-          (error: any): any => {
-            reject(error);
-            console.log(error);
-            alert("Error while geting data");
-          });
-    });
-  }
-
-  async function _getSimilarClassifiedAppsListData(productObj: any): Promise<any> {
-
-    let selectString = "*,Author/ID,Author/Title,Author/EMail,AttachmentFiles";
-    let expandString = "AttachmentFiles,Author";
+    let selectString = "*,Author/ID,Author/Title,Author/EMail";
+    let expandString = "Author";
     let filterString = `CV_productCategory eq '${productObj.CV_productCategory}' and Id ne ${productObj.Id} and CV_productStatus ne 'InActive' `;
 
     return new Promise((resolve, reject) => {
@@ -303,23 +303,18 @@ const ProductDetailComponent: React.FunctionComponent<IProductDetailComponentPro
           });
     });
   }
-
-  /**
-   * Function for get product details based on Product Id
-   * @param Id 
-   * @returns 
-   */
-  async function _getProductDetailsById(Id: any): Promise<any> {
-    let selectString = "";
-    let expandString = "";
-    let filterString = "";
+  // Fetch image from site assets folder
+  async function _getImageFromFolder(folderUrl: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      commonServices._getListItemWithExpandAndFilter(sp, "Classified Products", selectString, expandString, filterString).then((response) => {
-        resolve(response);
-      },
-        (error: any): any => {
-          reject(error);
-        });
+      commonServices._getImageFromFolder(sp, folderUrl)
+        .then((response: any) => {
+          resolve(response);
+        },
+          (error: any): any => {
+            reject(error);
+            console.log(error);
+            alert("Error while geting data");
+          });
     });
   }
 
